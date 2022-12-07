@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Modal from "./Modal";
 import Header from "../common/header";
 import { useNavigate } from "react-router-dom";
+import Transaction from "./components/transactions";
 
 const PageContainer = styled.div`
   position: relative;
@@ -19,16 +19,8 @@ const TransactionPage = () => {
 
   return (
     <PageContainer>
-     
-        <Modal
-          closeModal={() => {
-            setShowModal(false);
-            routeMain();
-          }}
-          visible={showModal}
-        />
-      
       <Header></Header>
+      <Transaction></Transaction>
     </PageContainer>
   );
 };

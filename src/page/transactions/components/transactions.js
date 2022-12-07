@@ -11,6 +11,8 @@ import rewardToken from "../../../artifacts/rewardToken.json";
 import { useNavigate } from "react-router-dom";
 import Pagination from "./pagination";
 
+import { useTable } from 'react-table'
+
 
 
 const LeverageWrapper = styled.div`
@@ -64,7 +66,10 @@ const TransactionTable = styled.div`
 const TableHeader = styled.th` 
 
 `;
-
+const Line = styled.hr` 
+width: 100%;
+color: white;
+`;
 
 const web3 = new Web3(window.ethereum);
 const liquidStakingAddress = address.liquidStaking;
@@ -108,16 +113,85 @@ const Transaction = ({ token, getAmount }) => {
     }
 
     
-  
 
     useEffect(()=> {
         getTransactions();
     }, []);
+
+    // const temp = transactions.items[0];
+
+    function parseItem() {
+        let temp;
+        for (let i = 0; i < transactions.items.length; i++) {
+            let temp2 = {
+                block_height: transactions.items[i].block_height ,
+                amount: "hello",
+                from_address: "hello",
+                to_address: "aaaaaaaaaaaaaaaaaaaa",
+                fees: "",
+                tx_hash: "",
+                successful: "",
+            };
+            temp += temp2;
+        }
+        
+        return temp;
+    }
+    console.log(parseItem());
+
+    const item = parseItem();
+
+    const data = React.useMemo(
+        () => [
+            item
+        ],[]);
+    
+      const columns = React.useMemo(
+        () => [
+          {
+            Header: 'Block Height',
+            accessor: 'block_height', // accessor is the "key" in the data
+          },
+          {
+            Header: 'AMOUNT',
+            accessor: 'amount',
+          },
+          {
+            Header: 'From Address',
+            accessor: 'from_address', // accessor is the "key" in the data
+          },
+          {
+            Header: 'To Address',
+            accessor: 'to_address',
+          },
+          {
+            Header: 'FEES',
+            accessor: 'fees', // accessor is the "key" in the data
+          },
+          {
+            Header: 'TX Hash',
+            accessor: 'tx_hash',
+          },
+          {
+            Header: 'Successful',
+            accessor: 'successful',
+          },
+        ],[]
+      )
+    
+      const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+      } = useTable({ columns, data })
     
     if (transactions == null) {
         return (
             <LeverageWrapper>
-                <FirstText>Transactions</FirstText>
+                <FirstText>Transaction History</FirstText>
+                <Line></Line>
                 <SecondText>
                     Address: {account}
                 </SecondText>
@@ -134,20 +208,62 @@ const Transaction = ({ token, getAmount }) => {
         )
     }
 
+    
 
     return (
         <LeverageWrapper>
-            <FirstText>Transactions</FirstText>
-            <SecondText>
-                Address: {account}
-            </SecondText>
+            <FirstText>Transaction History</FirstText>
+            <Line></Line>
             <StakeStatusWrapper>
-                <YouStaked>TXhash</YouStaked>
                 <TransactionTable>
                     {/* {transactions.items.map(item =>{
                         return <div>{item.tx_hash}</div>
                     })} */}
-                    <Pagination itemsPerPage={10} items={transactions.items}></Pagination>
+                    <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+                        <thead>
+                            {headerGroups.map(headerGroup => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map(column => (
+                                <th
+                                    {...column.getHeaderProps()}
+                                    style={{
+                                    borderBottom: 'solid 3px red',
+                                    background: 'aliceblue',
+                                    color: 'black',
+                                    fontWeight: 'bold',
+                                    }}
+                                >
+                                    {column.render('Header')}
+                                </th>
+                                ))}
+                            </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {rows.map(row => {
+                            prepareRow(row)
+                            return (
+                                <tr {...row.getRowProps()}>
+                                {row.cells.map(cell => {
+                                    return (
+                                    <td
+                                        {...cell.getCellProps()}
+                                        style={{
+                                        padding: '10px',
+                                        border: 'solid 1px gray',
+                                        background: 'papayawhip',
+                                        }}
+                                    >
+                                        {cell.render('Cell')}
+                                    </td>
+                                    )
+                                })}
+                                </tr>
+                            )
+                            })}
+                        </tbody>
+                    </table>
+                    {/* <Pagination itemsPerPage={10} items={transactions.items}></Pagination> */}
                 </TransactionTable>
             </StakeStatusWrapper>
         </LeverageWrapper>
