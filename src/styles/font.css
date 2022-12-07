@@ -1,0 +1,44 @@
+@font-face {
+    font-family: 'pretendard-regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/pretendard.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+
+  /*
+  pretendard
+ */
+ @font-face {
+    font-family: "Pretendard";
+    src: url('./font/Pretendard/Pretendard-Medium.otf'
+    ); 
+  }
+  
+  @font-face {
+    font-family: "Pretendard";
+    src: url('./font/Pretendard/Pretendard-Bold.otf'
+    );
+    font-weight: bold;
+  }
+  
+  @font-face {
+    font-family: "Pretendard";
+    src: url('./font/Pretendard/Pretendard-Light.otf'
+    );
+    font-weight: lighter;
+  }
+
+  @font-face {
+    font-family: "Pretendard";
+    src: url('./font/Pretendard/Pretendard-Regular.otf'
+    );
+    font-weight: 400;
+  }
+  
+  @font-face {
+    font-family: "Pretendard";
+    src: url('./font/Pretendard/Pretendard-SemiBold.otf'
+    );
+    font-weight: 600;
+  }
