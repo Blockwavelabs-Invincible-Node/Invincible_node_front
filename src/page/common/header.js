@@ -7,6 +7,8 @@ import logo from "../../assets/images/Logo.svg";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { selectConnectMetamask } from "../../redux/reducers/connectMetamaskReducer";
 import { setStatus } from "../../redux/reducers/connectMetamaskReducer";
+import Dropdown from 'react-bootstrap/Dropdown';
+import "./header.css"
 //--------------------Styles--------------------------//
 const Top = styled.div`
   width: 100%;
@@ -17,17 +19,11 @@ const Top = styled.div`
 `;
 const LeftTop = styled.div``;
 const RightTop = styled.div`
-  //   display: grid;
-  //   margin-right: 5%;
   display: flex;
   margin-top: 50px;
   white-space: nowrap;
-  //   grid-template-columns: 1fr 2fr;
 `;
 const WalletConnect = styled(Button)`
-  //   width: 80%;
-  //   grid-column-start: 2;
-  //   grid-column-end: 2;
   width: auto;
   padding-left: 3vw;
   padding-right: 3vw;
@@ -58,11 +54,8 @@ const Logo = styled.img`
   width: 97px;
 `;
 const UnstakeButton = styled.button`
-  //   grid-column-start: 1;
-  //   grid-column-end: 1;
   font-size: 15px;
   height: 55px;
-  //   width: 120px;
   padding-left: 3vw;
   padding-right: 3vw;
   border-radius: 5px;
@@ -72,26 +65,45 @@ const UnstakeButton = styled.button`
   background-color: transparent;
   color: #ffffff;
 `;
-const ClaimButton = styled.button` 
-font-size: 15px;
-height: 55px;
-padding-left: 3vw;
-padding-right: 3vw;
-border-radius: 5px;
-font-family: Pretendard;
-font-weight: 700;
-border: hidden;
-background-color: transparent;
-color: #ffffff;
-`;
 const HomeButton = styled.button`
-  grid-column-start: 1;
-  grid-column-end: 1;
   font-size: 20px;
   width: 120px;
   border-radius: 5px;
   font-family: pretendard;
   font-weight: 700;
+`;
+const StyledDropdown = styled(Dropdown)` 
+  
+  font-size: 15px;
+  height: 55px;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  margin-top: 20px;
+  border-radius: 5px;
+  font-family: Pretendard;
+  font-weight: 700;
+  border: hidden;
+  background-color: transparent;
+  color: #ffffff;
+`;
+const StyledDropdownButton = styled(Dropdown.Toggle)` 
+color: white;
+border: hidden;
+background-color: transparent;
+font-size: 15px;
+padding-left: 3vw;
+padding-right: 3vw;
+border-radius: 5px;
+font-family: Pretendard;
+font-weight: 700;
+`;
+const StyledDropdownItem = styled(Dropdown.Item)` 
+color:white;
+text-align: left;
+`;
+const StyledDropdownMenu = styled(Dropdown.Menu)` 
+display: flex;
+flex-direction: column;
 `;
 //--------------------------------------------------------------//
 
@@ -103,22 +115,34 @@ function Header({ home }) {
 
 
   let navigate = useNavigate();
-  const routeUnstake = () => {
-    let path = `/unstake`;
-    navigate(path);
-  };
   const routeMain = () => {
     let path = "/";
+    navigate(path);
+  };
+  const routeStake = () => {
+    let path = '/stake';
+    navigate(path);
+  }
+  const routeUnstake = () => {
+    let path = `/unstake`;
     navigate(path);
   };
   const routeClaimReward = () => {
     let path = "/claim";
     navigate(path);
   }
+  const routeContract = () => {
+    let path = "/contracts";
+    navigate(path);
+  }
   const routeTransaction = () => {
     let path = "/transactions";
     navigate(path);
   }
+  const routeValidator = () => {
+    let path = "/validators";
+    navigate(path);
+  } 
 
   const AddNetwork = async() => {
     await window.ethereum.request({
@@ -271,7 +295,7 @@ function Header({ home }) {
             </HomeButton>
           ) : (
             <>
-            <UnstakeButton
+            {/* <UnstakeButton
               onClick={() => {
                 routeClaimReward();
               }}
@@ -291,7 +315,45 @@ function Header({ home }) {
               }}
             >
               Transactions
-            </UnstakeButton>
+            </UnstakeButton> */}
+            <StyledDropdown>
+              <StyledDropdownButton variant="success" id="dropdown-basic">
+                Event
+              </StyledDropdownButton>
+              <StyledDropdownMenu>
+                <StyledDropdownItem><div onClick={() => {
+                  routeStake();
+                  }}
+                >Stake</div></StyledDropdownItem>
+                <StyledDropdownItem><div onClick={() => {
+                  routeUnstake();
+                  }}
+                >Unstake</div></StyledDropdownItem>
+                <StyledDropdownItem><div onClick={() => {
+                  routeClaimReward();
+                  }}
+                >Claim Rewards</div></StyledDropdownItem>
+              </StyledDropdownMenu>
+            </StyledDropdown>
+            <StyledDropdown>
+              <StyledDropdownButton variant="success" id="dropdown-basic">
+                Info
+              </StyledDropdownButton>
+              <StyledDropdownMenu>
+                <StyledDropdownItem><div onClick={() => {
+                  routeContract();
+                  }}
+                >Contracts</div></StyledDropdownItem>
+                <StyledDropdownItem><div onClick={() => {
+                  routeTransaction();
+                  }}
+                >Transactions</div></StyledDropdownItem>
+                <StyledDropdownItem><div onClick={() => {
+                  routeValidator();
+                  }}
+                >Validators</div></StyledDropdownItem>
+              </StyledDropdownMenu>
+            </StyledDropdown>
             </>
           )}
           {window.localStorage.getItem("connectMetamask") ? (

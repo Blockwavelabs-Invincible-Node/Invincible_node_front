@@ -8,11 +8,13 @@ import styled from "styled-components";
 import UnstakePage from "./page/unstake";
 import ClaimRewardPage from "./page/claimReward";
 import TransactionPage from "./page/transactions";
+import ContractPage from "./page/contracts";
+import ValidatorPage from "./page/validators";
 
 
 
 const Background = styled.div`
-  background-color: #1e1e1e;
+  background-color: #262626;
   color: white;
   min-height: 100vh;
 `;
@@ -29,6 +31,8 @@ function App() {
           <Route path="/unstake" element={<UnstakePage />}></Route>
           <Route path="/claim" element={<ClaimRewardPage />}></Route>
           <Route path="/transactions" element={ <TransactionPage /> }></Route>
+          <Route path="/contracts" element={<ContractPage />} ></Route>
+          <Route path="/validators" element={<ValidatorPage />} ></Route>
         </Routes>
       </BrowserRouter>
     </Background>

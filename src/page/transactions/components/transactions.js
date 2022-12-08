@@ -35,7 +35,6 @@ const StakeStatusWrapper = styled.div`
     background-color: #292929;
     margin-bottom: 10px;
     border-radius: 10px;
-
 `;
 const StakeStatusText = styled.div` 
     margin-left: 2vw;
@@ -47,97 +46,44 @@ const YouStaked = styled(BoldText)`
 padding-right: 5vw;
 padding-bottom: 1vh;
 `;
-const Price = styled(LightText)` 
-margin-right: 2vw;
-padding-top: 0.5vh;
-font-size: 1vh;
-`;
 const StakeAmountText = styled(LightText)` 
 text-align:center;
 padding-bottom: 2vh;
 `; 
-
-const UndelegateButton = styled(Button)` 
-    width: 100%;
-`;
-const TransactionTable = styled.div` 
-
-`;
-const TableHeader = styled.th` 
-
-`;
 const Line = styled.hr` 
 width: 100%;
 color: white;
 `;
 
-const web3 = new Web3(window.ethereum);
-const liquidStakingAddress = address.liquidStaking;
-const liquidStakingContract = new web3.eth.Contract(liquidStaking.output.abi, liquidStakingAddress);
-const rewardTokenAddress = address.rewardToken;
-const rewardTokenContract = new web3.eth.Contract(rewardToken.output.abi, rewardTokenAddress);
-
-const Transaction = ({ token, getAmount }) => {
-    const [rewardAmount, setRewardAmount] = useState(); 
-    const [account, setAccount] = useState();
-    const [transactions, setTransactions] = useState();
-
-
+const Transaction = ({ account, transactions }) => {
     let navigate = useNavigate();
     const routeMain = () => {
         let path = "/";
         navigate(path);
     };
 
-    const getTransactions = async() => {
-        const getAccount = await web3.eth.getAccounts();
-        const account = getAccount[0];
-        setAccount(account);
-        const APIKEY = process.env.REACT_APP_APIKEY;
-        const baseURL = 'https://api.covalenthq.com/v1'
-        const blockchainChainId = '9000'
-        const demoAddress = account;
-        
-        async function getTransactions(chainId, address) {
-            const url = new URL(`${baseURL}/${chainId}/address/${address}/transactions_v2/?key=${APIKEY}`);
-            const response = await fetch(url);
-            const result = await response.json();
-            const data = result.data;
-            console.log(data);
-            return data;
-        }
-        
-        const data = await getTransactions(blockchainChainId, demoAddress);
-        console.log(data);
-        setTransactions(data);
-    }
-
-    
-
     useEffect(()=> {
-        getTransactions();
+       
     }, []);
-
-    // const temp = transactions.items[0];
 
     function parseItem() {
         let temp;
         for (let i = 0; i < transactions.items.length; i++) {
-            let temp2 = {
-                block_height: transactions.items[i].block_height ,
+            const temp2 = {
+                block_height: transactions.items[i].block_height,
                 amount: "hello",
                 from_address: "hello",
-                to_address: "aaaaaaaaaaaaaaaaaaaa",
+                to_address: "aa",
                 fees: "",
                 tx_hash: "",
                 successful: "",
             };
             temp += temp2;
+            
         }
         
         return temp;
     }
-    console.log(parseItem());
 
     const item = parseItem();
 
@@ -146,7 +92,7 @@ const Transaction = ({ token, getAmount }) => {
             item
         ],[]);
     
-      const columns = React.useMemo(
+    const columns = React.useMemo(
         () => [
           {
             Header: 'Block Height',
@@ -179,13 +125,13 @@ const Transaction = ({ token, getAmount }) => {
         ],[]
       )
     
-      const {
+    const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
         rows,
         prepareRow,
-      } = useTable({ columns, data })
+    } = useTable({ columns, data })
     
     if (transactions == null) {
         return (
@@ -208,63 +154,12 @@ const Transaction = ({ token, getAmount }) => {
         )
     }
 
-    
-
     return (
         <LeverageWrapper>
             <FirstText>Transaction History</FirstText>
             <Line></Line>
             <StakeStatusWrapper>
-                <TransactionTable>
-                    {/* {transactions.items.map(item =>{
-                        return <div>{item.tx_hash}</div>
-                    })} */}
-                    <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
-                        <thead>
-                            {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map(column => (
-                                <th
-                                    {...column.getHeaderProps()}
-                                    style={{
-                                    borderBottom: 'solid 3px red',
-                                    background: 'aliceblue',
-                                    color: 'black',
-                                    fontWeight: 'bold',
-                                    }}
-                                >
-                                    {column.render('Header')}
-                                </th>
-                                ))}
-                            </tr>
-                            ))}
-                        </thead>
-                        <tbody {...getTableBodyProps()}>
-                            {rows.map(row => {
-                            prepareRow(row)
-                            return (
-                                <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => {
-                                    return (
-                                    <td
-                                        {...cell.getCellProps()}
-                                        style={{
-                                        padding: '10px',
-                                        border: 'solid 1px gray',
-                                        background: 'papayawhip',
-                                        }}
-                                    >
-                                        {cell.render('Cell')}
-                                    </td>
-                                    )
-                                })}
-                                </tr>
-                            )
-                            })}
-                        </tbody>
-                    </table>
-                    {/* <Pagination itemsPerPage={10} items={transactions.items}></Pagination> */}
-                </TransactionTable>
+                <Pagination itemsPerPage={10} items={transactions.items}></Pagination>
             </StakeStatusWrapper>
         </LeverageWrapper>
     );
