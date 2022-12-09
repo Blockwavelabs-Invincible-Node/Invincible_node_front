@@ -15,6 +15,7 @@ import { Form } from "../../../styles/styledComponents/form";
 import Select from "react-select";
 import Web3 from "web3";
 import { Button } from "../../../styles/styledComponents/button";
+import { useNavigate } from "react-router-dom";
 
 const StakeForm = styled(Form)``;
 const StakingWrapper = styled(Wrapper)`
@@ -266,7 +267,11 @@ const Stake = ({
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const dispatch = useDispatch();
 
-
+  let navigate = useNavigate();
+  const routeRiskHedge = () => {
+    let path = "/risk-hedge";
+    navigate(path);
+  };
 
   useEffect(() => {
     setStakeAmountGlobal(stakeAmount);
@@ -314,7 +319,7 @@ const Stake = ({
   };
 
   const liquidStake = () => {
-    openModal();
+    // openModal();
   };
 
   useEffect(() => {
@@ -343,6 +348,7 @@ const Stake = ({
               />
             ))}
           </StageBar>
+
           <ContentBox>
             <LevelBox>
               <LevelCircle>0</LevelCircle>
@@ -411,9 +417,10 @@ const Stake = ({
                 onClick={() => {
                   liquidStake();
                   setPressStake(true);
+                  routeRiskHedge();
                 }}
               >
-                Liquid Stake
+                Continue
               </StakeButton>
             </InputBox>
           </ContentBox>

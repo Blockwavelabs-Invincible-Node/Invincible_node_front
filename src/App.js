@@ -10,6 +10,7 @@ import ClaimRewardPage from "./page/claimReward";
 import TransactionPage from "./page/transactions";
 import ContractPage from "./page/contracts";
 import ValidatorPage from "./page/validators";
+import RiskHedgePage from "./page/riskHedge";
 
 
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/transactions" element={ <TransactionPage /> }></Route>
           <Route path="/contracts" element={<ContractPage />} ></Route>
           <Route path="/validators" element={<ValidatorPage />} ></Route>
+          <Route path="/risk-hedge" element={<RiskHedgePage />}></Route>
         </Routes>
       </BrowserRouter>
     </Background>
