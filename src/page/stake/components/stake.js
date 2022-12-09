@@ -4,7 +4,7 @@ import zeroImg from "../../../assets/images/zero.png";
 import oneImg from "../../../assets/images/one.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
-import { setAmount } from "../../../redux/reducers/stakeAmountReducer";
+import { setStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
 import { NumberImg } from "../../../styles/styledComponents/numberImg";
@@ -258,7 +258,7 @@ const Stake = ({
 }) => {
   const [pressStake, setPressStake] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [stakeAmount, setStakeAmount] = useState();
+  const [stake, setStake] = useState();
   const [ethBalance, setEthBalance] = useState(null);
   const [udenom, setUdenom] = useState(options[0].udenom);
   const [label, setLabel] = useState(options[0].label);
@@ -274,24 +274,24 @@ const Stake = ({
   };
 
   useEffect(() => {
-    setStakeAmountGlobal(stakeAmount);
+    setStakeAmountGlobal(stake);
     // staking 후 받게 될 amount 계산 후...
-    setGetAmountGlobal(stakeAmount); // 계산값 여기에 넣어주기
-  }, [stakeAmount]);
+    setGetAmountGlobal(stake); // 계산값 여기에 넣어주기
+  }, [stake]);
 
   useEffect(() => {
-    if (stakeAmount) {
+    if (stake) {
       setStageLevel(1);
     } else {
       setStageLevel(0);
     }
-  }, [stakeAmount]);
+  }, [stake]);
 
   const web3 = new Web3(window.ethereum);
   console.log("stake reducer: ", stakeAmountRedux);
   const handleStakeAmountChange = (event) => {
     setStakeAmount(event.target.value);
-    console.log(dispatch(setAmount(event.target.value)));
+    console.log(dispatch(setStakeAmount(event.target.value)));
   };
 
   const maxOnClick = () => {
@@ -392,7 +392,7 @@ const Stake = ({
                 <AmountToStake
                   placeholder="0.0"
                   type="text"
-                  value={stakeAmount}
+                  value={stake}
                   onChange={handleStakeAmountChange}
                 ></AmountToStake>
                 <CurrencyBox>{udenom}</CurrencyBox>
@@ -401,14 +401,14 @@ const Stake = ({
                 <StakeWrapper>
                   <YouWillStake>You will stake</YouWillStake>
                   <EvmosInputWrapper>
-                    <EvmosInput value={stakeAmount} />
+                    <EvmosInput value={stake} />
                     <EvmosAmount>{label}</EvmosAmount>
                   </EvmosInputWrapper>
                 </StakeWrapper>
                 <GetWrapper>
                   <YouWillGet>You will get</YouWillGet>
                   <EvmosInputWrapper>
-                    <EvmosInput value={stakeAmount} />
+                    <EvmosInput value={stake} />
                     <InEvmosAmount>in {label}</InEvmosAmount>
                   </EvmosInputWrapper>
                 </GetWrapper>

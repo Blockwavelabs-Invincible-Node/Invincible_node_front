@@ -28,6 +28,7 @@ const RiskHedgePage = () => {
           token={token}
           stakeAmount={stakeAmount}
           getAmount={getAmount}
+          hedgeAmount={hedgeAmount}
         />
       )}
       <Header></Header>

@@ -4,7 +4,8 @@ import zeroImg from "../../../assets/images/zero.png";
 import oneImg from "../../../assets/images/one.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
-import { setAmount } from "../../../redux/reducers/stakeAmountReducer";
+import { setStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
+import { setHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
 import { NumberImg } from "../../../styles/styledComponents/numberImg";
@@ -15,6 +16,9 @@ import Select from "react-select";
 import Web3 from "web3";
 import { Button } from "../../../styles/styledComponents/button";
 import { useNavigate } from "react-router-dom";
+import { First } from "react-bootstrap/esm/PageItem";
+import { selectHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
+
 
 const stage = [
     { status: "selectToken" },
@@ -63,6 +67,10 @@ const TitleBox = styled.div`
 `;
 const TextBox = styled.div` 
 `;
+const TextBox2 = styled.div` 
+display: flex;
+justify-content: space-between;
+`
 const FirstText = styled(BoldText)` 
 
 `;
@@ -74,6 +82,7 @@ const ThirdText = styled(LightText)`
 height: 2vh;
 margin-top: 2vh;
 margin-bottom: 1vh;
+font-size: 20px;
 `;
 const Checker = styled.div` 
 
@@ -105,6 +114,9 @@ const ThirdBox = styled(SecondBox)`
 
 `;
 const FourthBox = styled(SecondBox)` 
+margin-bottom: 15px;
+`;
+const FifthBox = styled(FirstBox)` 
 margin-bottom: 15px;
 `;
 const LeftSide = styled.div` 
@@ -151,75 +163,97 @@ const RiskHedge = ({
     setGetAmountGlobal,
     setHedgeAmountGlobal
 }) => {
-  const [stageLevel, setStageLevel] = useState(2);
-  const [volume, setVolume] = useState(2);
+    const [stageLevel, setStageLevel] = useState(2);
+    const [volume, setVolume] = useState(2);
+    const [hedge, setHedge] = useState(0);
+    const [updatedStakeAmount, setUpdatedStakeAmount] = useState(0);
+    const stakeAmountRedux = useSelector(selectStakeAmount);
+    const hedgeAmountRedux = useSelector(selectHedgeAmount);
 
-  const tempStake = 500;
-  const tempSwapRate = 0.9;
+    const stakeDispatch = useDispatch();
+    const hedgeDispatch = useDispatch();
 
-  return (
-    <AllWrapper>
-        <StageBar>
-            {stage.map((v, i) => (
-              <StageCircle
-                style={i <= stageLevel ? { backgroundColor: "#1F53FF" } : {}}
-              />
-            ))}
-        </StageBar>
-        <ContentBox>
-            <LevelBox>
-              <LevelCircle>3</LevelCircle>
-            </LevelBox>
-            <TitleBox>
-                <TextBox>
-                    <FirstText>Risk Hedge with Stable Coin</FirstText>
-                    <SecondText>Set your hedging ratio</SecondText>
-                </TextBox>
-                <Checker>
-                </Checker>
-            </TitleBox>
-        </ContentBox>
-        <ContentBox>
-            <EmptyBox></EmptyBox>
-            <FormBox>
-                <FirstBox>
-                    <ThirdText>You will stake</ThirdText>
-                    <VolumeControl
-                        type="range"
-                        min={0}
-                        max={60}
-                        step={1}
-                        value={volume}
-                        onChange={(event) => {
-                        setVolume(event.target.valueAsNumber);
-                        }}
-                        // onChange={(e)=>leverageOnChange(e)}
-                    />
-                </FirstBox>
-                <SecondBox>
-                    <LeftSide>Stable Hedge Ratio</LeftSide>
-                    <RightSide>{volume}%</RightSide>
-                </SecondBox>
-                <ThirdBox>
-                    <LeftSide>From</LeftSide>
-                    <RightSide>{tempStake * volume / 100} Matic</RightSide>
-                </ThirdBox>
-                <FourthBox>
-                    <LeftSide>To</LeftSide>
-                    <RightSide>{tempStake * volume * tempSwapRate / 100} USDT</RightSide>
-                </FourthBox>
-            </FormBox>
-        </ContentBox>
-        <ContentBox>
-            <EmptyBox></EmptyBox>
-            <ConfirmButton 
-            onClick={() => {
-                openModal();
-            }}
-            >Confirm</ConfirmButton>
-        </ContentBox>
-    </AllWrapper>
-  );
+    const tempStake = stakeAmountRedux;
+    const tempSwapRate = 0.9;
+
+    useEffect(() => {
+       
+    }, [stakeAmount]);
+
+    return (
+        <AllWrapper>
+            <StageBar>
+                {stage.map((v, i) => (
+                <StageCircle
+                    style={i <= stageLevel ? { backgroundColor: "#1F53FF" } : {}}
+                />
+                ))}
+            </StageBar>
+            <ContentBox>
+                <LevelBox>
+                <LevelCircle>3</LevelCircle>
+                </LevelBox>
+                <TitleBox>
+                    <TextBox>
+                        <FirstText>Risk Hedge with Stable Coin</FirstText>
+                        <SecondText>Set your hedging ratio</SecondText>
+                    </TextBox>
+                    <Checker>
+                    </Checker>
+                </TitleBox>
+            </ContentBox>
+            <ContentBox>
+                <EmptyBox></EmptyBox>
+                <FormBox>
+                    <FirstBox>
+                        <TextBox2>
+                            <ThirdText>You will stake</ThirdText>
+                            <ThirdText>{stakeAmountRedux * (100-volume)/100} Matic</ThirdText>
+                        </TextBox2>
+                        <VolumeControl
+                            type="range"
+                            min={0}
+                            max={60}
+                            step={1}
+                            value={volume}
+                            onChange={(event) => {
+                            setVolume(event.target.valueAsNumber);
+                            }}
+                            // onChange={(e)=>leverageOnChange(e)}
+                        />
+                    </FirstBox>
+                    <SecondBox>
+                        <LeftSide>Stable Hedge Ratio</LeftSide>
+                        <RightSide>{volume}%</RightSide>
+                    </SecondBox>
+                    <ThirdBox>
+                        <LeftSide>From</LeftSide>
+                        <RightSide>{tempStake * volume / 100} Matic</RightSide>
+                    </ThirdBox>
+                    <FourthBox>
+                        <LeftSide>To</LeftSide>
+                        <RightSide>{tempStake * volume * tempSwapRate / 100} USDT</RightSide>
+                    </FourthBox>
+                    <FifthBox>
+                        <TextBox2>
+                            <ThirdText>You will Receive</ThirdText>
+                            <ThirdText>{tempStake * volume * tempSwapRate / 100} USDT</ThirdText>
+                        </TextBox2>
+                    </FifthBox>
+                </FormBox>
+            </ContentBox>
+            <ContentBox>
+                <EmptyBox></EmptyBox>
+                <ConfirmButton 
+                onClick={() => {
+                    openModal();
+                    stakeDispatch(setStakeAmount(stakeAmountRedux * (100-volume)/100));
+                    hedgeDispatch(setHedgeAmount(stakeAmountRedux * volume * tempSwapRate / 100));
+                }}
+                >Confirm</ConfirmButton>
+            </ContentBox>
+        </AllWrapper>
+    );
 };
 
 export default RiskHedge;

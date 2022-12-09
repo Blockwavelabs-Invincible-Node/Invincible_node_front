@@ -42,7 +42,7 @@ const ModalOverlay = styled.div`
   z-index: 2;
 `;
 
-function Modal({ closeModal, visible, token, stakeAmount, getAmount }) {
+function Modal({ closeModal, visible, token, stakeAmount, getAmount, hedgeAmount }) {
   const [component, setComponent] = useState(false);
   const modalRef = useRef();
 
@@ -81,6 +81,7 @@ function Modal({ closeModal, visible, token, stakeAmount, getAmount }) {
               token={token}
               stakeAmount={stakeAmount}
               getAmount={getAmount}
+              hedgeAmount={hedgeAmount}
             />
           ) : (
             <Success

@@ -8,14 +8,14 @@ export const stakeAmountReducer = createSlice({
   name: 'stakeAmount',
   initialState,
   reducers: {
-    setAmount: (state, action) => {
+    setStakeAmount: (state, action) => {
         state.ethStakeAmount = action.payload;
     }
   },
 
 });
 
-export const { setAmount } = stakeAmountReducer.actions;
+export const { setStakeAmount } = stakeAmountReducer.actions;
 export const selectStakeAmount = (state) => state.stakeAmount.ethStakeAmount;
 
 export default stakeAmountReducer.reducer;

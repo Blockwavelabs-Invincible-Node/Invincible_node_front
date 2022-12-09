@@ -1,4 +1,6 @@
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { selectHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
@@ -71,6 +73,7 @@ const YouWillGet = styled(LightText)`
 `;
 
 const HedgeInput = ({ status, token, hedgeAmount }) => {
+  const hedgeAmountRedux = useSelector(selectHedgeAmount);
   return (
     <>
       <ResultContainer>
@@ -79,8 +82,8 @@ const HedgeInput = ({ status, token, hedgeAmount }) => {
             {status == "success" ? "You can get" : "You will get"}
           </YouWillGet>
           <EvmosInputWrapper>
-            <EvmosInput value={hedgeAmount} />
-            <InEvmosAmount>in {token}</InEvmosAmount>
+            <EvmosInput value={hedgeAmountRedux} />
+            <InEvmosAmount>USDT</InEvmosAmount>
           </EvmosInputWrapper>
         </GetWrapper>
       </ResultContainer>

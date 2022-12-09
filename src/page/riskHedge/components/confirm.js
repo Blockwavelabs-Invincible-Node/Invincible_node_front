@@ -183,6 +183,9 @@ const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => 
         })
         .then(function(receipt){
           console.log(receipt);
+          if (receipt) {
+            
+          }
           pressStake();
         });
     }
@@ -203,15 +206,12 @@ const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => 
         <CurrentStatusWrapper>
             <StakeInput
             token={token}
-            stakeAmount={stakeAmount}
-            getAmount={getAmount}
             />
         </CurrentStatusWrapper>
         <ThirdText>Risk Hedge Status</ThirdText>
         <CurrentStatusWrapper>
             <HedgeInput
             token={token}
-            hedgeAmount={hedgeAmount}
             />
         </CurrentStatusWrapper>
         <ButtonWrapper>
