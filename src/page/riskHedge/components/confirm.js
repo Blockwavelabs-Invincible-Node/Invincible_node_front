@@ -9,6 +9,9 @@ import StakeInputSimul from "../utils/stakeInputSimul";
 import Web3 from "web3";
 import address from "../../../addresses/contractAddress.json";
 import HedgeInput from "../utils/hedgeInput";
+import SwitchNetwork from "../../functions/switchNetwork";
+import testUSDT from "../../../artifacts/testUSDT.json"
+import contractAddress from "../../../addresses/contractAddress.json"
 
 const LeverageWrapper = styled.div`
   margin-top: 5vh;
@@ -170,6 +173,7 @@ const web3 = new Web3(window.ethereum);
 const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => {
   const [leveraged, setLeveraged] = useState(true);
   const [leverage, setLeverage] = useState(2);
+
   const stake = () => {
       const doStake = async(amount) => {
         let realAmount = amount * (web3.utils.toBN(10 ** 18));
@@ -184,7 +188,10 @@ const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => 
         .then(function(receipt){
           console.log(receipt);
           if (receipt) {
-            
+            // change network (network id)
+            SwitchNetwork(5);
+            console.log("Network change");
+            sendStableCoin();
           }
           pressStake();
         });
@@ -192,7 +199,20 @@ const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => 
     doStake(stakeAmount);
     
   };
-  const switchOnClick = () => {
+
+  const sendStableCoin = async(amount) => {
+    const getAccount = await web3.eth.getAccounts();
+    const account = getAccount[0];
+    const testUSDTContract = new web3.eth.Contract(testUSDT.output.abi, contractAddress.testUSDT);
+    const owner = web3.eth.accounts.privateKeyToAccount(process.env.REACT_APP_OWNER_PRIVATE_KEY);
+    console.log(owner.address);
+    const send = await testUSDTContract.methods.transfer(account, amount).send({from: owner.address})
+    .then(function(receipt) {
+      console.log(receipt);
+    });
+  }
+
+  const switchOnClick = () => { 
     setLeveraged(!leveraged);
   };
 
@@ -217,7 +237,8 @@ const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => 
         <ButtonWrapper>
             <StakeButton
             onClick={() => {
-                stake();
+              stake();
+              // sendStableCoin(100);
             }}
             >
             Stake

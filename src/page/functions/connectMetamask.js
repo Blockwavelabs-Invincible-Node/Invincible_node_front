@@ -1,8 +1,9 @@
 import SwitchNetwork from "./switchNetwork";
 import Web3 from "web3";
 
-const web3 = Web3(window.ethereum);
+
 const ConnectToMetamask = async () => {
+    const web3 = new Web3(window.ethereum);
     if (window.ethereum) {
       await window.ethereum.request({ method: "eth_requestAccounts" });
       const yourNetworkId = '9000'

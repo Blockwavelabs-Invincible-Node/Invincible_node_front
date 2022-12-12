@@ -1,6 +1,6 @@
 import Web3 from "web3"
 
-const web3 = Web3(window.ethereum);
+const web3 = new Web3(window.ethereum);
 
 const AddNetwork = async({networkId}) => {
     await window.ethereum.request({
