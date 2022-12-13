@@ -1,6 +1,6 @@
 {
     "rewardToken" : "0x004e2d9d9d0e7fB202eFdc6069d624a4F97841fa",
-    "liquidStaking" : "0x80c51b9F8463BF726238d12da607E37F1ffc36B4",
+    "liquidStaking" : "0x17d5703B68842A7Ca8d24614aC244c5410C85bC2",
     "testUSDT" : "0x2b744b6C5f211Aa65C976a880E94c2dC0fAE4a1a",
-    "stableCoinPool" : "0xB0Ce225935361c2f26c422f1fB675C8734E928b7"
+    "stableCoinPool" : "0xA410b8C8217F42E6CBE63154a541bc5e5e64bd68"
 }

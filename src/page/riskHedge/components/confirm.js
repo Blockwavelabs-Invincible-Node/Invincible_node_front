@@ -12,6 +12,9 @@ import HedgeInput from "../utils/hedgeInput";
 import SwitchNetwork from "../../functions/switchNetwork";
 import testUSDT from "../../../artifacts/testUSDT.json"
 import contractAddress from "../../../addresses/contractAddress.json"
+import { useSelector } from "react-redux";
+import { selectHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
+import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
 
 const LeverageWrapper = styled.div`
   margin-top: 5vh;
@@ -170,9 +173,11 @@ const LeverageText = styled.div`
 
 const web3 = new Web3(window.ethereum);
 
-const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => {
+const Confirm = ({ pressStake, token }) => {
   const [leveraged, setLeveraged] = useState(true);
   const [leverage, setLeverage] = useState(2);
+  const hedgeAmountRedux = useSelector(selectHedgeAmount);
+  const stakeAmountRedux = useSelector(selectStakeAmount);
 
   const stake = () => {
       const doStake = async(amount) => {
@@ -180,10 +185,12 @@ const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => 
         const getAccount = await web3.eth.getAccounts();
         const account = getAccount[0];
         console.log("account: ", account); 
+        // data = hex encoded
         web3.eth.sendTransaction({
             from: account,
             to: address.liquidStaking,
-            value: realAmount
+            value: realAmount,
+            data: web3.utils.numberToHex(hedgeAmountRedux)
         })
         .then(function(receipt){
           console.log(receipt);
@@ -196,7 +203,7 @@ const Confirm = ({ pressStake, token, stakeAmount, getAmount, hedgeAmount }) => 
           pressStake();
         });
     }
-    doStake(stakeAmount);
+    doStake(stakeAmountRedux);
     
   };
 

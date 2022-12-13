@@ -10,6 +10,9 @@ import liquidStaking from "../../../artifacts/liquidStaking.json";
 import rewardToken from "../../../artifacts/rewardToken.json";
 import { useNavigate } from "react-router-dom";
 import { useTable } from 'react-table'
+import contractAddress from "../../../addresses/contractAddress.json"
+import StableTokenPoolMethodObject from "../../functions/getStableTokenPool";
+import stableTokenPool from "../../../artifacts/stableCoinPool.json";
 
 
 const LeverageWrapper = styled.div`
@@ -68,7 +71,8 @@ background: #1B1B1B;
 border-radius: 10px;
 `;
 const ContentText = styled(LightText)` 
-
+width: 95%;
+font-size: 20px ;
 `;
 const Line = styled.hr` 
 width: 100%;
@@ -93,6 +97,8 @@ const TableHeader = styled.th`
 const TableElement = styled.td` 
 
 `;
+
+const web3 = new Web3(window.ethereum);
 const Contract = () => {
     let navigate = useNavigate();
     const routeMain = () => {
@@ -100,6 +106,21 @@ const Contract = () => {
         navigate(path);
     };
 
+
+    const stableCoinPoolRead = async() => {
+        const stableTokenPoolContract = new web3.eth.Contract(stableTokenPool.output.abi, contractAddress.stableCoinPool)
+        const totalSupplyPro = stableTokenPoolContract.methods.totalReceived().call();
+        const totalLendPro = stableTokenPoolContract.methods.totalSent().call();
+        
+        const [totalSupply, totalLend] = await Promise.all([
+            totalSupplyPro,
+            totalLendPro
+        ]);
+
+        console.log(totalSupply, totalLend);
+        return totalSupply-totalLend;
+    }
+  
     useEffect(()=> {
        
     }, []);
@@ -115,7 +136,7 @@ const Contract = () => {
                         <Element1>
                             <TitleText>Address</TitleText>
                             <TextBox>
-                                <ContentText>0x00000000</ContentText>
+                                <ContentText>{contractAddress.liquidStaking}</ContentText>
                             </TextBox>
                         </Element1>
                         <Element1>
@@ -133,13 +154,13 @@ const Contract = () => {
                         <Element2>
                             <TitleText>Address</TitleText>
                             <TextBox>
-                                <ContentText>0x000000</ContentText>
+                                <ContentText>{contractAddress.stableCoinPool}</ContentText>
                             </TextBox>
                         </Element2>
                         <Element2>
                             <TitleText>Balance</TitleText>
                             <TextBox>
-                                <ContentText>111,111</ContentText>
+                                <ContentText>10</ContentText>
                             </TextBox>
                         </Element2>
                         <Element2>

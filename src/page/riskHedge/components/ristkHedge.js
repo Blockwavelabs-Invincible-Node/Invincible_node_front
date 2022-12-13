@@ -247,8 +247,9 @@ const RiskHedge = ({
                 <ConfirmButton 
                 onClick={() => {
                     openModal();
+                    const hedge = parseInt(stakeAmountRedux * volume * tempSwapRate * 10**16);
                     stakeDispatch(setStakeAmount(stakeAmountRedux * (100-volume)/100));
-                    hedgeDispatch(setHedgeAmount(stakeAmountRedux * volume * tempSwapRate / 100));
+                    hedgeDispatch(setHedgeAmount(hedge));
                 }}
                 >Confirm</ConfirmButton>
             </ContentBox>

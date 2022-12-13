@@ -11,6 +11,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ConnectToMetamask from "../functions/connectMetamask";
 import ValidatorApplication from "../functions/validatorApplication";
 import "./header.css"
+import SwitchNetwork from "../functions/switchNetwork";
 //--------------------Styles--------------------------//
 const Top = styled.div`
   width: 100%;
@@ -145,6 +146,11 @@ function Header({ home }) {
     let path = "/validators";
     navigate(path);
   } 
+  const routeValidatorApplication = () => {
+    let path = "/validator-application";
+    navigate(path);
+  }
+
 
   // const AddNetwork = async() => {
   //   await window.ethereum.request({
@@ -237,11 +243,46 @@ function Header({ home }) {
     
   }
 
+  const checkNetwork = async() => {
+    // goerli testnet network id
+    const properNetworkId = '5'
+    const netId = await web3.eth.net.getId()
+    .then((networkId) => {
+        if (networkId != properNetworkId) {
+            alert("Switch network to goerli testnet");
+            SwitchNetwork(properNetworkId)
+            .then(() => {
+              routeValidatorApplication();
+            })
+        }
+        else {
+          console.log(networkId, properNetworkId, networkId == properNetworkId);
+          routeValidatorApplication();
+        }
+    })
+    // console.log("netID: ", netId);
+}
+
   // Use Effect
   useEffect(() => {
     getWeb3();
     // window.localStorage.removeItem("connectMetamask");
   }, []);
+
+//   <LaunchApp
+//   onClick={async() => {
+//     const connection = await ConnectToMetamask();
+//     if (connection) {
+//       routeApp();
+//     }
+//     else {
+//       alert("Change Network to begin");
+//     }
+//   }}
+// >
+//   Launch App
+// </LaunchApp>
+
 
   if (account == null) {
     return (
@@ -303,8 +344,8 @@ function Header({ home }) {
           ) : (
             <>
             <UnstakeButton
-              onClick={() => {
-                ValidatorApplication();
+              onClick={async() => {
+                const check = await checkNetwork()
               }}
             >
               Apply as Validator

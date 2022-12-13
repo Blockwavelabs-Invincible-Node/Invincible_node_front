@@ -11,6 +11,7 @@ import TransactionPage from "./page/transactions";
 import ContractPage from "./page/contracts";
 import ValidatorPage from "./page/validators";
 import RiskHedgePage from "./page/riskHedge";
+import ValidatorApplicationPage from "./page/validatorApplication";
 
 
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="/contracts" element={<ContractPage />} ></Route>
           <Route path="/validators" element={<ValidatorPage />} ></Route>
           <Route path="/risk-hedge" element={<RiskHedgePage />}></Route>
+          <Route path="/validator-application" element={<ValidatorApplicationPage />}></Route>
         </Routes>
       </BrowserRouter>
     </Background>

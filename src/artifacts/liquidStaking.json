@@ -59,6 +59,12 @@
 						"internalType": "uint256",
 						"name": "val",
 						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes",
+						"name": "stableAmount",
+						"type": "bytes"
 					}
 				],
 				"name": "Transfer",
@@ -407,7 +413,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/liquidStaking.sol": "LiquidStaking"
+			"contracts/LiquidStaking.sol": "LiquidStaking"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -429,12 +435,12 @@
 				"dweb:/ipfs/QmTyFztU3tLEcEDnqqiaW4UJetqsU77LXc6pjc9oTXCK5u"
 			]
 		},
-		"contracts/liquidStaking.sol": {
-			"keccak256": "0x55b4bb8384812096fbb0b4ef831468adfed96e8a1dbfeaf660971c0cf5a156a4",
+		"contracts/LiquidStaking.sol": {
+			"keccak256": "0x4cff4797698e84b38ffd0675de386db6771a4e53fde470bd4d801662f778ed91",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://50bbc26f54670934c838f818d782bc104d218275d516925112da53227368119e",
-				"dweb:/ipfs/QmWMAzgMh8uWq1TEEoCJACSdEzoFJ94JkG6oGZFScSdhn3"
+				"bzz-raw://0f6f6d4ddbbbc421bfcacdb4639fa86351fcd2926d59c4c48ab7d0f5a5f10cca",
+				"dweb:/ipfs/QmVQCuf9serVt3NtS4vG2jARxUTsogARi5mw3dnABfR9fx"
 			]
 		}
 	},
