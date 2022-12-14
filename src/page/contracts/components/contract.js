@@ -122,7 +122,7 @@ const Contract = () => {
     }
   
     useEffect(()=> {
-       
+       stableCoinPoolRead();
     }, []);
 
   

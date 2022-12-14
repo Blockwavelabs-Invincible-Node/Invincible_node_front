@@ -208,7 +208,7 @@ const RiskHedge = ({
                     <FirstBox>
                         <TextBox2>
                             <ThirdText>You will stake</ThirdText>
-                            <ThirdText>{stakeAmountRedux * (100-volume)/100} Matic</ThirdText>
+                            <ThirdText>{stakeAmountRedux * (100-volume)/100} Evmos</ThirdText>
                         </TextBox2>
                         <VolumeControl
                             type="range"
@@ -228,7 +228,7 @@ const RiskHedge = ({
                     </SecondBox>
                     <ThirdBox>
                         <LeftSide>From</LeftSide>
-                        <RightSide>{tempStake * volume / 100} Matic</RightSide>
+                        <RightSide>{tempStake * volume / 100} EVMOS</RightSide>
                     </ThirdBox>
                     <FourthBox>
                         <LeftSide>To</LeftSide>
@@ -237,7 +237,7 @@ const RiskHedge = ({
                     <FifthBox>
                         <TextBox2>
                             <ThirdText>You will Receive</ThirdText>
-                            <ThirdText>{tempStake * volume * tempSwapRate / 100} USDT</ThirdText>
+                            <ThirdText>{tempStake * volume * tempSwapRate / 10**20} USDT</ThirdText>
                         </TextBox2>
                     </FifthBox>
                 </FormBox>

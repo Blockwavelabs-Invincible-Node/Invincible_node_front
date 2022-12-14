@@ -12,6 +12,7 @@ import ConnectToMetamask from "../functions/connectMetamask";
 import ValidatorApplication from "../functions/validatorApplication";
 import "./header.css"
 import SwitchNetwork from "../functions/switchNetwork";
+import Menu from "./components/menu";
 //--------------------Styles--------------------------//
 const Top = styled.div`
   width: 100%;
@@ -343,51 +344,7 @@ function Header({ home }) {
             </HomeButton>
           ) : (
             <>
-            <UnstakeButton
-              onClick={async() => {
-                const check = await checkNetwork()
-              }}
-            >
-              Apply as Validator
-            </UnstakeButton>
-            <StyledDropdown>
-              <StyledDropdownButton variant="success" id="dropdown-basic">
-                Event
-              </StyledDropdownButton>
-              <StyledDropdownMenu>
-                <StyledDropdownItem><div onClick={() => {
-                  routeStake();
-                  }}
-                >Stake</div></StyledDropdownItem>
-                <StyledDropdownItem><div onClick={() => {
-                  routeUnstake();
-                  }}
-                >Unstake</div></StyledDropdownItem>
-                <StyledDropdownItem><div onClick={() => {
-                  routeClaimReward();
-                  }}
-                >Claim Rewards</div></StyledDropdownItem>
-              </StyledDropdownMenu>
-            </StyledDropdown>
-            <StyledDropdown>
-              <StyledDropdownButton variant="success" id="dropdown-basic">
-                Info
-              </StyledDropdownButton>
-              <StyledDropdownMenu>
-                <StyledDropdownItem><div onClick={() => {
-                  routeContract();
-                  }}
-                >Contracts</div></StyledDropdownItem>
-                <StyledDropdownItem><div onClick={() => {
-                  routeTransaction();
-                  }}
-                >Transactions</div></StyledDropdownItem>
-                <StyledDropdownItem><div onClick={() => {
-                  routeValidator();
-                  }}
-                >Validators</div></StyledDropdownItem>
-              </StyledDropdownMenu>
-            </StyledDropdown>
+              <Menu />
             </>
           )}
           {window.localStorage.getItem("connectMetamask") ? (
