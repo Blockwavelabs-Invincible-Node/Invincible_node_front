@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
+import { Button } from "../../../styles/styledComponents/button";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Web3 from "web3";
+import { selectNetworkName } from "../../../redux/reducers/networkReducer";
 import SwitchNetwork from "../../functions/switchNetwork";
 
 const StyledDropdown = styled(Dropdown)` 
@@ -49,6 +52,9 @@ const ApplyButton = styled.button`
   background-color: transparent;
   color: #ffffff;
 `;
+const NetworkButton = styled(Button)` 
+
+`;
 
 const web3 = new Web3(window.ethereum);
 
@@ -63,7 +69,7 @@ const Menu = () => {
     const routeStake = () => {
         let path = '/stake';
         navigate(path);
-    }
+    };
     const routeUnstake = () => {
         let path = `/unstake`;
         navigate(path);
@@ -71,23 +77,25 @@ const Menu = () => {
     const routeClaimReward = () => {
         let path = "/claim";
         navigate(path);
-    }
+    };
     const routeContract = () => {
         let path = "/contracts";
         navigate(path);
-    }
+    };
     const routeTransaction = () => {
         let path = "/transactions";
         navigate(path);
-    }
+    };
     const routeValidator = () => {
         let path = "/validators";
         navigate(path);
-    } 
+    };
     const routeValidatorApplication = () => {
         let path = "/validator-application";
         navigate(path);
-    }
+    };
+
+    const networkNameRedux = useSelector(selectNetworkName);
 
     const checkNetwork = async() => {
         // goerli testnet network id
@@ -113,7 +121,7 @@ const Menu = () => {
         <>  
             <ApplyButton
               onClick={async() => {
-                const check = await checkNetwork()
+                const check = await checkNetwork();
               }}
             >
               Apply as Validator
@@ -149,7 +157,6 @@ const Menu = () => {
                     >Claim Rewards</div></StyledDropdownItem>
                 </div>
               </StyledDropdownMenu>
-              
             </StyledDropdown>
 
             <StyledDropdown>
@@ -181,6 +188,10 @@ const Menu = () => {
                 </div>
               </StyledDropdownMenu>
             </StyledDropdown>
+            
+            <NetworkButton>
+                  {networkNameRedux}
+            </NetworkButton>
 
         </>
     )

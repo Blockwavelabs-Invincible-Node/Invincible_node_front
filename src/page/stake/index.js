@@ -29,7 +29,7 @@ const StakePage = () => {
           getAmount={getAmount}
         />
       )} */}
-      <Header></Header>
+      <Header home={0} launchedApp={1}></Header>
       <Base
         component={
           <Stake

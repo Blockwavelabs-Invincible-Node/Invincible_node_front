@@ -113,7 +113,7 @@ flex-direction: column;
 
 const web3 = new Web3(window.ethereum);
 
-function Header({ home }) {
+function Header({ home, launchedApp }) {
   const [account, setAccount] = useState();
   const dispatch = useDispatch();
 
@@ -152,78 +152,6 @@ function Header({ home }) {
     navigate(path);
   }
 
-
-  // const AddNetwork = async() => {
-  //   await window.ethereum.request({
-  //     method: 'wallet_addEthereumChain',
-  //     params: [{ 
-  //         chainId: web3.utils.toHex('9000'),
-  //         chainName: 'Evmos',
-  //         nativeCurrency: {
-  //             name: 'tEVMOS',
-  //             symbol: 'tEVMOS',
-  //             decimals: 18
-  //         },
-  //         rpcUrls: ['https://eth.bd.evmos.dev:8545'],
-  //         blockExplorerUrls: ['https://evm.evmos.dev']
-  //     }],
-  // })
-  // .then(() => console.log('network added'))
-  // .catch(() => console.log('could not add network'))
-  // }
-
-  // const SwitchNetwork = async () => {
-  //   await window.ethereum.request({
-  //       method: 'wallet_switchEthereumChain',
-  //       params: [{ chainId: web3.utils.toHex('9000') }],
-  //   })
-  //   .then(() => console.log('network has been set'))
-  //   .catch((e) => {
-  //       if (e.code === 4902) {
-  //         console.log('network is not available, add it');
-  //         AddNetwork();
-
-  //       } else {
-  //         console.log('could not set network')
-  //       }
-  //   })
-  // }
-
-  // const ConnectToMetamask = async () => {
-  //   if (window.ethereum) {
-  //     await window.ethereum.request({ method: "eth_requestAccounts" });
-  //     const yourNetworkId = '9000'
-  //     const netId = await web3.eth.net.getId()
-  //     .then((networkId) => {
-  //       if (networkId != yourNetworkId) {
-  //         // MetaMask network is wrong
-  //         console.log('current net id: ', networkId);
-  //         // set network
-  //         SwitchNetwork();
-  //       }
-  //       else {
-  //         console.log("proper network. id: ", networkId);
-          
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       // unable to retrieve network id
-  //       console.log(err);
-  //     });
-
-  //     const account = web3.eth.accounts;
-  //     //Get the current MetaMask selected/active wallet
-  //     const walletAddress = account.givenProvider.selectedAddress;
-  //     console.log(`Wallet Address: ${walletAddress}`);
-  //     console.log(dispatch(setStatus(true)));
-  //     window.localStorage.setItem("connectMetamask", true);
-  //     window.location.reload();
-  //     return true;
-  //   } else {
-  //     console.log("No wallet");
-  //     return false;
-  //   }
-  // };
 
   const getWeb3 = async () => {
     if (window.localStorage.getItem("connectMetamask")) {
@@ -270,57 +198,7 @@ function Header({ home }) {
     // window.localStorage.removeItem("connectMetamask");
   }, []);
 
-//   <LaunchApp
-//   onClick={async() => {
-//     const connection = await ConnectToMetamask();
-//     if (connection) {
-//       routeApp();
-//     }
-//     else {
-//       alert("Change Network to begin");
-//     }
-//   }}
-// >
-//   Launch App
-// </LaunchApp>
-
-
-  if (account == null) {
-    return (
-      <>
-        <Top>
-          <LeftTop>
-            <Logo
-              src={logo}
-              onClick={() => {
-                routeMain();
-              }}
-            />
-          </LeftTop>
-          <RightTop>
-            {home ? (
-              <HomeButton
-                onClick={() => {
-                  routeMain();
-                }}
-              >
-                Main
-              </HomeButton>
-            ) : (
-              <></>
-            )}
-            <WalletConnect
-              onClick={() => {
-                ConnectToMetamask();
-              }}
-            >
-              Connect Wallet
-            </WalletConnect>
-          </RightTop>
-        </Top>
-      </>
-    );
-  }
+  console.log("launched: ", launchedApp)
 
   return (
     <>
@@ -344,9 +222,12 @@ function Header({ home }) {
             </HomeButton>
           ) : (
             <>
-              <Menu />
+              {
+                launchedApp ? (<Menu></Menu>) : (<></>)
+              }
             </>
           )}
+          
           {window.localStorage.getItem("connectMetamask") ? (
             <WalletAddress>
               <WalletAddressText>{account} ...</WalletAddressText>

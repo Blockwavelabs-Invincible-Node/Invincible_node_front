@@ -349,33 +349,26 @@ const Stake = ({
             ))}
           </StageBar>
 
-          <ContentBox>
+          {/* <ContentBox>
             <LevelBox>
               <LevelCircle>0</LevelCircle>
             </LevelBox>
             <InputBox>
               <SelectTokenText>Select Token to stake </SelectTokenText>
               <br />
-              {/* <TokenToStake   
-                            defaultValue={options[0]}
-                            options={options}
-                            onChange={setSelectedOption}
-                        ></TokenToStake><br /> */}
               <DropboxContainer>
-                {/* {!pressStake ? ( */}
+               
                 <TokenToStake
                   defaultValue={options[0]}
                   options={options}
                   onChange={(e) => handleSelectedOption(e)}
                   styles={colourStyles}
                 ></TokenToStake>
-                {/* ) : (
-                  <div></div>
-                )} */}
+               
                 <SelectButton>Select</SelectButton>
               </DropboxContainer>
             </InputBox>
-          </ContentBox>
+          </ContentBox> */}
           <ContentBox>
             <LevelBox>
               <LevelCircle>1</LevelCircle>

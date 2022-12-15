@@ -66,7 +66,7 @@ const LaunchApp = styled(BlueButton)`
 
 const web3 = new Web3(window.ethereum);
 
-function Title() {
+function Title({openModal}) {
   let navigate = useNavigate();
   const routeApp = () => {
     let path = `stake`;
@@ -158,14 +158,16 @@ function Title() {
           <Contact>Contact us</Contact>
           <LaunchApp
             onClick={async() => {
-              const connection = await ConnectToMetamask();
-              if (connection) {
-                routeApp();
-              }
-              else {
-                alert("Change Network to begin");
-              }
+              openModal();
+              // const connection = await ConnectToMetamask();
+              // if (connection) {
+              //   routeApp();
+              // }
+              // else {
+              //   alert("Change Network to begin");
+              // }
             }}
+            
           >
             Launch App
           </LaunchApp>

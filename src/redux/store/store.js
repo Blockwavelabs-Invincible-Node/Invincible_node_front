@@ -6,12 +6,15 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import stakeAmountReducer from "../reducers/stakeAmountReducer";
 import connectMetamaskReducer from "../reducers/connectMetamaskReducer";
 import hedgeAmountReducer from "../reducers/hedgeAmountReducer";
+import networkReducer from "../reducers/networkReducer";
+
 
 const rootReducer = combineReducers({
     // list of reducers
     stakeAmount: stakeAmountReducer,
     connectMetamask: connectMetamaskReducer,
-    hedgeAmount: hedgeAmountReducer
+    hedgeAmount: hedgeAmountReducer,
+    network: networkReducer
 });
 
 //const middleware = applyMiddleware(thunk);

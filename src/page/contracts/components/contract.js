@@ -72,7 +72,7 @@ border-radius: 10px;
 `;
 const ContentText = styled(LightText)` 
 width: 95%;
-font-size: 20px ;
+font-size: 15px ;
 `;
 const Line = styled.hr` 
 width: 100%;
@@ -98,8 +98,13 @@ const TableElement = styled.td`
 
 `;
 
-const web3 = new Web3(window.ethereum);
+const goerliWeb3 = new Web3(process.env.REACT_APP_GOERLI_RPC_URL);
+const liquidStakingContractAddress = contractAddress.liquidStaking;
+const rewardTokenContractAddress = contractAddress.rewardToken;
+const stableCoinPoolContractAddress = contractAddress.stableCoinPool;
+const testUSDTAddress = contractAddress.testUSDT;
 const Contract = () => {
+    const [balance, setBalance] = useState();
     let navigate = useNavigate();
     const routeMain = () => {
         let path = "/";
@@ -108,7 +113,7 @@ const Contract = () => {
 
 
     const stableCoinPoolRead = async() => {
-        const stableTokenPoolContract = new web3.eth.Contract(stableTokenPool.output.abi, contractAddress.stableCoinPool)
+        const stableTokenPoolContract = new goerliWeb3.eth.Contract(stableTokenPool.output.abi, contractAddress.stableCoinPool);
         const totalSupplyPro = stableTokenPoolContract.methods.totalReceived().call();
         const totalLendPro = stableTokenPoolContract.methods.totalSent().call();
         
@@ -118,13 +123,16 @@ const Contract = () => {
         ]);
 
         console.log(totalSupply, totalLend);
-        return totalSupply-totalLend;
+        setBalance((totalSupply-totalLend) / 10**18);
     }
   
     useEffect(()=> {
        stableCoinPoolRead();
     }, []);
 
+    function getShortenedAddress(addr) {
+        return addr.substring(0,5) + "..." + addr.substring(25);
+    }
   
     return (
         <LeverageWrapper>
@@ -136,7 +144,7 @@ const Contract = () => {
                         <Element1>
                             <TitleText>Address</TitleText>
                             <TextBox>
-                                <ContentText>{contractAddress.liquidStaking}</ContentText>
+                                <ContentText>{getShortenedAddress(liquidStakingContractAddress)}</ContentText>
                             </TextBox>
                         </Element1>
                         <Element1>
@@ -154,13 +162,22 @@ const Contract = () => {
                         <Element2>
                             <TitleText>Address</TitleText>
                             <TextBox>
-                                <ContentText>{contractAddress.stableCoinPool}</ContentText>
+                                <ContentText>{getShortenedAddress(stableCoinPoolContractAddress)}</ContentText>
                             </TextBox>
                         </Element2>
                         <Element2>
                             <TitleText>Balance</TitleText>
                             <TextBox>
-                                <ContentText>10</ContentText>
+                                <ContentText>{balance}</ContentText>
+                            </TextBox>
+                        </Element2>
+                    </ElementWrapper>
+
+                    <ElementWrapper>
+                        <Element2>
+                            <TitleText>Token Address</TitleText>
+                            <TextBox>
+                                <ContentText>{contractAddress.testUSDT}</ContentText>
                             </TextBox>
                         </Element2>
                         <Element2>
