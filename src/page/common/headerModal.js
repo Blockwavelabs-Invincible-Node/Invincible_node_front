@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SelectNetworkPopup from "../common/components/selectNetworkPopup";
+import SwitchNetworkPopup from "./components/switchNetworkPopup";
 
 
 
@@ -45,8 +46,8 @@ const ModalOverlay = styled.div`
 `;
 
 
-function Modal({ closeModal, visible, token, stakeAmount, getAmount }) {
-  const [component, setComponent] = useState(false);
+function HeaderModal({ closeModal, visible }) {
+
   const modalRef = useRef();
 
   const clickModalOutside = (e) => {
@@ -82,12 +83,12 @@ function Modal({ closeModal, visible, token, stakeAmount, getAmount }) {
         visible={visible}
       >
         <ModalWrapper>
-          <SelectNetworkPopup routePage={routeStake}>
+          <SwitchNetworkPopup routePage={routeStake} closeModal={closeModal}>
 
-          </SelectNetworkPopup>
+          </SwitchNetworkPopup>
         </ModalWrapper>
       </ModalBackground>
     </>
   );
 }
-export default Modal;
+export default HeaderModal;

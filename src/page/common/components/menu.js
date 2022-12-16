@@ -188,11 +188,7 @@ const Menu = () => {
                 </div>
               </StyledDropdownMenu>
             </StyledDropdown>
-            
-            <NetworkButton>
-                  {networkNameRedux}
-            </NetworkButton>
-
+          
         </>
     )
 }

@@ -1,7 +1,11 @@
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { selectNetworkName } from "../../redux/reducers/networkReducer";
 import { BoldText } from "../../styles/styledComponents/boldText";
 import { LightText } from "../../styles/styledComponents/lightText";
 import useWindowDimensions from "../../utils/functions/useWindowDimensions";
+import Menu from "./components/menu";
 
 const BaseWrapper = styled.div`
   display: flex;
@@ -40,15 +44,22 @@ const MaximizeEarningText = styled(LightText)`
 
 const Base = ({ component }) => {
   const { height, width } = useWindowDimensions();
-
+  const networkNameRedux = useSelector(selectNetworkName);
+  let navigate = useNavigate();
+  const routeStake = () => {
+    let path = "/stake";
+    navigate(path);
+  };
+ 
   return (
     <BaseWrapper>
       {width > 1100 ? (
         <TitleWrapper>
-          <InvincibleNodeText>Invincible Evmos</InvincibleNodeText>
+          <InvincibleNodeText onClick={() => {routeStake();}}>Invincible {networkNameRedux}</InvincibleNodeText>
           <MaximizeEarningText>
             Maximize Profit, Saving Value
           </MaximizeEarningText>
+          <Menu></Menu>
         </TitleWrapper>
       ) : (
         <></>

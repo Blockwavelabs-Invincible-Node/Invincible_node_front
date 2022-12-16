@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Transaction from "./components/transactions";
 import Web3 from "web3";
 import { BoldText } from "../../styles/styledComponents/boldText";
+import Base from "../common/base";
 
 const PageContainer = styled.div`
   position: relative;
@@ -54,16 +55,24 @@ const TransactionPage = () => {
     if (transactions == null) {
       return (
         <PageContainer>
-          <Header></Header>
-          <Loading>Loading Transactions.. Please wait</Loading>
+          <Header launchedApp={true}></Header>
+          <Base
+            component={
+              <Loading>Loading Transactions.. Please wait</Loading>
+            }
+          ></Base>
         </PageContainer>
       );
     }
 
     return (
       <PageContainer>
-        <Header></Header>
-        <Transaction account={account} transactions={transactions}></Transaction>
+        <Header launchedApp={true}></Header>
+        <Base
+            component={
+              <Transaction account={account} transactions={transactions}></Transaction>            
+            }
+          ></Base>
       </PageContainer>
     );
 };

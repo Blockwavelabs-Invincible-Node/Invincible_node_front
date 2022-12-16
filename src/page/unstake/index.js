@@ -11,8 +11,8 @@ const PageContainer = styled.div`
 const UnstakePage = () => {
   const [showModal, setShowModal] = useState(true);
   let navigate = useNavigate();
-  const routeMain = () => {
-    let path = "/";
+  const routeStake = () => {
+    let path = "/stake";
     navigate(path);
   };
 
@@ -23,12 +23,12 @@ const UnstakePage = () => {
         <Modal
           closeModal={() => {
             setShowModal(false);
-            routeMain();
+            routeStake();
           }}
           visible={showModal}
         />
       
-      <Header></Header>
+      <Header launchedApp={true}></Header>
     </PageContainer>
   );
 };

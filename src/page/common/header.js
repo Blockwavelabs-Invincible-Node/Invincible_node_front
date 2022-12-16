@@ -13,6 +13,8 @@ import ValidatorApplication from "../functions/validatorApplication";
 import "./header.css"
 import SwitchNetwork from "../functions/switchNetwork";
 import Menu from "./components/menu";
+import HeaderModal from "./headerModal";
+import { selectNetworkName } from "../../redux/reducers/networkReducer";
 //--------------------Styles--------------------------//
 const Top = styled.div`
   width: 100%;
@@ -109,46 +111,31 @@ const StyledDropdownMenu = styled(Dropdown.Menu)`
 display: flex;
 flex-direction: column;
 `;
-//--------------------------------------------------------------//
+const NetworkButton = styled(Button)` 
+
+`;
+const MyPageButton = styled(Button)` 
+
+`;//--------------------------------------------------------------//
 
 const web3 = new Web3(window.ethereum);
 
-function Header({ home, launchedApp }) {
+function Header({ launchedApp }) {
   const [account, setAccount] = useState();
   const dispatch = useDispatch();
-
+  const networkNameRedux = useSelector(selectNetworkName);
 
   let navigate = useNavigate();
   const routeMain = () => {
     let path = "/";
     navigate(path);
   };
-  const routeStake = () => {
-    let path = '/stake';
-    navigate(path);
-  }
-  const routeUnstake = () => {
-    let path = `/unstake`;
-    navigate(path);
-  };
-  const routeClaimReward = () => {
-    let path = "/claim";
-    navigate(path);
-  }
-  const routeContract = () => {
-    let path = "/contracts";
-    navigate(path);
-  }
-  const routeTransaction = () => {
-    let path = "/transactions";
-    navigate(path);
-  }
-  const routeValidator = () => {
-    let path = "/validators";
-    navigate(path);
-  } 
   const routeValidatorApplication = () => {
     let path = "/validator-application";
+    navigate(path);
+  }
+  const routeMyPage = () => {
+    let path = "/my-page";
     navigate(path);
   }
 
@@ -190,18 +177,29 @@ function Header({ home, launchedApp }) {
         }
     })
     // console.log("netID: ", netId);
-}
+  }
+
+  const [showModal, setShowModal] = useState(false);  
 
   // Use Effect
   useEffect(() => {
     getWeb3();
     // window.localStorage.removeItem("connectMetamask");
   }, []);
+  
 
   console.log("launched: ", launchedApp)
 
   return (
     <>
+    {showModal && (
+        <HeaderModal
+          closeModal={() => {
+            setShowModal(false);
+          }}
+          visible={showModal}
+        />
+      )}
       <Top>
         <LeftTop>
           <Logo
@@ -211,23 +209,25 @@ function Header({ home, launchedApp }) {
             }}
           ></Logo>
         </LeftTop>
+        
         <RightTop>
-          {home ? (
-            <HomeButton
-              onClick={() => {
-                routeMain();
-              }}
-            >
-              Main
-            </HomeButton>
-          ) : (
-            <>
+          <>
               {
-                launchedApp ? (<Menu></Menu>) : (<></>)
+                launchedApp ? (
+                <>
+                  <MyPageButton onClick={() => {
+                    routeMyPage();
+                  }}>
+                    My Page
+                  </MyPageButton>
+                  <NetworkButton onClick={() => {
+                      setShowModal(true);
+                    }}>
+                    {networkNameRedux}
+                  </NetworkButton>
+                </>) : (<></>)
               }
-            </>
-          )}
-          
+          </>
           {window.localStorage.getItem("connectMetamask") ? (
             <WalletAddress>
               <WalletAddressText>{account} ...</WalletAddressText>

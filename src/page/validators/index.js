@@ -53,7 +53,7 @@ const ValidatorPage = () => {
     if (transactions == null) {
       return (
         <PageContainer>
-          <Header></Header>
+          <Header launchedApp={true}></Header>
           <Loading>Loading Transactions.. Please wait</Loading>
         </PageContainer>
       );

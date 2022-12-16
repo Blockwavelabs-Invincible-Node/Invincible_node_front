@@ -11,8 +11,8 @@ const PageContainer = styled.div`
 const ClaimRewardPage = () => {
   const [showModal, setShowModal] = useState(true);
   let navigate = useNavigate();
-  const routeMain = () => {
-    let path = "/";
+  const routeStake = () => {
+    let path = "/stake";
     navigate(path);
   };
 
@@ -23,7 +23,7 @@ const ClaimRewardPage = () => {
         <Modal
           closeModal={() => {
             setShowModal(false);
-            routeMain();
+            routeStake();
           }}
           visible={showModal}
         />

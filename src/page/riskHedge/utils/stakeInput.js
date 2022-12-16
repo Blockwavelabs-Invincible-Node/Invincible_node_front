@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { selectTokenName } from "../../../redux/reducers/networkReducer";
 import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { BoldText } from "../../../styles/styledComponents/boldText";
@@ -75,6 +76,8 @@ const YouWillGet = styled(LightText)`
 
 const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
   const stakeAmountRedux = useSelector(selectStakeAmount);
+  const tokenNameRedux = useSelector(selectTokenName);
+
   return (
     <>
       <ResultContainer>
@@ -84,7 +87,7 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
           </YouWillStake>
           <EvmosInputWrapper>
             <EvmosInput value={stakeAmountRedux} />
-            <EvmosAmount>{token}</EvmosAmount>
+            <EvmosAmount>{tokenNameRedux}</EvmosAmount>
           </EvmosInputWrapper>
         </StakeWrapper>
         <GetWrapper>
@@ -93,7 +96,7 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
           </YouWillGet>
           <EvmosInputWrapper>
             <EvmosInput value={stakeAmountRedux} />
-            <InEvmosAmount>in{token}</InEvmosAmount>
+            <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
           </EvmosInputWrapper>
         </GetWrapper>
       </ResultContainer>

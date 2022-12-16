@@ -18,6 +18,7 @@ import { Button } from "../../../styles/styledComponents/button";
 import { useNavigate } from "react-router-dom";
 import { First } from "react-bootstrap/esm/PageItem";
 import { selectHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
+import { selectNetworkName, selectTokenName } from "../../../redux/reducers/networkReducer";
 
 
 const stage = [
@@ -169,6 +170,8 @@ const RiskHedge = ({
     const [updatedStakeAmount, setUpdatedStakeAmount] = useState(0);
     const stakeAmountRedux = useSelector(selectStakeAmount);
     const hedgeAmountRedux = useSelector(selectHedgeAmount);
+    const networkNameRedux = useSelector(selectNetworkName);
+    const tokenNameRedux = useSelector(selectTokenName);
 
     const stakeDispatch = useDispatch();
     const hedgeDispatch = useDispatch();
@@ -208,7 +211,7 @@ const RiskHedge = ({
                     <FirstBox>
                         <TextBox2>
                             <ThirdText>You will stake</ThirdText>
-                            <ThirdText>{stakeAmountRedux * (100-volume)/100} Evmos</ThirdText>
+                            <ThirdText>{stakeAmountRedux * (100-volume)/100} {tokenNameRedux}</ThirdText>
                         </TextBox2>
                         <VolumeControl
                             type="range"
@@ -228,7 +231,7 @@ const RiskHedge = ({
                     </SecondBox>
                     <ThirdBox>
                         <LeftSide>From</LeftSide>
-                        <RightSide>{tempStake * volume / 100} EVMOS</RightSide>
+                        <RightSide>{tempStake * volume / 100} {tokenNameRedux}</RightSide>
                     </ThirdBox>
                     <FourthBox>
                         <LeftSide>To</LeftSide>

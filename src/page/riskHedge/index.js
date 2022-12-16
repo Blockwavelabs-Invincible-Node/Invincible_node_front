@@ -31,7 +31,7 @@ const RiskHedgePage = () => {
           hedgeAmount={hedgeAmount}
         />
       )}
-      <Header></Header>
+      <Header launchedApp={true}></Header>
       <Base
         component={
           <RiskHedge

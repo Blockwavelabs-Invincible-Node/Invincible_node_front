@@ -6,6 +6,7 @@ import Web3 from "web3";
 import { BoldText } from "../../styles/styledComponents/boldText";
 import ApplyForm from "./components/applyForm";
 import SwitchNetwork from "../functions/switchNetwork";
+import Base from "../common/base";
 
 const PageContainer = styled.div`
   position: relative;
@@ -31,13 +32,16 @@ const ValidatorApplicationPage = () => {
        
     }, []);
 
- 
-        return (
-            <PageContainer>
-                <Header></Header>
-                <ApplyForm></ApplyForm>
-            </PageContainer>
-        );
+    return (
+        <PageContainer>
+            <Header launchedApp={true}></Header>
+            <Base
+            component={
+                <ApplyForm></ApplyForm>  
+            }
+            ></Base>
+        </PageContainer>
+    );
     
     
     

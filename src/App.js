@@ -2,7 +2,7 @@ import "./App.css";
 import MainPage from "./page/main";
 import React from "react";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-import MyAsset from "./page/myAsset";
+import MyPage from "./page/myPage";
 import StakePage from "./page/stake";
 import styled from "styled-components";
 import UnstakePage from "./page/unstake";
@@ -29,7 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />}></Route>
           <Route path="/stake" element={<StakePage />}></Route>
-          <Route path="/my-asset" element={<MyAsset />}></Route>
+          <Route path="/my-page" element={<MyPage />}></Route>
           <Route path="/unstake" element={<UnstakePage />}></Route>
           <Route path="/claim" element={<ClaimRewardPage />}></Route>
           <Route path="/transactions" element={ <TransactionPage /> }></Route>

@@ -139,8 +139,8 @@ const Unstake = ({ token, getAmount }) => {
     const [evmosPrice, setEvmosPrice] = useState(0);
 
     let navigate = useNavigate();
-    const routeMain = () => {
-        let path = "/";
+    const routeStake = () => {
+        let path = "/stake";
         navigate(path);
     };
 
@@ -159,7 +159,7 @@ const Unstake = ({ token, getAmount }) => {
             .then(function(receipt) {
                 console.log(receipt);
                 alert("Unstake Request submitted");
-                routeMain();
+                routeStake();
             })
         }
         doUnstake(stakeAmount);

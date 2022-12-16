@@ -16,6 +16,7 @@ import Select from "react-select";
 import Web3 from "web3";
 import { Button } from "../../../styles/styledComponents/button";
 import { useNavigate } from "react-router-dom";
+import { selectNetworkName, selectTokenName } from "../../../redux/reducers/networkReducer";
 
 const StakeForm = styled(Form)``;
 const StakingWrapper = styled(Wrapper)`
@@ -264,6 +265,7 @@ const Stake = ({
   const [label, setLabel] = useState(options[0].label);
   const [stageLevel, setStageLevel] = useState(0);
 
+  const tokenNameRedux = useSelector(selectTokenName);
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const dispatch = useDispatch();
 
@@ -369,6 +371,7 @@ const Stake = ({
               </DropboxContainer>
             </InputBox>
           </ContentBox> */}
+
           <ContentBox>
             <LevelBox>
               <LevelCircle>1</LevelCircle>
@@ -377,7 +380,7 @@ const Stake = ({
               <StakeAmountWrapper>
                 <StakeAmountText>Stake Amount</StakeAmountText>
                 <BalanceText>
-                  Available: {ethBalance ? ethBalance / 10 ** 18 : "-"} {udenom}
+                  Available: {ethBalance ? ethBalance / 10 ** 18 : "-"} {tokenNameRedux}
                 </BalanceText>
               </StakeAmountWrapper>
               <AmountBox>
@@ -388,21 +391,21 @@ const Stake = ({
                   value={stake}
                   onChange={handleStakeAmountChange}
                 ></AmountToStake>
-                <CurrencyBox>{udenom}</CurrencyBox>
+                <CurrencyBox>{tokenNameRedux}</CurrencyBox>
               </AmountBox>
               <ResultContainer>
                 <StakeWrapper>
                   <YouWillStake>You will stake</YouWillStake>
                   <EvmosInputWrapper>
                     <EvmosInput value={stake} />
-                    <EvmosAmount>{label}</EvmosAmount>
+                    <EvmosAmount>{tokenNameRedux}</EvmosAmount>
                   </EvmosInputWrapper>
                 </StakeWrapper>
                 <GetWrapper>
                   <YouWillGet>You will get</YouWillGet>
                   <EvmosInputWrapper>
                     <EvmosInput value={stake} />
-                    <InEvmosAmount>in {label}</InEvmosAmount>
+                    <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
                   </EvmosInputWrapper>
                 </GetWrapper>
               </ResultContainer>

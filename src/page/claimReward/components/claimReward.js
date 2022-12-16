@@ -75,8 +75,8 @@ const ClaimReward = ({ token, getAmount }) => {
     const [evmosPrice, setEvmosPrice] = useState(0);
 
     let navigate = useNavigate();
-    const routeMain = () => {
-        let path = "/";
+    const routeStake = () => {
+        let path = "/stake";
         navigate(path);
     };
 
@@ -90,12 +90,12 @@ const ClaimReward = ({ token, getAmount }) => {
             .then(function(receipt) {
                 console.log(receipt);
                 alert("Successfully Claimed rewards");
-                routeMain();
+                routeStake();
             })
         }
         if (rewardAmount == 0) {
             alert("No reward to claim!");
-            routeMain();
+            routeStake();
         }
         else {
             doClaim();
