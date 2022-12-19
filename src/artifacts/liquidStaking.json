@@ -90,6 +90,19 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "string",
+						"name": "validatorAddress",
+						"type": "string"
+					}
+				],
+				"name": "UpdateRequest",
+				"type": "event"
+			},
+			{
 				"stateMutability": "payable",
 				"type": "fallback"
 			},
@@ -102,6 +115,19 @@
 					}
 				],
 				"name": "addAddressList",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_validatorAddress",
+						"type": "string"
+					}
+				],
+				"name": "addValidatorAddress",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -242,6 +268,24 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_validatorAddress",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_result",
+						"type": "uint256"
+					}
+				],
+				"name": "setValidatorAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "totalAddressNumber",
 				"outputs": [
@@ -374,6 +418,25 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"name": "validatorAddresses",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "validatorOwner",
 				"outputs": [
@@ -436,11 +499,11 @@
 			]
 		},
 		"contracts/LiquidStaking.sol": {
-			"keccak256": "0x4cff4797698e84b38ffd0675de386db6771a4e53fde470bd4d801662f778ed91",
+			"keccak256": "0x52d3c6641160b9f54a4d734da1a588a5961a18d44ab0cf772fe376c8ffdd205e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0f6f6d4ddbbbc421bfcacdb4639fa86351fcd2926d59c4c48ab7d0f5a5f10cca",
-				"dweb:/ipfs/QmVQCuf9serVt3NtS4vG2jARxUTsogARi5mw3dnABfR9fx"
+				"bzz-raw://cca5e06f701c0ee96e032417461d5852ca37aa13ba8c4c4e766e0134616b3b2b",
+				"dweb:/ipfs/QmYjtQ87QDufyVyWpfQr3T19kjXhN5wQYkn6USNdCGqQL7"
 			]
 		}
 	},

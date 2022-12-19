@@ -58,6 +58,11 @@
 						"internalType": "uint256",
 						"name": "_amount",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_validatorAddress",
+						"type": "string"
 					}
 				],
 				"name": "receiveStableToken",
@@ -123,6 +128,25 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "validatorAddress",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"stateMutability": "payable",
 				"type": "receive"
 			}
@@ -163,11 +187,11 @@
 			]
 		},
 		"contracts/StableTokenPool.sol": {
-			"keccak256": "0x2596f43a4ff38387a2073f0d3945e0b8351eadbbf6a711686345a6def01fbc4f",
+			"keccak256": "0xb9f46f5f2ef2ef7308661b86a4b38ca30520b69558c73b7b62ba6d86e30b91b9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://18c363b907e71335bacbcadf9b24662a3f19d67b64f21939683518321d30c3fd",
-				"dweb:/ipfs/QmUMGgi7Se8EksWm3CkaM2MDK4GJZFaYQmqQ9h3bJpTE5j"
+				"bzz-raw://54e924e5218fece32d91357af51b489de7c6b26bab64df91b02420fbfa801190",
+				"dweb:/ipfs/QmUDZPURGZCubZMsZNyLmBAQTg9EcYLAUyFh41cQ3jenr3"
 			]
 		}
 	},

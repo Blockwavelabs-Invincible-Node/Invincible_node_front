@@ -228,7 +228,7 @@ function Header({ launchedApp }) {
                 </>) : (<></>)
               }
           </>
-          {window.localStorage.getItem("connectMetamask") ? (
+          { (account) ? (
             <WalletAddress>
               <WalletAddressText>{account} ...</WalletAddressText>
             </WalletAddress>

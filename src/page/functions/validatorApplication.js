@@ -38,19 +38,20 @@ const testUSDTContract = new web3.eth.Contract(testUSDTABI, testUSDTAddress);
 const owner = "0x3abc249dd82Df7eD790509Fba0cC22498C92cCFc";
 
 //function
-const ValidatorApplication = async(amount) => {
+const ValidatorApplication = async(validatorAddress, amount) => {
     const getAccount = await web3.eth.getAccounts();
     const account = getAccount[0];
     console.log("account: ", account);
+    console.log(validatorAddress, amount);
     const approve = await testUSDTContract.methods.approve(stableCoinPoolContractAddress, amount).send({from: account})
     .then((result) => {
         console.log(result);
     });
-    const receive = await stableCoinPoolContract.methods.receiveStableToken(amount).send({from: account})
+    const receive = await stableCoinPoolContract.methods.receiveStableToken(amount, validatorAddress).send({from: account})
     .then((result) => {
         console.log(result);
     });
-    // stableCoinPoolContractWrite.receiveStableToken(1000)
+    // stableCoinPoolContractWrite.receiveStableToken(1000, validatorAddress)
     // .then((result) => {
     //     console.log(result);
     // });

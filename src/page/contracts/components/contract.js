@@ -111,7 +111,6 @@ const Contract = () => {
         navigate(path);
     };
 
-
     const stableCoinPoolRead = async() => {
         const stableTokenPoolContract = new goerliWeb3.eth.Contract(stableTokenPool.output.abi, contractAddress.stableCoinPool);
         const totalSupplyPro = stableTokenPoolContract.methods.totalReceived().call();
