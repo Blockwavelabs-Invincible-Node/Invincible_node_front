@@ -61,6 +61,8 @@ const web3 = new Web3(window.ethereum);
 const Menu = () => {
     const [eventMenuState, setEventMenuState] = useState(false);
     const [infoMenuState, setInfoMenuState] = useState(false);
+    const [validatorMenuState, setValidatorMenuState] = useState(false);
+
     let navigate = useNavigate();
     const routeMain = () => {
         let path = "/";
@@ -119,13 +121,7 @@ const Menu = () => {
 
     return (
         <>  
-            <ApplyButton
-              onClick={async() => {
-                const check = await checkNetwork();
-              }}
-            >
-              Apply as Validator
-            </ApplyButton>
+           
       
             <StyledDropdown>
               <StyledDropdownButton variant="success" id="dropdown-basic">
@@ -186,8 +182,42 @@ const Menu = () => {
                   }}
                 >Validators</div></StyledDropdownItem>
                 </div>
+              </StyledDropdownMenu>    
+            </StyledDropdown>
+
+            <StyledDropdown>
+              <StyledDropdownButton variant="success" id="dropdown-basic">
+                <div onClick={() => {
+                    if (validatorMenuState) {
+                        setValidatorMenuState(false);
+                    } else {
+                        setValidatorMenuState(true);
+                    }
+                }}>Validator</div>
+              </StyledDropdownButton>
+              <StyledDropdownMenu>
+                <div style={{
+                    visibility: validatorMenuState ? "visible" : "hidden",
+                }}>
+                <StyledDropdownItem>
+                  <div onClick={() => {
+                    routeValidator();
+                    }}
+                  >Validator Info</div>
+                </StyledDropdownItem>
+                <StyledDropdownItem>
+                  <div
+                    onClick={async() => {
+                      const check = await checkNetwork();
+                    }}>
+                    Apply as Validator
+                  </div>
+                </StyledDropdownItem>
+
+                </div>
               </StyledDropdownMenu>
             </StyledDropdown>
+            
           
         </>
     )

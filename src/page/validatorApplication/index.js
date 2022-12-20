@@ -7,6 +7,7 @@ import { BoldText } from "../../styles/styledComponents/boldText";
 import ApplyForm from "./components/applyForm";
 import SwitchNetwork from "../functions/switchNetwork";
 import Base from "../common/base";
+import Modal from "./Modal";
 
 const PageContainer = styled.div`
   position: relative;
@@ -20,9 +21,11 @@ const web3 = new Web3(window.ethereum);
 const ValidatorApplicationPage = () => {
     const [account, setAccount] = useState();
     const [transactions, setTransactions] = useState();
+    const [showModal, setShowModal] = useState(true);
+
     let navigate = useNavigate();
-    const routeMain = () => {
-        let path = "/";
+    const routeValidatorApplication = () => {
+        let path = "/validator-application";
         navigate(path);
     };
     
@@ -34,6 +37,13 @@ const ValidatorApplicationPage = () => {
 
     return (
         <PageContainer>
+            <Modal
+            closeModal={() => {
+                setShowModal(false);
+                routeValidatorApplication();
+            }}
+            visible={showModal}
+            />
             <Header launchedApp={true}></Header>
             <Base
             component={
