@@ -1,8 +1,10 @@
 import { ethers } from "ethers";
+import { useDispatch } from "react-redux";
 import Web3 from "web3";
 import liquidStakingJSON from "../../artifacts/liquidStaking.json";
 import stableCoinPoolJSON from "../../artifacts/stableCoinPool.json";
 import testUSDTJSON from "../../artifacts/testUSDT.json";
+import { increasePageNumber } from "../../redux/reducers/modalPageNumberReducer";
 import SwitchNetwork from "./switchNetwork";
 
 const addresses = require("../../addresses/contractAddress.json");
@@ -44,8 +46,10 @@ const testUSDTContract = new web3.eth.Contract(testUSDTABI, testUSDTAddress);
 
 const owner = "0x3abc249dd82Df7eD790509Fba0cC22498C92cCFc";
 
+
 //function
 const ValidatorApplication = async(validatorAddress, amount) => {
+    const dispatch = useDispatch();
     SwitchNetwork(5)
     .then( async() => {
         const getAccount = await web3.eth.getAccounts();
@@ -54,34 +58,18 @@ const ValidatorApplication = async(validatorAddress, amount) => {
         console.log("account: ", getAccount[0]);
         console.log(validatorAddress, amount);
         console.log(await testUSDTContract.methods);
+        // dispatch(increasePageNumber());
         const approve = await testUSDTContract.methods.approve(stableCoinPoolContractAddress, amount).send({from: getAccount[0]})
         .then((result) => {
             console.log(result);
         });
+        // dispatch(increasePageNumber());
         const receive = await stableCoinPoolContract.methods.receiveStableToken(amount, validatorAddress).send({from: getAccount[0]})
         .then((result) => {
             console.log(result);
         });
-    }
-    )
-    // const getAccount = await web3.eth.getAccounts();
-    // // const getBalance = await web3.eth.getBalance(getAccount[0]);
-    // // console.log("balance: ", getBalance);
-    // console.log("account: ", getAccount[0]);
-    // console.log(validatorAddress, amount);
-    // console.log(await testUSDTContract.methods);
-    // const approve = await testUSDTContract.methods.approve(stableCoinPoolContractAddress, amount).send({from: getAccount[0]})
-    // .then((result) => {
-    //     console.log(result);
-    // });
-    // const receive = await stableCoinPoolContract.methods.receiveStableToken(amount, validatorAddress).send({from: getAccount[0]})
-    // .then((result) => {
-    //     console.log(result);
-    // });
-    // stableCoinPoolContractWrite.receiveStableToken(1000, validatorAddress)
-    // .then((result) => {
-    //     console.log(result);
-    // });
+        // dispatch(increasePageNumber());
+    })
  }
 
  export default ValidatorApplication;

@@ -7,6 +7,7 @@ import stakeAmountReducer from "../reducers/stakeAmountReducer";
 import connectMetamaskReducer from "../reducers/connectMetamaskReducer";
 import hedgeAmountReducer from "../reducers/hedgeAmountReducer";
 import networkReducer from "../reducers/networkReducer";
+import modalPageNumberReducer from "../reducers/modalPageNumberReducer";
 
 
 const rootReducer = combineReducers({
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     stakeAmount: stakeAmountReducer,
     connectMetamask: connectMetamaskReducer,
     hedgeAmount: hedgeAmountReducer,
-    network: networkReducer
+    network: networkReducer,
+    modalPageNumber: modalPageNumberReducer
 });
 
 //const middleware = applyMiddleware(thunk);

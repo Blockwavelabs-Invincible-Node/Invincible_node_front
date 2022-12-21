@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { selectModalPageNumber } from "../../redux/reducers/modalPageNumberReducer";
 import ModalComponent from "./components/modalComponent";
 
 
@@ -44,7 +46,7 @@ const ModalOverlay = styled.div`
   z-index: 2;
 `;
 
-function Modal({ closeModal, visible, token, stakeAmount, getAmount }) {
+function Modal({ closeModal, visible }) {
   const [component, setComponent] = useState(false);
   const modalRef = useRef();
 
@@ -75,7 +77,7 @@ function Modal({ closeModal, visible, token, stakeAmount, getAmount }) {
       >
         <ModalWrapper>
             <ModalComponent
-
+              
             />
         </ModalWrapper>
       </ModalBackground>

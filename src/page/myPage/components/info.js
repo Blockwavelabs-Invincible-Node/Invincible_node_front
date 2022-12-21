@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Web3 from "web3";
 import { Wrapper } from "../../../styles/styledComponents/wrapper";
 import contractAddress from "../../../addresses/contractAddress.json"
-import StableTokenPoolMethodObject from "../../functions/getStableTokenPool";
 import stableTokenPool from "../../../artifacts/stableCoinPool.json";
 import liquidStaking from "../../../artifacts/liquidStaking.json";
 import { Button } from "../../../styles/styledComponents/button";
@@ -36,18 +35,21 @@ const Info = () => {
     const [stableCoinLended, setStableCoinLended] = useState(0);
     const [stakedAmount, setStakedAmount] = useState(0);
     const [pageStatus, setPageStatus] = useState(0);
+    const [rewardClaimed, setRewardClaimed] = useState(0);
+    const [borrowed, setBorrowed] = useState(0);
     
     const stableCoinPoolRead = async() => {
         const getAccount = await web3.eth.getAccounts();
         const account = getAccount[0];
         const stableTokenPoolContract = new goerliWeb3.eth.Contract(stableTokenPool.output.abi, contractAddress.stableCoinPool);
         const balanceOf = await stableTokenPoolContract.methods.balanceOf(account).call();
+        const borrowed = await stableTokenPoolContract.methods.borrowed(account).call();
         console.log("Stable Coin Lended: ", balanceOf/10**18);
         setStableCoinLended(balanceOf/10**18);
+        setBorrowed(borrowed/10**18);
         if (balanceOf) {
             setIsValidator(true);
         }
-    
     }
 
     const liquidStakingContractRead = async() => {
@@ -90,13 +92,13 @@ const Info = () => {
                 <ContentWrapper>
                     <h1>Staking Rank: </h1>
                     <h1>Staked: {stakedAmount} </h1>
-                    <h1>Reward Claimed: </h1>
+                    <h1>Reward Claimed: {rewardClaimed}</h1>
                 </ContentWrapper>
                 ) : (
                 <ContentWrapper>
                     <h1>Is Validator: {isValidator.toString()}</h1>
                     <h1>Stable Coin Lended: {stableCoinLended} </h1>
-                    <h1>Stable Coin Borrowed: </h1>
+                    <h1>Stable Coin Borrowed: {borrowed}</h1>
                 </ContentWrapper>
                 )
             }

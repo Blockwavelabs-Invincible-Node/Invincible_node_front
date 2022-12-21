@@ -101,11 +101,10 @@ const Menu = () => {
 
     const checkNetwork = async() => {
         // goerli testnet network id
-        const properNetworkId = '5'
+        const properNetworkId = '9000'
         const netId = await web3.eth.net.getId()
         .then((networkId) => {
-            if (networkId != properNetworkId) {
-                alert("Switch network to goerli testnet");
+            if (networkId != properNetworkId) {  
                 SwitchNetwork(properNetworkId)
                 .then(() => {
                   routeValidatorApplication();
@@ -177,10 +176,6 @@ const Menu = () => {
                   routeTransaction();
                   }}
                 >Transactions</div></StyledDropdownItem>
-                <StyledDropdownItem><div onClick={() => {
-                  routeValidator();
-                  }}
-                >Validators</div></StyledDropdownItem>
                 </div>
               </StyledDropdownMenu>    
             </StyledDropdown>

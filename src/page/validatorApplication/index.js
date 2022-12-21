@@ -21,7 +21,7 @@ const web3 = new Web3(window.ethereum);
 const ValidatorApplicationPage = () => {
     const [account, setAccount] = useState();
     const [transactions, setTransactions] = useState();
-    const [showModal, setShowModal] = useState(true);
+    const [showModal, setShowModal] = useState(false);
 
     let navigate = useNavigate();
     const routeValidatorApplication = () => {
@@ -29,8 +29,6 @@ const ValidatorApplicationPage = () => {
         navigate(path);
     };
     
-
-
     useEffect(()=> {
        
     }, []);
@@ -47,7 +45,12 @@ const ValidatorApplicationPage = () => {
             <Header launchedApp={true}></Header>
             <Base
             component={
-                <ApplyForm></ApplyForm>  
+                <ApplyForm
+                    openModal={() => {
+                        setShowModal(true);
+                    }}
+                 
+                ></ApplyForm>  
             }
             ></Base>
         </PageContainer>

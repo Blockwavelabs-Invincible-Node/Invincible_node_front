@@ -287,7 +287,39 @@
 			},
 			{
 				"inputs": [],
+				"name": "temp",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "totalAddressNumber",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "totalRewardsClaimed",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -452,6 +484,25 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "validatorRequests",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
 						"name": "_amount",
 						"type": "uint256"
@@ -499,11 +550,11 @@
 			]
 		},
 		"contracts/LiquidStaking.sol": {
-			"keccak256": "0x52d3c6641160b9f54a4d734da1a588a5961a18d44ab0cf772fe376c8ffdd205e",
+			"keccak256": "0xe5c0656b6cf77e96ec60814330c8ca9f847b2c536fc57c74006bcbdd7229a5c1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://cca5e06f701c0ee96e032417461d5852ca37aa13ba8c4c4e766e0134616b3b2b",
-				"dweb:/ipfs/QmYjtQ87QDufyVyWpfQr3T19kjXhN5wQYkn6USNdCGqQL7"
+				"bzz-raw://a8d0c2363ca11e6e408d4ba108bf0770566c95e03547c293826b1dd184c1068a",
+				"dweb:/ipfs/QmfHLQgVkQ4mPdTASHuqUHomaE12DuCttcFRtiUDyqRZJ7"
 			]
 		}
 	},
