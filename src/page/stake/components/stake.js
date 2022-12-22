@@ -293,6 +293,7 @@ const Stake = ({
   console.log("stake reducer: ", stakeAmountRedux);
   const handleStakeAmountChange = (event) => {
     setStakeAmount(event.target.value);
+    setStake(event.target.value);
     console.log(dispatch(setStakeAmount(event.target.value)));
   };
 

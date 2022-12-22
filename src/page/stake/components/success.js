@@ -26,8 +26,8 @@ const ConfirmButton = styled(Button)`
 
 const Success = ({ token, stakeAmount, getAmount }) => {
   let navigate = useNavigate();
-  const routeMain = () => {
-    let path = "/";
+  const routeStake = () => {
+    let path = "/stake";
     navigate(path);
   };
 
@@ -42,7 +42,7 @@ const Success = ({ token, stakeAmount, getAmount }) => {
         stakeAmount={stakeAmount}
         getAmount={getAmount}
       />
-      <ConfirmButton onClick={() => { routeMain() }}>OK</ConfirmButton>
+      <ConfirmButton onClick={() => { routeStake() }}>OK</ConfirmButton>
     </SuccessWrapper>
   );
 };

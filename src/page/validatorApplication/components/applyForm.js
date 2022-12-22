@@ -63,7 +63,7 @@ const ApplyForm = ({openModal}) => {
                     ValidatorApplication(validatorAddress, number);
                 }
             })
-        },20000)
+        },10000)
     }
     const ValidatorApplication = async(validatorAddress, amount) => {
       
