@@ -300,7 +300,7 @@ const Stake = ({
   };
 
   const maxOnClick = () => {
-    setStakeAmount(ethBalance ? ethBalance / 10 ** 18 : 0);
+    setStake(ethBalance ? ethBalance / 10 ** 18 : 0);
   };
 
   const getEthBalance = async (account) => {

@@ -60,7 +60,9 @@ const WalletInfoPopup = ({ routePage, closeModal }) => {
       </ListContainer>
       <DisconnectButton
         onClick={async () => {
-          const disconnect = await web3.eth.currentProvider.disconnect();
+          window.localStorage.setItem("connectMetamask", false);
+          window.location.reload();
+          console.log(window.localStorage.getItem("connectMetamask"));
           //routeMain();
         }}
       >

@@ -4,14 +4,19 @@ pragma solidity ^0.8;
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol"; 
 
 contract StableTokenPool is ReentrancyGuard{
-    address owner;
+    address public owner;
     IERC20 public immutable stableToken;
 
     constructor (address _stableTokenAddress) {
         stableToken = IERC20(_stableTokenAddress);
+        owner = msg.sender;
     }
 
-    mapping(address => uint) balanceOf;
+    mapping(address => uint) public balanceOf;
+    mapping(address => string) public validatorAddress;
+    mapping(address => uint) public borrowed;
+    address[] public addressList;
+    uint public totalAddressNumber = 0;
     uint public totalReceived;
     uint public totalSent;
     uint private totalSupply;
@@ -24,6 +29,22 @@ contract StableTokenPool is ReentrancyGuard{
 
     }
 
+    function exists(address _account) public view returns(bool) {
+        for (uint i = 0; i< addressList.length; i++) {
+            if (addressList[i] == _account) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function addAddressList(address _account) public {
+        if (!exists(_account)) {
+            addressList.push(_account);
+            totalAddressNumber++;
+        }
+    }
+
     modifier onlyOwner() {
         require(msg.sender == owner, "not authorized");
         _;
@@ -32,13 +53,16 @@ contract StableTokenPool is ReentrancyGuard{
     function sendStableToken(address _recipient, uint _amount) public onlyOwner {
         require(_amount + totalSent < totalReceived, "not enough supply");
         totalSent += _amount;
+        borrowed[_recipient] += _amount;
         stableToken.transfer(_recipient, _amount);
     }
 
-    function receiveStableToken(uint _amount) public onlyOwner{
+    function receiveStableToken(uint _amount, string memory _validatorAddress) public{
         totalReceived += _amount;
         stableToken.transferFrom(msg.sender, address(this), _amount);
         balanceOf[msg.sender] += _amount;
+        validatorAddress[msg.sender] = _validatorAddress; 
+        addAddressList(msg.sender);
     }
 }
 
