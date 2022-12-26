@@ -7,10 +7,10 @@ import logo from "../../assets/images/Logo.svg";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { selectConnectMetamask } from "../../redux/reducers/connectMetamaskReducer";
 import { setStatus } from "../../redux/reducers/connectMetamaskReducer";
-import Dropdown from 'react-bootstrap/Dropdown';
+import Dropdown from "react-bootstrap/Dropdown";
 import ConnectToMetamask from "../functions/connectMetamask";
 import ValidatorApplication from "../functions/validatorApplication";
-import "./header.css"
+import "./header.css";
 import SwitchNetwork from "../functions/switchNetwork";
 import Menu from "./components/menu";
 import HeaderModal from "./headerModal";
@@ -56,8 +56,8 @@ const WalletAddressText = styled.div`
   text-align: center;
 `;
 const Logo = styled.img`
-  margin-top: 50%;
-  width: 97px;
+  margin-top: 4vh;
+  width: 40px;
 `;
 const UnstakeButton = styled.button`
   font-size: 15px;
@@ -78,8 +78,7 @@ const HomeButton = styled.button`
   font-family: pretendard;
   font-weight: 700;
 `;
-const StyledDropdown = styled(Dropdown)` 
-  
+const StyledDropdown = styled(Dropdown)`
   font-size: 15px;
   height: 55px;
   padding-left: 3vw;
@@ -92,37 +91,35 @@ const StyledDropdown = styled(Dropdown)`
   background-color: transparent;
   color: #ffffff;
 `;
-const StyledDropdownButton = styled(Dropdown.Toggle)` 
-color: white;
-border: hidden;
-background-color: transparent;
-font-size: 15px;
-padding-left: 3vw;
-padding-right: 3vw;
-border-radius: 5px;
-font-family: Pretendard;
-font-weight: 700;
+const StyledDropdownButton = styled(Dropdown.Toggle)`
+  color: white;
+  border: hidden;
+  background-color: transparent;
+  font-size: 15px;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  border-radius: 5px;
+  font-family: Pretendard;
+  font-weight: 700;
 `;
-const StyledDropdownItem = styled(Dropdown.Item)` 
-color:white;
-text-align: left;
+const StyledDropdownItem = styled(Dropdown.Item)`
+  color: white;
+  text-align: left;
 `;
-const StyledDropdownMenu = styled(Dropdown.Menu)` 
-display: flex;
-flex-direction: column;
+const StyledDropdownMenu = styled(Dropdown.Menu)`
+  display: flex;
+  flex-direction: column;
 `;
-const NetworkButton = styled(Button)` 
-
-`;
-const MyPageButton = styled(Button)` 
-
-`;//--------------------------------------------------------------//
+const NetworkButton = styled(Button)``;
+const MyPageButton = styled(Button)``; //--------------------------------------------------------------//
 
 const web3 = new Web3(window.ethereum);
 
 function Header({ launchedApp }) {
   const [account, setAccount] = useState();
   const dispatch = useDispatch();
+  const [modalType, setModalType] = useState();
+
   const networkNameRedux = useSelector(selectNetworkName);
 
   let navigate = useNavigate();
@@ -133,12 +130,11 @@ function Header({ launchedApp }) {
   const routeValidatorApplication = () => {
     let path = "/validator-application";
     navigate(path);
-  }
+  };
   const routeMyPage = () => {
     let path = "/my-page";
     navigate(path);
-  }
-
+  };
 
   const getWeb3 = async () => {
     if (window.localStorage.getItem("connectMetamask")) {
@@ -155,49 +151,44 @@ function Header({ launchedApp }) {
     }
   };
 
-  const apply = async() => {
-    
-  }
+  const apply = async () => {};
 
-  const checkNetwork = async() => {
+  const checkNetwork = async () => {
     // goerli testnet network id
-    const properNetworkId = '5'
-    const netId = await web3.eth.net.getId()
-    .then((networkId) => {
-        if (networkId != properNetworkId) {
-            alert("Switch network to goerli testnet");
-            SwitchNetwork(properNetworkId)
-            .then(() => {
-              routeValidatorApplication();
-            })
-        }
-        else {
-          console.log(networkId, properNetworkId, networkId == properNetworkId);
+    const properNetworkId = "5";
+    const netId = await web3.eth.net.getId().then((networkId) => {
+      if (networkId != properNetworkId) {
+        alert("Switch network to goerli testnet");
+        SwitchNetwork(properNetworkId).then(() => {
           routeValidatorApplication();
-        }
-    })
+        });
+      } else {
+        console.log(networkId, properNetworkId, networkId == properNetworkId);
+        routeValidatorApplication();
+      }
+    });
     // console.log("netID: ", netId);
-  }
+  };
 
-  const [showModal, setShowModal] = useState(false);  
+  const [showModal, setShowModal] = useState(false);
 
   // Use Effect
   useEffect(() => {
     getWeb3();
     // window.localStorage.removeItem("connectMetamask");
   }, []);
-  
 
-  console.log("launched: ", launchedApp)
+  console.log("launched: ", launchedApp);
 
   return (
     <>
-    {showModal && (
+      {showModal && (
         <HeaderModal
           closeModal={() => {
             setShowModal(false);
           }}
           visible={showModal}
+          modalType={modalType}
         />
       )}
       <Top>
@@ -209,28 +200,41 @@ function Header({ launchedApp }) {
             }}
           ></Logo>
         </LeftTop>
-        
+
         <RightTop>
           <>
-              {
-                launchedApp ? (
-                <>
-                  <MyPageButton onClick={() => {
+            {launchedApp ? (
+              <>
+                <MyPageButton
+                  onClick={() => {
                     routeMyPage();
-                  }}>
-                    My Page
-                  </MyPageButton>
-                  <NetworkButton onClick={() => {
-                      setShowModal(true);
-                    }}>
-                    {networkNameRedux}
-                  </NetworkButton>
-                </>) : (<></>)
-              }
+                  }}
+                >
+                  My Page
+                </MyPageButton>
+                <NetworkButton
+                  onClick={() => {
+                    setModalType(0);
+                    setShowModal(true);
+                  }}
+                >
+                  {networkNameRedux}
+                </NetworkButton>
+              </>
+            ) : (
+              <></>
+            )}
           </>
-          { (account) ? (
+          {account ? (
             <WalletAddress>
-              <WalletAddressText>{account} ...</WalletAddressText>
+              <WalletAddressText
+                onClick={() => {
+                  setModalType(1);
+                  setShowModal(true);
+                }}
+              >
+                {account} ...
+              </WalletAddressText>
             </WalletAddress>
           ) : (
             <WalletConnect
