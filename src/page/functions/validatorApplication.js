@@ -17,18 +17,18 @@ const testUSDTAddress = addresses.testUSDT;
 
 // ethers
 
-const evmosProvider = new ethers.providers.JsonRpcProvider(process.env.EVMOS_TESTNET_RPC_URL);
-const privateKey = process.env.REACT_APP_OWNER_PRIVATE_KEY;
-const evmosSigner = new ethers.Wallet(privateKey, evmosProvider);
+// const evmosProvider = new ethers.providers.JsonRpcProvider(process.env.EVMOS_TESTNET_RPC_URL);
+// const privateKey = process.env.REACT_APP_OWNER_PRIVATE_KEY;
+// const evmosSigner = new ethers.Wallet(privateKey, evmosProvider);
 
-const ethereumProvider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_GOERLI_RPC_URL);
-const ethereumSigner = new ethers.Wallet(privateKey, ethereumProvider);
+// const ethereumProvider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_GOERLI_RPC_URL);
+// const ethereumSigner = new ethers.Wallet(privateKey, ethereumProvider);
             
-const liquidStakingContractWrite = new ethers.Contract(liquidStakingContractAddress, liquidStakingContractABI, evmosSigner);
-const liquidStakingContractRead = new ethers.Contract(liquidStakingContractAddress, liquidStakingContractABI, evmosProvider);
+// const liquidStakingContractWrite = new ethers.Contract(liquidStakingContractAddress, liquidStakingContractABI, evmosSigner);
+// const liquidStakingContractRead = new ethers.Contract(liquidStakingContractAddress, liquidStakingContractABI, evmosProvider);
 
-const stableCoinPoolContractWrite = new ethers.Contract(stableCoinPoolContractAddress, stableCoinPoolContractABI, ethereumSigner);
-const stableCoinPoolContractRead = new ethers.Contract(stableCoinPoolContractAddress, stableCoinPoolContractABI, ethereumProvider);
+// const stableCoinPoolContractWrite = new ethers.Contract(stableCoinPoolContractAddress, stableCoinPoolContractABI, ethereumSigner);
+// const stableCoinPoolContractRead = new ethers.Contract(stableCoinPoolContractAddress, stableCoinPoolContractABI, ethereumProvider);
 
 // web3
 // web3 window ethereum
