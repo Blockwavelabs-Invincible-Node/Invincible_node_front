@@ -20,15 +20,32 @@ import { useNavigate } from "react-router-dom";
 const WalletInfoWrapper = styled.div``;
 const FirstText = styled(BoldText)`
   text-align: left;
+  margin-bottom: 1vh;
 `;
 const ListContainer = styled.div`
   display: flex;
 `;
 const Logo = styled.img``;
-const WalletContainer = styled.div``;
-const WalletText = styled(LightText)``;
+const WalletContainer = styled.div`
+  margin-left: 1vw;
+`;
+const WalletText = styled(LightText)`
+  font-size: 1.5vh;
+  margin-bottom: 0.5vh;
+`;
+const WalletFunctionWrapper = styled.div`
+  display: flex;
+`;
+const CopyText = styled(LightText)`
+  margin-right: 1vw;
+  font-size: 1.3vh;
+`;
+const ViewOnExplorerText = styled(LightText)`
+  font-size: 1.3vh;
+`;
 const DisconnectButton = styled(Button)`
   width: 100%;
+  margin-top: 3vh;
 `;
 
 const web3 = new Web3(window.ethereum);
@@ -56,6 +73,10 @@ const WalletInfoPopup = ({ routePage, closeModal }) => {
         <Logo src={MetamaskLogo}></Logo>
         <WalletContainer>
           <WalletText>{account}</WalletText>
+          <WalletFunctionWrapper>
+            <CopyText>Copy</CopyText>
+            <ViewOnExplorerText>View on Explorer</ViewOnExplorerText>
+          </WalletFunctionWrapper>
         </WalletContainer>
       </ListContainer>
       <DisconnectButton
