@@ -5,14 +5,58 @@ import stableTokenPool from "../../../artifacts/stableCoinPool.json";
 import liquidStaking from "../../../artifacts/liquidStaking.json";
 import { useState } from "react";
 import { useEffect } from "react";
+import { BoldText } from "../../../styles/styledComponents/boldText";
+import { LightText } from "../../../styles/styledComponents/lightText";
 
 const NodesBox = styled.div``;
 
-const ListBox = styled.div``;
-const ListTable = styled.table``;
-const ListTableHeader = styled.tr``;
-const ListTableRow = styled.tr``;
+const ListBox = styled.div`
+  margin-top: 10vh;
+`;
+const ListTable = styled.table`
+  width: 90%;
+  margin: auto;
+  padding-top: 3vh;
+  padding-bottom: 3vh;
+`;
+const ListTableBox = styled.div`
+  background-color: black;
+  width: 90%;
+  margin: auto;
+  border-radius: 10px;
+`;
+const ListTableHeader = styled.tr`
+  height: 5vh;
+`;
+const ListTableRow = styled.tr`
+  height: 3vh;
+`;
 const ListTableElement = styled.td``;
+const FirstText = styled(BoldText)`
+  text-align: left;
+  margin-left: 5%;
+  margin-bottom: 3vh;
+`;
+const NodeBoxWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin: auto;
+`;
+const NodeBox = styled.div`
+  background-color: black;
+  width: 22%;
+  height: 10vh;
+  border-radius: 10px;
+`;
+const NodeBoxTitle = styled(LightText)`
+  text-align: left;
+  font-size: 1vh;
+  margin-top: 1.5vh;
+  margin-left: 1.5vw;
+  margin-bottom: 1.5vh;
+`;
+const NodeBoxText = styled(BoldText)``;
 
 const goerliProvider = process.env.REACT_APP_GOERLI_RPC_URL;
 const web3Provider = new Web3.providers.HttpProvider(goerliProvider);
@@ -126,21 +170,44 @@ const Dashboard = () => {
     </>
   ) : (
     <>
-      <NodesBox></NodesBox>
+      <NodesBox>
+        <FirstText>Chain Status</FirstText>
+        <NodeBoxWrapper>
+          <NodeBox>
+            <NodeBoxTitle>Block Heights</NodeBoxTitle>
+            <NodeBoxText>111111</NodeBoxText>
+          </NodeBox>
+          <NodeBox>
+            <NodeBoxTitle>Nodes</NodeBoxTitle>
+            <NodeBoxText>111111</NodeBoxText>
+          </NodeBox>
+          <NodeBox>
+            <NodeBoxTitle>Bonded Tokens</NodeBoxTitle>
+            <NodeBoxText>111111</NodeBoxText>
+          </NodeBox>
+          <NodeBox>
+            <NodeBoxTitle>Block Time</NodeBoxTitle>
+            <NodeBoxText>111111</NodeBoxText>
+          </NodeBox>
+        </NodeBoxWrapper>
+      </NodesBox>
 
       <ListBox>
-        <ListTable>
-          <ListTableHeader>
-            <ListTableElement>No.</ListTableElement>
-            <ListTableElement>Owner</ListTableElement>
-            <ListTableElement>Validator</ListTableElement>
-            <ListTableElement>Commission</ListTableElement>
-            <ListTableElement>USDT Lended</ListTableElement>
-            <ListTableElement>Score</ListTableElement>
-            <ListTableElement>Share(%)</ListTableElement>
-          </ListTableHeader>
-          {TableRows()}
-        </ListTable>
+        <FirstText>List</FirstText>
+        <ListTableBox>
+          <ListTable>
+            <ListTableHeader>
+              <ListTableElement>No.</ListTableElement>
+              <ListTableElement>Owner</ListTableElement>
+              <ListTableElement>Validator</ListTableElement>
+              <ListTableElement>Commission</ListTableElement>
+              <ListTableElement>USDT Lended</ListTableElement>
+              <ListTableElement>Score</ListTableElement>
+              <ListTableElement>Share(%)</ListTableElement>
+            </ListTableHeader>
+            {TableRows()}
+          </ListTable>
+        </ListTableBox>
       </ListBox>
     </>
   );

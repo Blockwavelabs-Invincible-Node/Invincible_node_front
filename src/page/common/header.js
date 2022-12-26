@@ -225,12 +225,13 @@ function Header({ launchedApp }) {
               <></>
             )}
           </>
-          {account ? (
+          {window.localStorage.getItem("connectMetamask") == "true" ? (
             <WalletAddress>
               <WalletAddressText
                 onClick={() => {
                   setModalType(1);
                   setShowModal(true);
+                  console.log(window.localStorage.getItem("connectMetamask"));
                 }}
               >
                 {account} ...

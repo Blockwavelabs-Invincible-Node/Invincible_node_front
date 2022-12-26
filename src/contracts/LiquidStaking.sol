@@ -5,54 +5,147 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract LiquidStaking is ReentrancyGuard{
     // Reward로 지급 받는 토큰 type
-    IERC20 public immutable reETH;
+    IERC20 public immutable reToken;
 
-    // Mint public mint = new Mint();
     struct addressData {
         address account;
         bool isValue; 
     }
 
-    address public owner; 
+    struct UnbondData {
+        address account;
+        uint unbondCompleteTime;
+        uint amount;
+    }
+
+    address public owner;
+    address public validatorOwner; 
     // address list
-    address[] addressList;
+    address[] public addressList;
     // total address;
     uint public totalAddressNumber;
     // Reward Token Amount
     uint public rewardsTokenAmount;
-    // Minimum of last updated time and reward finish time
-    uint public updatedAt;
-    // Reward to be paid out per second
-    uint public rewardRate = 0;
-    // Sum of (reward rate * dt * 1e18 / total supply)
-    uint public rewardPerTokenStored;
-    // User address => rewardPerTokenStored
-    mapping(address => uint) public userRewardPerTokenPaid;
+    // uint public updatedAt;
+    uint public unbondingTime;
     // User address => rewards to be claimed
     mapping(address => uint) public rewards;
-    // updated reward timestamps
-    mapping(address => uint) public rewardLastUpdatedTime;
+    // maximum amount user can withdraw
+    mapping(address => uint) public userMaximumWithdrawAmount;
+    // total reward claimed
+    mapping(address => uint) public totalRewardsClaimed;
+
+    string validatorAddress;
+    
     // Total staked -> 총 스테이킹 된 양
     uint public totalSupply;
+    uint public totalUnstaked;
     // User address => staked amount -> 각 유저가 스테이킹한 양
     mapping(address => uint) public balanceOf;
+    // mapping(address => uint) public staked;
+    mapping(address => uint) public unstaked;
+    UnbondData[] public unbondRequests;
+    mapping(string => uint) public validatorAddresses;
+
+    // mapping(address => string) public approvedValidators;
+    mapping(address => string) public validatorRequests;
+
 
     event Received(address sender);
+    event Transfer(address indexed src, address indexed dst, uint val, bytes stableAmount);
+    event Unbond(address indexed src, uint val);
+    event UpdateRequest(string indexed validatorAddress);
+
+    // validatorOwner = 0x3abc249dd82Df7eD790509Fba0cC22498C92cCFc
+    // rewardToken = 0x89a7D248d7520387963F5d164De9D8a3A77A4200
+    // liquidStaking = 0xAd6c553BCe3079b4Dc52689fbfD4a2e72F1F3158
+    // unbondingtime = 604800
+
+    function withdraw(uint _amount) public nonReentrant() {
+        require(_amount > 0, "amount = 0");
+        require(_amount + unstaked[msg.sender] < userMaximumWithdrawAmount[msg.sender], "too much amount");
+        // require(_amount <= userMaximumWithdrawAmount[msg.sender], "too much amount");
+        emit Unbond(msg.sender, _amount);
+        
+        unstaked[msg.sender] += _amount;
+        totalUnstaked += _amount;
+        
+        reToken.transferFrom(msg.sender, address(this), _amount);
+        UnbondData memory data = UnbondData(msg.sender, block.timestamp+unbondingTime, _amount);
+        unbondRequests.push(data);
+    }
 
     // 생성자로 staking token address / reward token address을 입력 
-    constructor(address _reETH) {
+    constructor(address _reToken, address _validatorOwner, uint _unbondingTime) {
         owner = msg.sender;
-        reETH = IERC20(_reETH);
+        validatorOwner = _validatorOwner;
+        reToken = IERC20(_reToken);
         totalAddressNumber = 0;
+        unbondingTime = _unbondingTime;
+
+        //for test
+        userMaximumWithdrawAmount[msg.sender] = 1000000000000000;
     }
 
     fallback() external payable {
         emit Received(msg.sender);
-        balanceOf[msg.sender] += msg.value;
-        totalSupply += msg.value;
-        // reward token을 필요한 만큼 mint
-        reETH.mintToken(address(this), msg.value);
-        reETH.transfer(msg.sender, msg.value);
+        if (msg.sender == validatorOwner) {
+            for (uint i = 0; i < unbondRequests.length; i++) {
+                if (unbondRequests[i].unbondCompleteTime < block.timestamp && msg.value == unbondRequests[i].amount  ) {
+                    address receiver = unbondRequests[i].account;
+                    (bool sent, ) = receiver.call{value: msg.value}("");
+                    require(sent, "Failed to send");
+                }
+                popFromUnbondRequest(i);
+            }
+        }
+        // normal user send
+        else {
+            emit Transfer(msg.sender, address(this), msg.value, msg.data);
+            addAddressList(msg.sender);
+            balanceOf[msg.sender] += msg.value;
+            userMaximumWithdrawAmount[msg.sender] += msg.value;
+            totalSupply += msg.value;
+            // reward token mint
+            reToken.mintToken(address(this), msg.value);
+            reToken.transfer(msg.sender, msg.value);
+        }
+    }
+ 
+    modifier onlyOwner() {
+        require(msg.sender == owner, "not authorized");
+        _;
+    }
+
+    function addValidatorAddress(string memory _validatorAddress) public {
+        validatorAddresses[_validatorAddress] = 0;
+        validatorRequests[msg.sender] = _validatorAddress;
+        emit UpdateRequest(_validatorAddress);
+    }
+
+    function setValidatorAddress(string memory _validatorAddress, uint _result) public {
+        // if proper address = 1 
+        validatorAddresses[_validatorAddress] = _result;
+
+    }
+
+    function setUnbondingTime(uint _period) public onlyOwner() {
+        unbondingTime = _period;
+    }
+
+    function updateAccountReward (address _account, uint _amount) private {
+        // uint dailyReward = _amount * balanceOf[_account] / totalSupply - _amount * balanceOf[_account] / totalUnstaked;
+        uint supply = totalSupply - totalUnstaked;
+        uint dailyReward = _amount * balanceOf[_account] / supply; 
+        rewards[_account] += dailyReward;
+        // user가 withdraw 할 수 있는 금액 증가
+        userMaximumWithdrawAmount[_account] += dailyReward;
+    }
+
+    function updateReward (uint _amount) public {
+        for (uint i = 0; i< addressList.length; i++) {
+            updateAccountReward(addressList[i], _amount);
+        }
     }
 
     function exists(address _account) public view returns(bool) {
@@ -64,77 +157,34 @@ contract LiquidStaking is ReentrancyGuard{
         return false;
     }
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "not authorized");
-        _;
-    }
-
-    // update 로직: 원래 있던 리워드 + 스테이킹 양 * 마지막 업데이트 이후 흐른 시간 * 보상 비율  / 1년 (3600*24*365)
-    modifier updateReward(address _account)  {
-        rewards[_account] = rewards[_account] + balanceOf[msg.sender] * (block.timestamp - rewardLastUpdatedTime[_account]) * rewardRate / (100 * 3600*24*365);
-        // reward time update
-        rewardLastUpdatedTime[_account] = block.timestamp;
-        _;
-    }
-
-    modifier addAddressList(address _account) {
+    function addAddressList(address _account) public {
         if (!exists(_account)) {
-            addressList[addressList.length] = _account;
+            addressList.push(_account);
             totalAddressNumber++;
         }
-        _;
     }
 
-    //set reward rate
-    function setRewardRate(uint _rewardRate) external onlyOwner {
-        rewardRate = _rewardRate;
-    }
-
-    // 스테이킹 함수 (amount 입력) -> reward도 같이 update 된다
-    // updateReward(msg.sender) addAddressList(msg.sender)
-    function stake(uint _amount) external payable updateReward(msg.sender) nonReentrant(){ 
-        // staking 양이 0이상
-        require(_amount > 0, "amount = 0");
-         // msg.sender의 balance 증가
-        balanceOf[msg.sender] += _amount;
-        // totalsupply 증가
-        totalSupply += _amount;
-        // reward token을 필요한 만큼 mint
-        reETH.mintToken(address(this), _amount);
-        //amount 방금 stake
-        (bool sent, bytes memory data) = address(this).call{value: msg.value}("");
-        require(sent, "Failed to send Ether");
-        // stake 한 만큼 reward token 지급
-        reETH.transfer(msg.sender, _amount);
-        //time stamp 기록
-        rewardLastUpdatedTime[msg.sender] = block.timestamp;
-    }
-
-    // withdraw 함수 -> reward update 이후에 withdraw
-    function withdraw(uint _amount) external payable updateReward(msg.sender) nonReentrant()  {
-        address recipient = msg.sender;
-        require(_amount > 0, "amount = 0");
-        require(_amount <= balanceOf[msg.sender], "too much amount");
-        reETH.transferFrom(msg.sender, address(this), _amount);
-        balanceOf[msg.sender] -= _amount;
-        totalSupply -= _amount;
-        (bool sent, bytes memory data) = recipient.call{value: msg.value}("");
-        require(sent, "Failed to send Ether");
-    }
-
-    // reward 수령
-    function receiveReward() external updateReward(msg.sender) nonReentrant()  {
+    function receiveReward() external nonReentrant()  {
         uint reward = rewards[msg.sender];
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            reETH.mintToken(address(this), reward);
+            totalRewardsClaimed[msg.sender] += reward;
+            reToken.mintToken(address(this), reward);
             // rewardsToken을 msg.sender 에 제공 
-            reETH. transfer(msg.sender, reward);
+            reToken.transfer(msg.sender, reward);
         }
     }
 
     function _min(uint x, uint y) private pure returns (uint) {
         return x <= y ? x : y;
+    }
+
+    function popFromUnbondRequest(uint index) private {
+        // UnbondData memory element = unbondRequests[index];
+        for (uint i = index; i < unbondRequests.length - 1; i++) {
+            unbondRequests[i] = unbondRequests[i + 1];
+        }
+        delete unbondRequests[unbondRequests.length - 1];
     }
 }
 
@@ -154,4 +204,3 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint value);
 }
 
- 
