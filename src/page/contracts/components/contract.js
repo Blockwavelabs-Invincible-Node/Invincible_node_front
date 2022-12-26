@@ -13,84 +13,186 @@ import { useTable } from "react-table";
 import contractAddress from "../../../addresses/contractAddress.json";
 import StableTokenPoolMethodObject from "../../functions/getStableTokenPool";
 import stableTokenPool from "../../../artifacts/stableCoinPool.json";
+import escapeArrow from "../../../assets/images/escapeArrow.png";
+import arrowDownGray from "../../../assets/images/arrowDownGray.png";
 
 const LeverageWrapper = styled.div`
-  margin-top: 5vh;
+  /* margin-top: 5vh; */
   margin-bottom: 5vh;
   text-align: left;
   max-width: 100%;
 `;
 const FirstText = styled(BoldText)`
-  font-size: 30px;
+  width: 20vw;
+  font-size: 15px;
   font-weight: 900;
   margin-bottom: 1px;
 `;
 const TitleText = styled(BoldText)`
+  font-size: 10px;
   text-align: left;
 `;
 const SecondText = styled(LightText)`
-  font-size: 15px;
+  font-size: 10px;
   font-weight: 400;
-  margin-bottom: 22px;
+  margin-top: 0.5vh;
+  margin-bottom: 0.5vh;
 `;
 const FirstWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  text-align: left;
-`;
-const SecondWrapper = styled.div`
-  margin-top: 5vh;
-  display: flex;
-  justify-content: space-between;
-  text-align: left;
-`;
-const ThirdWrapper = styled.div`
-  margin-top: 5vh;
-  margin-left: 3vw;
-  margin-right: 3vw;
-`;
-const ComponentWrapper = styled.div`
-  width: 45%;
-  margin-left: 3vw;
-  margin-right: 3vw;
-`;
-const ElementWrapper = styled.div`
-  display: flex;
   justify-content: space-evenly;
+  text-align: left;
 `;
+// const SecondWrapper = styled.div`
+//   /* margin-top: 5vh; */
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+//   text-align: left;
+// `;
+// const ThirdWrapper = styled.div`
+//   margin-top: 5vh;
+//   margin-left: 3vw;
+//   margin-right: 3vw;
+// `;
+const ComponentWrapper = styled.div`
+  /* width: 45%; */
+  display: flex;
+  border-radius: 10px;
+  background-color: #212121;
+
+  margin-top: 3vh;
+  margin-left: 3vw;
+  margin-right: 3vw;
+
+  padding-left: 2vw;
+  padding-right: 2vw;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+`;
+
+const CompoentWrapperCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background-color: #212121;
+
+  margin-top: 3vh;
+  margin-left: 3vw;
+  margin-right: 3vw;
+
+  padding-left: 2vw;
+  padding-right: 2vw;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+`;
+
+const ElementWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 2vw;
+`;
+
 const Element1 = styled.div`
-  width: 45%;
+  width: 20vh;
+  text-align: center;
+  margin-left: 2vh;
+`;
+
+const StakedTitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const EscapeArrow = styled.img`
+  margin-left: auto;
+  width: 10px;
+  height: 10px;
+`;
+
+const MoreWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const ArrowDownGray = styled.img`
+  /* margin-left: auto; */
+  width: 9px;
+  height: 4.5px;
+
+  margin-left: 3px;
+`;
+// const Element2 = styled(Element1)`
+//   width: 30%;
+// `;
+const TextBox = styled.div`
+  background-color: #1b1b1b;
+  border-radius: 10px;
+  margin-top: 1vh;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
+`;
+
+const UnitBox = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+const ContentText = styled(LightText)`
+  font-size: 10px;
   text-align: center;
 `;
-const Element2 = styled(Element1)`
-  width: 30%;
+
+const ContentTextBold = styled(BoldText)`
+  font-size: 10px;
+  text-align: center;
 `;
-const TextBox = styled.div`
-  background: #1b1b1b;
-  border-radius: 10px;
-`;
-const ContentText = styled(LightText)`
-  width: 95%;
-  font-size: 15px;
-`;
+
 const Line = styled.hr`
   width: 100%;
-  color: white;
+  border-top: 2px solid #4e4e4e;
 `;
 const Table = styled.table`
-  width: 90%;
+  width: 100%;
   margin: auto;
   text-align: center;
+  border-collapse: 0;
+  border-spacing: 0 1vh;
 `;
-const TableHeadRow = styled.tr``;
+const TableHeadRow = styled.tr`
+  height: 3vh;
+`;
 const TableRow = styled.tr`
+  height: 5vh;
   background: #1b1b1b;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
 `;
-const TableHeader = styled.th``;
-const TableElement = styled.td``;
+const TableHeader = styled.th`
+  font-size: 10px;
+`;
+const TableElement = styled.td`
+  font-size: 10px;
+  text-align: center;
+  /* border-radius: 5px; */
+
+  border: 2px solid #1b1b1b;
+
+  &:first-child {
+    border-left-style: solid;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  &:last-child {
+    border-right-style: solid;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+`;
 
 const goerliWeb3 = new Web3(process.env.REACT_APP_GOERLI_RPC_URL);
 const liquidStakingContractAddress = contractAddress.liquidStaking;
@@ -136,8 +238,8 @@ const Contract = () => {
     <LeverageWrapper>
       <FirstWrapper>
         <ComponentWrapper>
-          <FirstText>Liquid Staking Contract Info</FirstText>
-          <Line></Line>
+          <FirstText>Liquid Staking Contract</FirstText>
+          {/* <Line></Line> */}
           <ElementWrapper>
             <Element1>
               <TitleText>Address</TitleText>
@@ -150,31 +252,44 @@ const Contract = () => {
             <Element1>
               <TitleText>Block Height</TitleText>
               <TextBox>
-                <ContentText>111,111</ContentText>
+                <ContentTextBold>111,111</ContentTextBold>
               </TextBox>
             </Element1>
+            <Element1></Element1>
+            <EscapeArrow src={escapeArrow} />
           </ElementWrapper>
         </ComponentWrapper>
+
         <ComponentWrapper>
-          <FirstText>Reserved USDT Contract Info</FirstText>
-          <Line></Line>
+          <FirstText>Reserved USDT Usage</FirstText>
+          {/* <Line></Line> */}
           <ElementWrapper>
-            <Element2>
+            <Element1>
               <TitleText>Address</TitleText>
               <TextBox>
                 <ContentText>
                   {getShortenedAddress(stableCoinPoolContractAddress)}
                 </ContentText>
               </TextBox>
-            </Element2>
-            <Element2>
+            </Element1>
+            <Element1>
               <TitleText>Balance</TitleText>
               <TextBox>
-                <ContentText>{balance}</ContentText>
+                <UnitBox>
+                  <ContentTextBold>{balance}</ContentTextBold>
+                  <ContentTextBold>USDT</ContentTextBold>
+                </UnitBox>
               </TextBox>
-            </Element2>
+            </Element1>
+            <Element1>
+              <TitleText>Block Height</TitleText>
+              <TextBox>
+                <ContentTextBold>111,111</ContentTextBold>
+              </TextBox>
+            </Element1>
+            <EscapeArrow src={escapeArrow}></EscapeArrow>
           </ElementWrapper>
-
+          {/* 
           <ElementWrapper>
             <Element2>
               <TitleText>Token Address</TitleText>
@@ -182,26 +297,22 @@ const Contract = () => {
                 <ContentText>{contractAddress.testUSDT}</ContentText>
               </TextBox>
             </Element2>
-            <Element2>
-              <TitleText>Block Height</TitleText>
-              <TextBox>
-                <ContentText>111,111</ContentText>
-              </TextBox>
-            </Element2>
-          </ElementWrapper>
+          </ElementWrapper> */}
         </ComponentWrapper>
-      </FirstWrapper>
-      <SecondWrapper>
-        <ComponentWrapper>
-          <FirstText>Staked</FirstText>
+
+        <CompoentWrapperCol>
+          <StakedTitleWrapper>
+            <FirstText>Staked</FirstText>
+            <EscapeArrow src={escapeArrow} />
+          </StakedTitleWrapper>
           <SecondText>
-            Logs of staked amounts that the users had done toward INVI node
+            The logs of staked amounts that the users had done toward INVI node
           </SecondText>
           <Line></Line>
           <Table>
             <TableHeadRow>
-              <TableHeader>From</TableHeader>
-              <TableHeader>Token Amount</TableHeader>
+              <TableHeader>Address</TableHeader>
+              <TableHeader>Total Amount</TableHeader>
               <TableHeader>TX Hash</TableHeader>
               <TableHeader>Block Signed At</TableHeader>
             </TableHeadRow>
@@ -224,45 +335,58 @@ const Contract = () => {
               <TableElement>111,111</TableElement>
             </TableRow>
           </Table>
-        </ComponentWrapper>
-      </SecondWrapper>
-      <ThirdWrapper>
-        <FirstText>Reserved USDT Usage</FirstText>
-        <SecondText>
-          Logs of reserved $USDT for risk hedging that the users had done
-        </SecondText>
-        <Line></Line>
-        <Table>
-          <TableHeadRow>
-            <TableHeader>Recipient Address</TableHeader>
-            <TableHeader>Staked Amount</TableHeader>
-            <TableHeader>Collateral Amount</TableHeader>
-            <TableHeader>Borrowed Amount</TableHeader>
-            <TableHeader>Block Signed At</TableHeader>
-          </TableHeadRow>
-          <TableRow>
-            <TableElement>0x0000</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-          </TableRow>
-          <TableRow>
-            <TableElement>0x0000</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-          </TableRow>
-          <TableRow>
-            <TableElement>0x0000</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-            <TableElement>111,111</TableElement>
-          </TableRow>
-        </Table>
-      </ThirdWrapper>
+          <MoreWrapper>
+            <ContentText>More</ContentText>
+            <ArrowDownGray src={arrowDownGray} />
+          </MoreWrapper>
+        </CompoentWrapperCol>
+        <CompoentWrapperCol>
+          <FirstText>Reserved USDT Usage</FirstText>
+          <SecondText>
+            The logs of reserved $USDT for risk hedging that the users had done
+          </SecondText>
+          <Line></Line>
+          <Table>
+            <TableHeadRow>
+              <TableHeader>Recipient Address</TableHeader>
+              <TableHeader>Staked Amount</TableHeader>
+              <TableHeader>Collateral Amount</TableHeader>
+              <TableHeader>Borrowed Amount</TableHeader>
+              <TableHeader>Block Signed At</TableHeader>
+            </TableHeadRow>
+            <TableRow>
+              <TableElement>0x0000</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+            </TableRow>
+            <TableRow>
+              <TableElement>0x0000</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+            </TableRow>
+            <TableRow>
+              <TableElement>0x0000</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+              <TableElement>111,111</TableElement>
+            </TableRow>
+          </Table>
+          <MoreWrapper>
+            <ContentText>More</ContentText>
+            <ArrowDownGray src={arrowDownGray} />
+          </MoreWrapper>
+        </CompoentWrapperCol>
+      </FirstWrapper>
+
+      {/* <SecondWrapper>
+    
+      </SecondWrapper> */}
+      {/* <ThirdWrapper></ThirdWrapper> */}
     </LeverageWrapper>
   );
 };
