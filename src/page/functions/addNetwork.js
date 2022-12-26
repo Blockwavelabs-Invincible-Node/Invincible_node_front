@@ -2,19 +2,19 @@ import Web3 from "web3"
 
 const web3 = new Web3(window.ethereum);
 
-const AddNetwork = async({networkId}) => {
+const AddNetwork = async({networkId, chainName, currencyName, currencySymbol, decimals, rpcUrls, blockExplorerUrls}) => {
     await window.ethereum.request({
       method: 'wallet_addEthereumChain',
       params: [{ 
           chainId: web3.utils.toHex(networkId),
-          chainName: 'Evmos',
+          chainName: chainName,
           nativeCurrency: {
-              name: 'tEVMOS',
-              symbol: 'tEVMOS',
-              decimals: 18
+              name: currencyName,
+              symbol: currencySymbol,
+              decimals: decimals
           },
-          rpcUrls: ['https://eth.bd.evmos.dev:8545'],
-          blockExplorerUrls: ['https://evm.evmos.dev']
+          rpcUrls: [rpcUrls],
+          blockExplorerUrls: [blockExplorerUrls]
       }],
   })
 .then(() => console.log('network added'))

@@ -44,6 +44,7 @@ const SwitchNetworkPopup = ({routePage, closeModal}) => {
     const [selectedNetwork, setSelectedNetwork] = useState(0);
     const [firstNetwork, setFirstNetwork] = useState(false);
     const [secondNetwork, setSecondNetwork] = useState(false);
+    const [thirdNetwork, setThirdNetwork] = useState(false);
     const dispatch = useDispatch();
     const networkIdRedux = useSelector(selectNetworkId);
     const networkNameRedux = useSelector(selectNetworkName);
@@ -60,6 +61,9 @@ const SwitchNetworkPopup = ({routePage, closeModal}) => {
                 routePage();
                 closeModal();
             })
+            .then(() => {
+                window.location.reload();
+            })
         }
         else if (selectedNetwork == 2) {
             //mumbai
@@ -72,7 +76,26 @@ const SwitchNetworkPopup = ({routePage, closeModal}) => {
                 routePage();
                 closeModal();
             })
+            .then(() => {
+                window.location.reload();
+            })
         }
+        else if (selectedNetwork == 3) {
+            // kava testnet
+            SwitchNetwork(2221)
+            .then(() => {
+                console.log("Connected to Kava EVM Testnet");
+                dispatch(setNetworkId(2221));
+                dispatch(setNetworkName("Kava"));
+                dispatch(setTokenName("Kava"));
+                routePage();
+                closeModal();
+            })
+            .then(() => {
+                window.location.reload();
+            })
+        }
+       
     }
 
     return(
@@ -92,6 +115,7 @@ const SwitchNetworkPopup = ({routePage, closeModal}) => {
                     <NetworkComponent selected={firstNetwork} onClick={() => {
                         setFirstNetwork(true);
                         setSecondNetwork(false);
+                        setThirdNetwork(false);
                         setSelectedNetwork(1);
                     }}>
                         Evmos
@@ -99,9 +123,18 @@ const SwitchNetworkPopup = ({routePage, closeModal}) => {
                     <NetworkComponent selected={secondNetwork} onClick={() => {
                         setSecondNetwork(true);
                         setFirstNetwork(false);
+                        setThirdNetwork(false);
                         setSelectedNetwork(2);
                     }}>
                         Polygon
+                    </NetworkComponent>
+                    <NetworkComponent selected={thirdNetwork} onClick={() => {
+                        setSecondNetwork(false);
+                        setFirstNetwork(false);
+                        setThirdNetwork(true);
+                        setSelectedNetwork(3);
+                    }}>
+                        Kava
                     </NetworkComponent>
                 </NetworkBox>
             </ToWrapper>
