@@ -149,6 +149,7 @@ const ConfirmButton = styled(Button)`
   margin-top: 20px;
 `;
 
+const decimals = 8;
 const web3 = new Web3(window.ethereum);
 
 const RiskHedge = ({
@@ -162,6 +163,11 @@ const RiskHedge = ({
   const [volume, setVolume] = useState(0);
   const [hedge, setHedge] = useState(0);
   const [updatedStakeAmount, setUpdatedStakeAmount] = useState(0);
+  const [from, setFrom] = useState(0);
+  const [to, setTo] = useState(0);
+  const [receive, setReceive] = useState(0);
+  const [stake, setStake] = useState(0);
+
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const hedgeAmountRedux = useSelector(selectHedgeAmount);
   const networkNameRedux = useSelector(selectNetworkName);
@@ -173,7 +179,17 @@ const RiskHedge = ({
   const tempStake = stakeAmountRedux;
   const tempSwapRate = 0.9;
 
-  useEffect(() => {}, [stakeAmount]);
+  useEffect(() => {
+    const tempFrom = (tempStake * volume) / 100;
+    console.log("set values");
+    setFrom(tempFrom.toFixed(decimals));
+    const tempTo = (tempStake * volume * tempSwapRate) / 100;
+    setTo(tempTo.toFixed(decimals));
+    const tempReceive = (tempStake * volume * tempSwapRate) / 100;
+    setReceive(tempReceive.toFixed(decimals));
+    const tempStakes = (stakeAmountRedux * (100 - volume)) / 100;
+    setStake(tempStakes.toFixed(decimals));
+  }, [volume]);
 
   return (
     <AllWrapper>
@@ -203,7 +219,7 @@ const RiskHedge = ({
             <TextBox2>
               <ThirdText>You will stake</ThirdText>
               <ThirdText>
-                {(stakeAmountRedux * (100 - volume)) / 100} {tokenNameRedux}
+                {stake} {tokenNameRedux}
               </ThirdText>
             </TextBox2>
             <VolumeControl
@@ -225,21 +241,17 @@ const RiskHedge = ({
           <ThirdBox>
             <LeftSide>From</LeftSide>
             <RightSide>
-              {(tempStake * volume) / 100} {tokenNameRedux}
+              {from} {tokenNameRedux}
             </RightSide>
           </ThirdBox>
           <FourthBox>
             <LeftSide>To</LeftSide>
-            <RightSide>
-              {(tempStake * volume * tempSwapRate) / 100} USDT
-            </RightSide>
+            <RightSide>{to} USDT</RightSide>
           </FourthBox>
           <FifthBox>
             <TextBox2>
               <ThirdText>You will Receive</ThirdText>
-              <ThirdText>
-                {(tempStake * volume * tempSwapRate) / 10 ** 20} USDT
-              </ThirdText>
+              <ThirdText>{receive} USDT</ThirdText>
             </TextBox2>
           </FifthBox>
         </FormBox>
