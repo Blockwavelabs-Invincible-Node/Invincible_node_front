@@ -16,7 +16,10 @@ import Select from "react-select";
 import Web3 from "web3";
 import { Button } from "../../../styles/styledComponents/button";
 import { useNavigate } from "react-router-dom";
-import { selectNetworkName, selectTokenName } from "../../../redux/reducers/networkReducer";
+import {
+  selectNetworkName,
+  selectTokenName,
+} from "../../../redux/reducers/networkReducer";
 
 const StakeForm = styled(Form)``;
 const StakingWrapper = styled(Wrapper)`
@@ -250,7 +253,6 @@ const colourStyles = {
 
 const web3 = new Web3(window.ethereum);
 
-
 const Stake = ({
   openModal,
   setToken,
@@ -381,7 +383,8 @@ const Stake = ({
               <StakeAmountWrapper>
                 <StakeAmountText>Stake Amount</StakeAmountText>
                 <BalanceText>
-                  Available: {ethBalance ? ethBalance / 10 ** 18 : "-"} {tokenNameRedux}
+                  Available: {ethBalance ? ethBalance / 10 ** 18 : "-"}{" "}
+                  {tokenNameRedux}
                 </BalanceText>
               </StakeAmountWrapper>
               <AmountBox>

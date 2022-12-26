@@ -23,7 +23,6 @@ const ConfirmButton = styled(Button)`
   font-weight: 700;
 `;
 
-
 const Success = ({ token, stakeAmount, getAmount }) => {
   let navigate = useNavigate();
   const routeStake = () => {
@@ -42,7 +41,13 @@ const Success = ({ token, stakeAmount, getAmount }) => {
         stakeAmount={stakeAmount}
         getAmount={getAmount}
       />
-      <ConfirmButton onClick={() => { routeStake() }}>OK</ConfirmButton>
+      <ConfirmButton
+        onClick={() => {
+          routeStake();
+        }}
+      >
+        OK
+      </ConfirmButton>
     </SuccessWrapper>
   );
 };

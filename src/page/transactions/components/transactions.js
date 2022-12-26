@@ -144,7 +144,8 @@ const Transaction = ({ account, transactions }) => {
                 <StakeStatusWrapper>
                     <StakeStatusText>
                         <YouStaked>TXhash</YouStaked>
-                    </StakeStatusText>
+                    </StakeStatusText> 
+                    
                     <StakeAmountText>
                         txhash uploading ...
                         {/* <Pagination itemsPerPage={10}></Pagination> */}
