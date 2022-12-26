@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
+import { RotatingLines } from "react-loader-spinner";
 
 const NodesBox = styled.div``;
 
@@ -57,6 +58,13 @@ const NodeBoxTitle = styled(LightText)`
   margin-bottom: 1.5vh;
 `;
 const NodeBoxText = styled(BoldText)``;
+const LoadingBox = styled.div`
+  margin-top: 2vh;
+  font-size: 2vh;
+`;
+const SpinnerBox = styled.div`
+  height: 2vh;
+`;
 
 const goerliProvider = process.env.REACT_APP_GOERLI_RPC_URL;
 const web3Provider = new Web3.providers.HttpProvider(goerliProvider);
@@ -166,7 +174,18 @@ const Dashboard = () => {
 
   return loading ? (
     <>
-      <div>Loading</div>
+      <LoadingBox>
+        Loading
+        <SpinnerBox>
+          <RotatingLines
+            strokeColor="grey"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="20"
+            visible={true}
+          />
+        </SpinnerBox>
+      </LoadingBox>
     </>
   ) : (
     <>

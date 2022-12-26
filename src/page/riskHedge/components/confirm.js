@@ -10,11 +10,13 @@ import Web3 from "web3";
 import address from "../../../addresses/contractAddress.json";
 import HedgeInput from "../utils/hedgeInput";
 import SwitchNetwork from "../../functions/switchNetwork";
-import testUSDT from "../../../artifacts/testUSDT.json"
-import contractAddress from "../../../addresses/contractAddress.json"
+import testUSDT from "../../../artifacts/testUSDT.json";
+import contractAddress from "../../../addresses/contractAddress.json";
 import { useSelector } from "react-redux";
 import { selectHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
 import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
+
+import { RotatingLines } from "react-loader-spinner";
 
 const LeverageWrapper = styled.div`
   margin-top: 5vh;
@@ -171,55 +173,73 @@ const LeverageText = styled.div`
   margin-top: 4px;
 `;
 
+const InProgress = styled.div``;
+const PendingBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const web3 = new Web3(window.ethereum);
 
 const Confirm = ({ pressStake, token }) => {
   const [leveraged, setLeveraged] = useState(true);
   const [leverage, setLeverage] = useState(2);
+  const [inProgress, setInProgress] = useState(false);
   const hedgeAmountRedux = useSelector(selectHedgeAmount);
   const stakeAmountRedux = useSelector(selectStakeAmount);
 
   const stake = () => {
-      const doStake = async(amount) => {
-        let realAmount = amount * (web3.utils.toBN(10 ** 18));
-        const getAccount = await web3.eth.getAccounts();
-        const account = getAccount[0];
-        console.log("account: ", account); 
-        // data = hex encoded
-        web3.eth.sendTransaction({
-            from: account,
-            to: address.liquidStaking,
-            value: realAmount,
-            data: web3.utils.numberToHex(hedgeAmountRedux)
+    const doStake = async (amount) => {
+      let realAmount = amount * web3.utils.toBN(10 ** 18);
+      const getAccount = await web3.eth.getAccounts();
+      const account = getAccount[0];
+      console.log("account: ", account);
+      // data = hex encoded
+      console.log("hedge amount: ", hedgeAmountRedux);
+      web3.eth
+        .sendTransaction({
+          from: account,
+          to: address.liquidStaking,
+          value: realAmount,
+          data:
+            hedgeAmountRedux != 0
+              ? web3.utils.numberToHex(hedgeAmountRedux)
+              : 0,
         })
-        .then(function(receipt){
+        .then(function (receipt) {
           console.log(receipt);
-          if (receipt) {
+          if (receipt && hedgeAmountRedux != 0) {
             // change network (network id)
-            SwitchNetwork(5);
-            console.log("Network change");
+            // SwitchNetwork(5);
+            // console.log("Network change");
             sendStableCoin();
           }
           pressStake();
         });
-    }
+    };
     doStake(stakeAmountRedux);
-    
   };
 
-  const sendStableCoin = async(amount) => {
+  const sendStableCoin = async (amount) => {
     const getAccount = await web3.eth.getAccounts();
     const account = getAccount[0];
-    const testUSDTContract = new web3.eth.Contract(testUSDT.output.abi, contractAddress.testUSDT);
-    const owner = web3.eth.accounts.privateKeyToAccount(process.env.REACT_APP_OWNER_PRIVATE_KEY);
+    const testUSDTContract = new web3.eth.Contract(
+      testUSDT.output.abi,
+      contractAddress.testUSDT
+    );
+    const owner = web3.eth.accounts.privateKeyToAccount(
+      process.env.REACT_APP_OWNER_PRIVATE_KEY
+    );
     console.log(owner.address);
-    const send = await testUSDTContract.methods.transfer(account, amount).send({from: owner.address})
-    .then(function(receipt) {
-      console.log(receipt);
-    });
-  }
+    const send = await testUSDTContract.methods
+      .transfer(account, amount)
+      .send({ from: owner.address })
+      .then(function (receipt) {
+        console.log(receipt);
+      });
+  };
 
-  const switchOnClick = () => { 
+  const switchOnClick = () => {
     setLeveraged(!leveraged);
   };
 
@@ -228,29 +248,42 @@ const Confirm = ({ pressStake, token }) => {
   };
   return (
     <LeverageWrapper>
-        <FirstText>Confirm Request</FirstText>
-        <ThirdText>Stake Status</ThirdText>
-        <CurrentStatusWrapper>
-            <StakeInput
-            token={token}
-            />
-        </CurrentStatusWrapper>
-        <ThirdText>Risk Hedge Status</ThirdText>
-        <CurrentStatusWrapper>
-            <HedgeInput
-            token={token}
-            />
-        </CurrentStatusWrapper>
-        <ButtonWrapper>
-            <StakeButton
+      <FirstText>Confirm Request</FirstText>
+      <ThirdText>Stake Status</ThirdText>
+      <CurrentStatusWrapper>
+        <StakeInput token={token} />
+      </CurrentStatusWrapper>
+      <ThirdText>Risk Hedge Status</ThirdText>
+      <CurrentStatusWrapper>
+        <HedgeInput token={token} />
+      </CurrentStatusWrapper>
+      <ButtonWrapper>
+        {!inProgress ? (
+          <StakeButton
             onClick={() => {
               stake();
+              setInProgress(true);
               // sendStableCoin(100);
             }}
-            >
+          >
             Stake
-            </StakeButton>
-        </ButtonWrapper>
+          </StakeButton>
+        ) : (
+          <InProgress>
+            Transaction in Progress..
+            <br />
+            <PendingBox>
+              <RotatingLines
+                strokeColor="grey"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="20"
+                visible={true}
+              />
+            </PendingBox>
+          </InProgress>
+        )}
+      </ButtonWrapper>
     </LeverageWrapper>
   );
 };

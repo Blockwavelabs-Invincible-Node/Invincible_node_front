@@ -42,8 +42,15 @@ const ModalOverlay = styled.div`
   z-index: 2;
 `;
 
-function Modal({ closeModal, visible, token, stakeAmount, getAmount, hedgeAmount }) {
-  const [component, setComponent] = useState(false);
+function Modal({
+  closeModal,
+  visible,
+  token,
+  stakeAmount,
+  getAmount,
+  hedgeAmount,
+}) {
+  const [component, setComponent] = useState(0);
   const modalRef = useRef();
 
   const clickModalOutside = (e) => {
@@ -52,6 +59,24 @@ function Modal({ closeModal, visible, token, stakeAmount, getAmount, hedgeAmount
       console.log("모달 닫았음");
     }
   };
+
+  // const ModalComponent = () => {
+  //   if (component == 0) {
+  //     <Confirm
+  //       pressStake={() => {
+  //         setComponent(true);
+  //       }}
+  //       token={token}
+  //       stakeAmount={stakeAmount}
+  //       getAmount={getAmount}
+  //       hedgeAmount={hedgeAmount}
+  //     />;
+  //   } else if (component == 1) {
+  //     <Success token={token} stakeAmount={stakeAmount} getAmount={getAmount} />;
+  //   } else if (component == 2) {
+
+  //   }
+  // };
 
   useEffect(() => {
     document.addEventListener("click", clickModalOutside);
