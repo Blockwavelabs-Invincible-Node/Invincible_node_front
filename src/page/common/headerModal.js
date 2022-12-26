@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SelectNetworkPopup from "../common/components/selectNetworkPopup";
 import SwitchNetworkPopup from "./components/switchNetworkPopup";
-
-
+import WalletInfoPopup from "./components/walletInfoPopup";
 
 const ModalBackground = styled.div`
   display: ${(props) => (props.visible ? "flex" : "none")};
@@ -45,9 +44,7 @@ const ModalOverlay = styled.div`
   z-index: 2;
 `;
 
-
-function HeaderModal({ closeModal, visible }) {
-
+function HeaderModal({ closeModal, visible, modalType }) {
   const modalRef = useRef();
 
   const clickModalOutside = (e) => {
@@ -74,6 +71,19 @@ function HeaderModal({ closeModal, visible }) {
     navigate(path);
   };
 
+  const ModalComponent = () => {
+    if (modalType === 0) {
+      return (
+        <SwitchNetworkPopup
+          routePage={routeStake}
+          closeModal={closeModal}
+        ></SwitchNetworkPopup>
+      );
+    } else if (modalType === 1) {
+      return <WalletInfoPopup></WalletInfoPopup>;
+    }
+  };
+
   return (
     <>
       <ModalOverlay visible={visible} />
@@ -83,9 +93,11 @@ function HeaderModal({ closeModal, visible }) {
         visible={visible}
       >
         <ModalWrapper>
-          <SwitchNetworkPopup routePage={routeStake} closeModal={closeModal}>
-
-          </SwitchNetworkPopup>
+          {/* <SwitchNetworkPopup
+            routePage={routeStake}
+            closeModal={closeModal}
+          ></SwitchNetworkPopup> */}
+          {ModalComponent()}
         </ModalWrapper>
       </ModalBackground>
     </>
