@@ -9,22 +9,47 @@ import {
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { Button } from "../../../styles/styledComponents/button";
 import SwitchNetwork from "../../functions/switchNetwork";
+import polygonEnabled from "../../../assets/images/polygonEnabled.svg";
+import polygonDisabled from "../../../assets/images/polygonDisabled.svg";
+import klaytnEnabled from "../../../assets/images/klaytnEnabled.svg";
+import klaytnDisabled from "../../../assets/images/klaytnDisabled.svg";
+import evmosEnabled from "../../../assets/images/evmosEnabled.svg";
+import evmosDisabled from "../../../assets/images/evmosDisabled.svg";
+import dydxEnabled from "../../../assets/images/dydxEnabled.svg";
+import dydxDisabled from "../../../assets/images/dydxDisabled.svg";
+import kavaEnabled from "../../../assets/images/kavaEnabled.svg";
+import kavaDisabled from "../../../assets/images/kavaDisabled.svg";
 
-const SwitchNetworkWrapper = styled.div``;
+const SwitchNetworkWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 40vw;
+  height: 35vh;
+`;
 const FirstText = styled(BoldText)`
+  font-size: 1.2vw;
+  text-align: left;
   margin-bottom: 2vh;
 `;
 const NetworkWrapper = styled.div`
+  height: 15vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 `;
 const NetworkComponent = styled.div`
   padding-left: 2vw;
   padding-right: 2vw;
-  background-color: ${(props) => (props.selected ? "red" : "none")};
+`;
+
+const NetworkLogo = styled.img`
+  width: 100%;
+  height: 100%;
 `;
 const ConfirmButton = styled(Button)`
+  width: 100%;
   margin-top: 2vh;
+  border-radius: 5px;
 `;
 
 const SelectNetworkPopup = ({ routePage }) => {
@@ -72,7 +97,7 @@ const SelectNetworkPopup = ({ routePage }) => {
 
   return (
     <SwitchNetworkWrapper>
-      <FirstText>Select Your Network</FirstText>
+      <FirstText>Please Select network you will use</FirstText>
       <NetworkWrapper>
         <NetworkComponent
           selected={firstNetwork}
@@ -83,7 +108,7 @@ const SelectNetworkPopup = ({ routePage }) => {
             setSelectedNetwork(1);
           }}
         >
-          Evmos
+          <NetworkLogo src={firstNetwork ? evmosEnabled : evmosDisabled} />
         </NetworkComponent>
         <NetworkComponent
           selected={secondNetwork}
@@ -94,7 +119,7 @@ const SelectNetworkPopup = ({ routePage }) => {
             setSelectedNetwork(2);
           }}
         >
-          Polygon
+          <NetworkLogo src={secondNetwork ? polygonEnabled : polygonDisabled} />
         </NetworkComponent>
         <NetworkComponent
           selected={thirdNetwork}
@@ -105,7 +130,7 @@ const SelectNetworkPopup = ({ routePage }) => {
             setSelectedNetwork(3);
           }}
         >
-          Kava
+          <NetworkLogo src={thirdNetwork ? kavaEnabled : kavaDisabled} />
         </NetworkComponent>
       </NetworkWrapper>
       <ConfirmButton
