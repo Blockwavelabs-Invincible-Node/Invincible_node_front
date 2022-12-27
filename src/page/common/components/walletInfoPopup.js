@@ -16,6 +16,8 @@ import MetamaskLogo from "../../../assets/images/metamask_logo.svg";
 import Web3 from "web3";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "../../../../node_modules/react-toastify/dist/ReactToastify.css";
 
 const WalletInfoWrapper = styled.div``;
 const FirstText = styled(BoldText)`
@@ -57,6 +59,20 @@ const WalletInfoPopup = ({ routePage, closeModal }) => {
   };
   const [account, setAccount] = useState();
 
+  const notify = () => {
+    toast.success("Copied to ClipBoard", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    console.log("notify");
+  };
+
   const getAccount = async () => {
     const accounts = await web3.eth.getAccounts();
     setAccount(accounts[0]);
@@ -68,13 +84,22 @@ const WalletInfoPopup = ({ routePage, closeModal }) => {
 
   return (
     <WalletInfoWrapper>
+      <ToastContainer />
       <FirstText>Wallet</FirstText>
       <ListContainer>
         <Logo src={MetamaskLogo}></Logo>
         <WalletContainer>
           <WalletText>{account}</WalletText>
           <WalletFunctionWrapper>
-            <CopyText>Copy</CopyText>
+            <CopyText
+              onClick={() => {
+                navigator.clipboard.writeText(account);
+                console.log("Copied");
+                notify();
+              }}
+            >
+              Copy
+            </CopyText>
             <ViewOnExplorerText>View on Explorer</ViewOnExplorerText>
           </WalletFunctionWrapper>
         </WalletContainer>

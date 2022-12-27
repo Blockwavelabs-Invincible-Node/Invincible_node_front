@@ -110,8 +110,16 @@ const StyledDropdownMenu = styled(Dropdown.Menu)`
   display: flex;
   flex-direction: column;
 `;
-const NetworkButton = styled(Button)``;
-const MyPageButton = styled(Button)``; //--------------------------------------------------------------//
+const NetworkButton = styled(Button)`
+  width: 10vw;
+`;
+const MyPageButton = styled(Button)`
+  width: 5vw;
+  margin-right: 10px;
+  background-color: gray;
+`;
+
+//--------------------------------------------------------------//
 
 const web3 = new Web3(window.ethereum);
 
@@ -225,7 +233,8 @@ function Header({ launchedApp }) {
               <></>
             )}
           </>
-          {window.localStorage.getItem("connectMetamask") == "true" ? (
+          {window.localStorage.getItem("connectMetamask") == "true" &&
+          account ? (
             <WalletAddress>
               <WalletAddressText
                 onClick={() => {

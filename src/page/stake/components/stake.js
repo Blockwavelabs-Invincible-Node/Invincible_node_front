@@ -71,11 +71,10 @@ const AmountBox = styled.div`
 `;
 
 const MaxButton = styled(Button)`
-  padding-left: 2vw;
-  padding-right: 2vw;
+  padding-left: 1vw;
+  padding-right: 1vw;
   width: auto;
   height: 35px;
-  max-width: 75px;
 `;
 
 const CurrencyBox = styled.div`
@@ -178,13 +177,13 @@ const ResultContainer = styled.div`
 
 const EvmosInputWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: center; */
   width: 50%;
   align-items: center;
 `;
-const EvmosInput = styled(BasicInput)`
-  width: 100%;
-  margin-right: 13px;
+const EvmosInput = styled.div`
+  width: 7vw;
+  margin-right: 1vw;
   height: 30px;
   background-color: #292929;
   border-radius: 5px;
@@ -401,14 +400,14 @@ const Stake = ({
                 <StakeWrapper>
                   <YouWillStake>You will stake</YouWillStake>
                   <EvmosInputWrapper>
-                    <EvmosInput value={stake} />
+                    <EvmosInput>{stake}</EvmosInput>
                     <EvmosAmount>{tokenNameRedux}</EvmosAmount>
                   </EvmosInputWrapper>
                 </StakeWrapper>
                 <GetWrapper>
                   <YouWillGet>You will get</YouWillGet>
                   <EvmosInputWrapper>
-                    <EvmosInput value={stake} />
+                    <EvmosInput>{stake}</EvmosInput>
                     <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
                   </EvmosInputWrapper>
                 </GetWrapper>
