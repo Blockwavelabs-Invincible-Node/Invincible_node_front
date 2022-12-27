@@ -53,6 +53,8 @@ const Line = styled.hr`
   color: white;
 `;
 
+const web3 = new Web3(window.ethereum);
+
 const Transaction = ({ account, transactions }) => {
   let navigate = useNavigate();
   const routeMain = () => {
@@ -60,7 +62,9 @@ const Transaction = ({ account, transactions }) => {
     navigate(path);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log("transaction list: ", web3);
+  }, []);
 
   function parseItem() {
     let temp;
