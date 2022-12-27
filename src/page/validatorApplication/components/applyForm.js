@@ -5,10 +5,101 @@ import address from "../../../addresses/contractAddress.json";
 import liquidStaking from "../../../artifacts/liquidStaking.json";
 import SwitchNetwork from "../../functions/switchNetwork";
 import { useDispatch, useSelector } from "react-redux";
-import { increasePageNumber, resetPageNumber, selectModalPageNumber } from "../../../redux/reducers/modalPageNumberReducer";
+import {
+  increasePageNumber,
+  resetPageNumber,
+  selectModalPageNumber,
+} from "../../../redux/reducers/modalPageNumberReducer";
 import testUSDTJSON from "../../../artifacts/testUSDT.json";
 import liquidStakingJSON from "../../../artifacts/liquidStaking.json";
 import stableCoinPoolJSON from "../../../artifacts/stableCoinPool.json";
+import { Wrapper } from "../../../styles/styledComponents/wrapper";
+import styled from "styled-components";
+import { LightText } from "../../../styles/styledComponents/lightText";
+import CheckFalse from "../../../assets/images/checkFalse.svg";
+import CheckTrue from "../../../assets/images/checkTrue.svg";
+import { BoldText } from "../../../styles/styledComponents/boldText";
+import { BasicInput } from "../../../styles/styledComponents/basicInput";
+import { Button } from "../../../styles/styledComponents/button";
+import { selectNetworkName } from "../../../redux/reducers/networkReducer";
+
+import { RotatingLines } from "react-loader-spinner";
+
+const Title = styled(BoldText)`
+  text-align: left;
+  margin-top: 3vh;
+  margin-left: 5%;
+  margin-bottom: 1vh;
+`;
+const SubTitle = styled(LightText)`
+  text-align: left;
+  font-size: 1vh;
+  margin-left: 5%;
+`;
+const Line = styled.hr`
+  width: 90%;
+  margin-bottom: 2vh;
+`;
+const VerifyBox = styled.div`
+  display: flex;
+`;
+const VerifyingText = styled.div``;
+
+const ValidatorApplicationWrapper = styled.div``;
+const Step1Wrapper = styled.div`
+  width: 90%;
+  background-color: #1b1b1b;
+  border-radius: 10px;
+  margin: auto;
+  margin-bottom: 2vh;
+`;
+const Step2Wrapper = styled(Step1Wrapper)`
+  display: flex;
+  justify-content: space-between;
+`;
+const Step3Wrapper = styled(Step1Wrapper)``;
+const CheckWrapper = styled.div`
+  display: flex;
+  padding-top: 1vh;
+  margin-bottom: 1vh;
+`;
+const InputWrapper = styled.div`
+  display: flex;
+  /* height: 2vh; */
+  justify-content: flex-end;
+  margin-top: 1vh;
+  padding-bottom: 2vh;
+`;
+const ValidatorInput = styled.input`
+  height: 2vh;
+  width: 20vw;
+  border-radius: 5px;
+  background-color: black;
+  font-family: Pretendard;
+  text-align: right;
+  border: none;
+  color: white;
+`;
+const NetworkWrapper = styled.div`
+  height: 2vh;
+  margin-left: 2vw;
+  margin-right: 2vw;
+`;
+const NetworkName = styled(LightText)``;
+const VerifyButton = styled(Button)`
+  height: 2vh;
+  width: 4vw;
+  margin-right: 2vw;
+`;
+
+const CheckImg = styled.img`
+  margin-left: 3vw;
+  margin-right: 1vw;
+`;
+const CheckText = styled(LightText)`
+  font-size: 1.5vh;
+  text-align: left;
+`;
 
 const web3 = new Web3(window.ethereum);
 
@@ -18,137 +109,227 @@ const liquidStakingContractAddress = address.liquidStaking;
 const liquidStakingContractABI = liquidStakingJSON.output.abi;
 const testUSDTABI = testUSDTJSON.output.abi;
 const testUSDTAddress = address.testUSDT;
-const stableCoinPoolContract = new web3.eth.Contract(stableCoinPoolContractABI, stableCoinPoolContractAddress);
+const stableCoinPoolContract = new web3.eth.Contract(
+  stableCoinPoolContractABI,
+  stableCoinPoolContractAddress
+);
 const testUSDTContract = new web3.eth.Contract(testUSDTABI, testUSDTAddress);
-
 
 const goerliProvider = process.env.REACT_APP_GOERLI_RPC_URL;
 const web3Provider = new Web3.providers.HttpProvider(goerliProvider);
 const goerliWeb3 = new Web3(web3Provider);
 const liquidStakingAddress = address.liquidStaking;
-const liquidStakingContract = new web3.eth.Contract(liquidStaking.output.abi, liquidStakingAddress);
+const liquidStakingContract = new web3.eth.Contract(
+  liquidStaking.output.abi,
+  liquidStakingAddress
+);
 
-const ApplyForm = ({openModal}) => {
-    const [ stableCoinAmount, setStableCoinAmount ] = useState(0);
-    const [ validatorAddress, setValidatorAddress ] = useState(null); 
+const ApplyForm = ({ openModal }) => {
+  const [stableCoinAmount, setStableCoinAmount] = useState(0);
+  const [validatorAddress, setValidatorAddress] = useState(null);
 
-    const dispatch = useDispatch();
-    //console.log(dispatch(setStakeAmount(event.target.value)));
-    dispatch(resetPageNumber());
+  const [secondMessage, setSecondMessage] = useState(false);
+  const [thirdMessage, setThirdMessage] = useState(false);
+  const [verifying, setVerifying] = useState(false);
 
-    const handleStableCoinAmountChange = (event) => {
-        setStableCoinAmount(event.target.value);
-    }
-    const handleValidatorAddressChange = (event) => {
-        setValidatorAddress(event.target.value);
-    }
-    const retryCheck = async() => {
-        setTimeout(async() => {
-            const checkValidatorAddress = await liquidStakingContract.methods.validatorAddresses(validatorAddress).call()
-            .catch( err => {
-                console.log(err.message);
+  const networkNameRedux = useSelector(selectNetworkName);
+
+  const dispatch = useDispatch();
+  //console.log(dispatch(setStakeAmount(event.target.value)));
+  dispatch(resetPageNumber());
+
+  const handleStableCoinAmountChange = (event) => {
+    setStableCoinAmount(event.target.value);
+  };
+  const handleValidatorAddressChange = (event) => {
+    setValidatorAddress(event.target.value);
+  };
+  const retryCheck = async () => {
+    setTimeout(async () => {
+      const checkValidatorAddress = await liquidStakingContract.methods
+        .validatorAddresses(validatorAddress)
+        .call()
+        .catch((err) => {
+          console.log(err.message);
+        })
+        .then(async function (receipt) {
+          console.log("check result: ", receipt);
+          if (receipt == 0) {
+            //retry
+            console.log("retry");
+          } else if (receipt == 1) {
+            //send stable coin
+            const value = stableCoinAmount;
+            const number = await web3.utils.toBN(value * 10 ** 18);
+            console.log("value: ", number);
+            dispatch(increasePageNumber());
+            ValidatorApplication(validatorAddress, number);
+          }
+        });
+    }, 10000);
+  };
+  const ValidatorApplication = async (validatorAddress, amount) => {
+    SwitchNetwork(5).then(async () => {
+      const getAccount = await web3.eth.getAccounts();
+      console.log("account: ", getAccount[0]);
+      console.log(validatorAddress, amount);
+      console.log(await testUSDTContract.methods);
+      dispatch(increasePageNumber());
+      const approve = await testUSDTContract.methods
+        .approve(stableCoinPoolContractAddress, amount)
+        .send({ from: getAccount[0] })
+        .then((result) => {
+          console.log(result);
+        });
+      dispatch(increasePageNumber());
+      const receive = await stableCoinPoolContract.methods
+        .receiveStableToken(amount, validatorAddress)
+        .send({ from: getAccount[0] })
+        .then((result) => {
+          console.log(result);
+        });
+      dispatch(increasePageNumber());
+    });
+  };
+
+  const verifyValidatorAddress = async () => {
+    const getAccount = await web3.eth.getAccounts();
+    const account = getAccount[0];
+    console.log(account);
+    const addValidatorAddress = await liquidStakingContract.methods
+      .addValidatorAddress(validatorAddress)
+      .send({ from: account })
+      .catch((err) => {
+        console.log(err.message);
+        return;
+      })
+      .then(function (receipt) {
+        console.log("receipt: ", receipt);
+      })
+      // check if it is right address
+      .then(async () => {
+        // 20초 간격으로 세 번 반복
+        setTimeout(async () => {
+          const checkValidatorAddress = await liquidStakingContract.methods
+            .validatorAddresses(validatorAddress)
+            .call()
+            .catch((err) => {
+              console.log(err.message);
             })
             .then(async function (receipt) {
-                console.log("check result: ", receipt);
-                if (receipt == 0) {
-                    //retry
-                    console.log("retry");
-                }
-                else if (receipt == 1) {
-                    //send stable coin
-                    const value = stableCoinAmount;
-                    const number = await web3.utils.toBN(value * 10**18);
-                    console.log("value: ", number);
-                    dispatch(increasePageNumber());
-                    ValidatorApplication(validatorAddress, number);
-                }
-            })
-        },10000)
-    }
-    const ValidatorApplication = async(validatorAddress, amount) => {
-      
-        SwitchNetwork(5)
-        .then( async() => {
-            const getAccount = await web3.eth.getAccounts();
+              console.log("check result: ", receipt);
+              if (receipt == 0) {
+                //retry
+                console.log("Retry");
+                retryCheck();
+              } else if (receipt == 1) {
+                //send stable coin
+                setVerifying(false);
+                const value = stableCoinAmount;
+                const number = await web3.utils.toBN(value * 10 ** 18);
+                console.log("value: ", number);
 
-            console.log("account: ", getAccount[0]);
-            console.log(validatorAddress, amount);
-            console.log(await testUSDTContract.methods);
-            dispatch(increasePageNumber());
-            const approve = await testUSDTContract.methods.approve(stableCoinPoolContractAddress, amount).send({from: getAccount[0]})
-            .then((result) => {
-                console.log(result);
+                setSecondMessage(true);
+                console.log("SecondMessage: ", secondMessage);
+                dispatch(increasePageNumber());
+                SwitchNetwork(5).then(() => {
+                  setThirdMessage(true);
+                });
+              }
             });
-            dispatch(increasePageNumber());
-            const receive = await stableCoinPoolContract.methods.receiveStableToken(amount, validatorAddress).send({from: getAccount[0]})
-            .then((result) => {
-                console.log(result);
-            });
-            dispatch(increasePageNumber());
-        })
-     }
+        }, 10000);
+      });
+  };
 
-    const verifyValidatorAddress = async() => {
-        const getAccount = await web3.eth.getAccounts();
-        const account = getAccount[0];
-        console.log(account);
-        const addValidatorAddress = await liquidStakingContract.methods.addValidatorAddress(validatorAddress).send({from: account})
-        .catch( err => {
-            console.log(err.message);
-            return;
-        })
-        .then(function(receipt) {
-            console.log("receipt: ", receipt);
-        })
-        // check if it is right address
-        .then(async() => {
-            // 20초 간격으로 세 번 반복
-            setTimeout(async() => { 
-                const checkValidatorAddress = await liquidStakingContract.methods.validatorAddresses(validatorAddress).call()
-                .catch( err => {
-                    console.log(err.message);
-                })
-                .then(async function (receipt) {
-                    console.log("check result: ", receipt);
-                    if (receipt == 0) {
-                        //retry
-                        console.log("Retry");
-                        retryCheck();
-                    }
-                    else if (receipt == 1) {
-                        //send stable coin
-                        const value = stableCoinAmount;
-                        const number = await web3.utils.toBN(value * 10**18);
-                        console.log("value: ", number);
-                        dispatch(increasePageNumber());
-                        ValidatorApplication(validatorAddress, number);
-                    }
-                })
-            }, 10000);
-            
-        })
-
-    }
-
-    
+  const Verifying = () => {
     return (
-        <>
-            Amount: <input onChange={handleStableCoinAmountChange}></input> (minimum: 1usdt) <br />
-            Validator Address: <input onChange={handleValidatorAddressChange}></input><br />
-            <button onClick={async() =>{
-                SwitchNetwork(9000)
-                .then(()=>{
-                    openModal();
-                })
-                .then(async() => {
-                    verifyValidatorAddress();
-                })
-                // const value = stableCoinAmount;
-                // const number = await web3.utils.toBN(value * 10**18);
-                // ValidatorApplication(validatorAddress, number);
-            }}>Submit</button>
-        </>
-    )
-}
+      <VerifyBox>
+        <VerifyingText>Verifying</VerifyingText>
+        <RotatingLines
+          strokeColor="grey"
+          strokeWidth="5"
+          animationDuration="0.75"
+          width="20"
+          visible={true}
+        />
+      </VerifyBox>
+    );
+  };
+
+  return (
+    <ValidatorApplicationWrapper>
+      <Title>Apply as Validator</Title>
+      <SubTitle>Application process</SubTitle>
+      <Line></Line>
+      <Step1Wrapper>
+        <CheckWrapper>
+          <CheckImg src={!secondMessage ? CheckFalse : CheckTrue}></CheckImg>
+          <CheckText>
+            Input validator’s address to enroll and verify <br />
+            after checking network & your wallet address currently you’ve
+            connected.
+          </CheckText>
+        </CheckWrapper>
+        <InputWrapper>
+          <ValidatorInput
+            placeholder="Place Validator Address Here     (ex)evmosvaloper..."
+            type="text"
+            onChange={handleValidatorAddressChange}
+          ></ValidatorInput>
+          <NetworkWrapper>
+            <NetworkName>{networkNameRedux}</NetworkName>
+          </NetworkWrapper>
+          <VerifyButton
+            onClick={async () => {
+              setVerifying(true);
+              SwitchNetwork(9000).then(async () => {
+                verifyValidatorAddress();
+              });
+            }}
+          >
+            {verifying ? Verifying() : "Verify"}
+          </VerifyButton>
+        </InputWrapper>
+      </Step1Wrapper>
+      {secondMessage ? (
+        <Step2Wrapper>
+          <CheckWrapper>
+            <CheckImg src={!thirdMessage ? CheckFalse : CheckTrue}></CheckImg>
+            <CheckText>Switching Network</CheckText>
+          </CheckWrapper>
+          {/* <SwitchNetworkButton>Switch Network to Ethereum</SwitchNetworkButton> */}
+        </Step2Wrapper>
+      ) : (
+        <></>
+      )}
+      {thirdMessage ? (
+        <Step3Wrapper>
+          <CheckWrapper>
+            <CheckImg src={CheckFalse}></CheckImg>
+            <CheckText>Provide Stable Coin into the pool </CheckText>
+          </CheckWrapper>
+          <InputWrapper>
+            <ValidatorInput
+              onChange={handleStableCoinAmountChange}
+            ></ValidatorInput>
+            <VerifyButton
+              onClick={async () => {
+                const value = stableCoinAmount;
+                const number = await web3.utils.toBN(value * 10 ** 18);
+                console.log("value: ", number);
+                dispatch(increasePageNumber());
+                ValidatorApplication(validatorAddress, number);
+              }}
+            >
+              Send
+            </VerifyButton>
+          </InputWrapper>
+        </Step3Wrapper>
+      ) : (
+        <></>
+      )}
+    </ValidatorApplicationWrapper>
+  );
+};
 
 export default ApplyForm;
