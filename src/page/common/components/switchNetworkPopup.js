@@ -30,15 +30,11 @@ const TitleWrapper = styled.div`
   margin-bottom: 2vh;
 `;
 const FirstText = styled(BoldText)`
-  /* margin-bottom: 2vh; */
-`;
-const NetworkWrapper = styled.div`
-  display: flex;
-  justify-content: center;
+  font-size: 1.2vw;
 `;
 const ComponentWrapper = styled.div`
-  width: 35vw;
-  height: 15vh;
+  width: 50vw;
+  height: 30vh;
   display: flex;
   justify-content: center;
   margin-bottom: 2vh;
@@ -47,7 +43,7 @@ const ComponentWrapper = styled.div`
   border-radius: 5px;
 `;
 const LeftBoxWrapper = styled.div`
-  width: 5vw;
+  width: 11vw;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -58,16 +54,13 @@ const LeftBoxWrapper = styled.div`
 const TextBox = styled.div`
   width: 100%;
   font-weight: 500;
-  font-size: 20px;
-  line-height: 12px;
+  font-size: 1.2vw;
   text-align: left;
 `;
 const TextBoxSmall = styled.div`
   width: 100%;
-  margin-top: 0.5vh;
   font-weight: 500;
-  font-size: 10px;
-  line-height: 12px;
+  font-size: 0.8vw;
   text-align: left;
 `;
 const NetworkBox = styled.div`

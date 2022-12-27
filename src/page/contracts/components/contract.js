@@ -23,16 +23,15 @@ const LeverageWrapper = styled.div`
 `;
 const FirstText = styled(BoldText)`
   width: 20vw;
-  font-size: 15px;
-  font-weight: 900;
+  font-size: 1.2vw;
   margin-bottom: 1px;
 `;
 const TitleText = styled(BoldText)`
-  font-size: 10px;
+  font-size: 0.8vw;
   text-align: left;
 `;
 const SecondText = styled(LightText)`
-  font-size: 10px;
+  font-size: 0.8vw;
   font-weight: 400;
   margin-top: 0.5vh;
   margin-bottom: 0.5vh;
@@ -46,6 +45,7 @@ const FirstWrapper = styled.div`
 
 const ComponentWrapper = styled.div`
   display: flex;
+  justify-content: flex-start;
   border-radius: 10px;
   background-color: #212121;
 
@@ -83,7 +83,7 @@ const ElementWrapper = styled.div`
 `;
 
 const Element1 = styled.div`
-  width: 20vh;
+  flex-basis: 50%;
   text-align: center;
   margin-left: 2vh;
 `;
@@ -128,12 +128,12 @@ const UnitBox = styled.div`
 `;
 
 const ContentText = styled(LightText)`
-  font-size: 10px;
+  font-size: 0.8vw;
   text-align: center;
 `;
 
-const ContentTextBold = styled(BoldText)`
-  font-size: 10px;
+const ContentTextBold = styled(LightText)`
+  font-size: 0.8vw;
   text-align: center;
 `;
 
@@ -156,10 +156,10 @@ const TableRow = styled.tr`
   background: #1b1b1b;
 `;
 const TableHeader = styled.th`
-  font-size: 10px;
+  font-size: 0.8vw;
 `;
 const TableElement = styled.td`
-  font-size: 10px;
+  font-size: 0.8vw;
   text-align: center;
   border: 2px solid #1b1b1b;
 
