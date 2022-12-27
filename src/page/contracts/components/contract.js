@@ -17,7 +17,6 @@ import escapeArrow from "../../../assets/images/escapeArrow.png";
 import arrowDownGray from "../../../assets/images/arrowDownGray.png";
 
 const LeverageWrapper = styled.div`
-  /* margin-top: 5vh; */
   margin-bottom: 5vh;
   text-align: left;
   max-width: 100%;
@@ -44,20 +43,8 @@ const FirstWrapper = styled.div`
   justify-content: space-evenly;
   text-align: left;
 `;
-// const SecondWrapper = styled.div`
-//   /* margin-top: 5vh; */
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-between;
-//   text-align: left;
-// `;
-// const ThirdWrapper = styled.div`
-//   margin-top: 5vh;
-//   margin-left: 3vw;
-//   margin-right: 3vw;
-// `;
+
 const ComponentWrapper = styled.div`
-  /* width: 45%; */
   display: flex;
   border-radius: 10px;
   background-color: #212121;
@@ -119,15 +106,12 @@ const MoreWrapper = styled.div`
 `;
 
 const ArrowDownGray = styled.img`
-  /* margin-left: auto; */
   width: 9px;
   height: 4.5px;
 
   margin-left: 3px;
 `;
-// const Element2 = styled(Element1)`
-//   width: 30%;
-// `;
+
 const TextBox = styled.div`
   background-color: #1b1b1b;
   border-radius: 10px;
@@ -177,8 +161,6 @@ const TableHeader = styled.th`
 const TableElement = styled.td`
   font-size: 10px;
   text-align: center;
-  /* border-radius: 5px; */
-
   border: 2px solid #1b1b1b;
 
   &:first-child {
@@ -239,7 +221,6 @@ const Contract = () => {
       <FirstWrapper>
         <ComponentWrapper>
           <FirstText>Liquid Staking Contract</FirstText>
-          {/* <Line></Line> */}
           <ElementWrapper>
             <Element1>
               <TitleText>Address</TitleText>
@@ -262,7 +243,6 @@ const Contract = () => {
 
         <ComponentWrapper>
           <FirstText>Reserved USDT Usage</FirstText>
-          {/* <Line></Line> */}
           <ElementWrapper>
             <Element1>
               <TitleText>Address</TitleText>
@@ -289,15 +269,6 @@ const Contract = () => {
             </Element1>
             <EscapeArrow src={escapeArrow}></EscapeArrow>
           </ElementWrapper>
-          {/* 
-          <ElementWrapper>
-            <Element2>
-              <TitleText>Token Address</TitleText>
-              <TextBox>
-                <ContentText>{contractAddress.testUSDT}</ContentText>
-              </TextBox>
-            </Element2>
-          </ElementWrapper> */}
         </ComponentWrapper>
 
         <CompoentWrapperCol>
@@ -382,11 +353,6 @@ const Contract = () => {
           </MoreWrapper>
         </CompoentWrapperCol>
       </FirstWrapper>
-
-      {/* <SecondWrapper>
-    
-      </SecondWrapper> */}
-      {/* <ThirdWrapper></ThirdWrapper> */}
     </LeverageWrapper>
   );
 };
