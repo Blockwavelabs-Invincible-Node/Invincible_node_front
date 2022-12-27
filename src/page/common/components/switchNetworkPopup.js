@@ -19,6 +19,8 @@ import evmosEnabled from "../../../assets/images/evmosEnabled.svg";
 import evmosDisabled from "../../../assets/images/evmosDisabled.svg";
 import dydxEnabled from "../../../assets/images/dydxEnabled.svg";
 import dydxDisabled from "../../../assets/images/dydxDisabled.svg";
+import kavaEnabled from "../../../assets/images/kavaEnabled.svg";
+import kavaDisabled from "../../../assets/images/kavaDisabled.svg";
 
 const SwitchNetworkWrapper = styled.div``;
 const TitleWrapper = styled.div`
@@ -35,8 +37,8 @@ const NetworkWrapper = styled.div`
   justify-content: center;
 `;
 const ComponentWrapper = styled.div`
-  width: 50vw;
-  height: 25vh;
+  width: 35vw;
+  height: 15vh;
   display: flex;
   justify-content: center;
   margin-bottom: 2vh;
@@ -45,24 +47,28 @@ const ComponentWrapper = styled.div`
   border-radius: 5px;
 `;
 const LeftBoxWrapper = styled.div`
-  width: 10vw;
+  width: 5vw;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 1.5vh;
+  padding: 1vh;
   background-color: #1a1a1a;
   border-radius: 5px;
 `;
 const TextBox = styled.div`
+  width: 100%;
   font-weight: 500;
   font-size: 20px;
   line-height: 12px;
+  text-align: left;
 `;
 const TextBoxSmall = styled.div`
-  margin-top: 1vh;
+  width: 100%;
+  margin-top: 0.5vh;
   font-weight: 500;
   font-size: 10px;
   line-height: 12px;
+  text-align: left;
 `;
 const NetworkBox = styled.div`
   display: flex;
@@ -75,7 +81,6 @@ const NetworkComponent = styled.div`
   width: 10vw;
   padding-left: 2vw;
   padding-right: 2vw;
-  /* background-color: ${(props) => (props.selected ? "red" : "none")}; */
 `;
 const NetworkLogo = styled.img`
   width: 100%;
@@ -154,7 +159,29 @@ const SwitchNetworkPopup = ({ routePage, closeModal }) => {
           <TextBoxSmall>Current Network</TextBoxSmall>
         </LeftBoxWrapper>
         <NetworkBox>
-          <NetworkComponent>{networkNameRedux}</NetworkComponent>
+          {networkNameRedux === "Evmos" ? (
+            <NetworkComponent>
+              <NetworkLogo src={evmosDisabled} />
+            </NetworkComponent>
+          ) : (
+            ""
+          )}
+
+          {networkNameRedux === "Polygon" ? (
+            <NetworkComponent>
+              <NetworkLogo src={polygonDisabled} />
+            </NetworkComponent>
+          ) : (
+            ""
+          )}
+
+          {networkNameRedux === "Kava" ? (
+            <NetworkComponent>
+              <NetworkLogo src={kavaDisabled} />
+            </NetworkComponent>
+          ) : (
+            ""
+          )}
         </NetworkBox>
       </ComponentWrapper>
       <ComponentWrapper>
@@ -162,45 +189,56 @@ const SwitchNetworkPopup = ({ routePage, closeModal }) => {
           <TextBox>To</TextBox>
           <TextBoxSmall>Network to change</TextBoxSmall>
         </LeftBoxWrapper>
-
         <NetworkBox>
-          <NetworkComponent
-            selected={firstNetwork}
-            onClick={() => {
-              setFirstNetwork(true);
-              setSecondNetwork(false);
-              setThirdNetwork(false);
-              setSelectedNetwork(1);
-            }}
-          >
-            <NetworkLogo src={firstNetwork ? evmosEnabled : evmosDisabled} />
-          </NetworkComponent>
+          {networkNameRedux === "Evmos" ? (
+            ""
+          ) : (
+            <NetworkComponent
+              selected={firstNetwork}
+              onClick={() => {
+                setFirstNetwork(true);
+                setSecondNetwork(false);
+                setThirdNetwork(false);
+                setSelectedNetwork(1);
+              }}
+            >
+              <NetworkLogo src={firstNetwork ? evmosEnabled : evmosDisabled} />
+            </NetworkComponent>
+          )}
 
-          <NetworkComponent
-            selected={secondNetwork}
-            onClick={() => {
-              setSecondNetwork(true);
-              setFirstNetwork(false);
-              setThirdNetwork(false);
-              setSelectedNetwork(2);
-            }}
-          >
-            <NetworkLogo src={secondNetwork ? klaytnEnabled : klaytnDisabled} />
-          </NetworkComponent>
+          {networkNameRedux === "Polygon" ? (
+            ""
+          ) : (
+            <NetworkComponent
+              selected={secondNetwork}
+              onClick={() => {
+                setSecondNetwork(true);
+                setFirstNetwork(false);
+                setThirdNetwork(false);
+                setSelectedNetwork(2);
+              }}
+            >
+              <NetworkLogo
+                src={secondNetwork ? polygonEnabled : polygonDisabled}
+              />
+            </NetworkComponent>
+          )}
 
-          <NetworkComponent
-            selected={thirdNetwork}
-            onClick={() => {
-              setSecondNetwork(false);
-              setFirstNetwork(false);
-              setThirdNetwork(true);
-              setSelectedNetwork(3);
-            }}
-          >
-            <NetworkLogo
-              src={thirdNetwork ? polygonEnabled : polygonDisabled}
-            />
-          </NetworkComponent>
+          {networkNameRedux === "Kava" ? (
+            ""
+          ) : (
+            <NetworkComponent
+              selected={thirdNetwork}
+              onClick={() => {
+                setSecondNetwork(false);
+                setFirstNetwork(false);
+                setThirdNetwork(true);
+                setSelectedNetwork(3);
+              }}
+            >
+              <NetworkLogo src={thirdNetwork ? kavaEnabled : kavaDisabled} />
+            </NetworkComponent>
+          )}
         </NetworkBox>
       </ComponentWrapper>
       <ConfirmButton
