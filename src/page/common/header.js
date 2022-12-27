@@ -213,13 +213,13 @@ function Header({ launchedApp }) {
           <>
             {launchedApp ? (
               <>
-                <MyPageButton
+                {/* <MyPageButton
                   onClick={() => {
                     routeMyPage();
                   }}
                 >
                   My Page
-                </MyPageButton>
+                </MyPageButton> */}
                 <NetworkButton
                   onClick={() => {
                     setModalType(0);

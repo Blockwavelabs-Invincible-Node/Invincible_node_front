@@ -181,7 +181,7 @@ const EvmosInputWrapper = styled.div`
   width: 50%;
   align-items: center;
 `;
-const EvmosInput = styled.div`
+const EvmosInput = styled.input`
   width: 7vw;
   margin-right: 1vw;
   height: 30px;
@@ -197,6 +197,7 @@ const EvmosInput = styled.div`
   &: focus {
     outline: none;
   }
+  word-wrap: break-word;
 `;
 
 const StageBar = styled.div`
@@ -400,14 +401,14 @@ const Stake = ({
                 <StakeWrapper>
                   <YouWillStake>You will stake</YouWillStake>
                   <EvmosInputWrapper>
-                    <EvmosInput>{stake}</EvmosInput>
+                    <EvmosInput value={stake}></EvmosInput>
                     <EvmosAmount>{tokenNameRedux}</EvmosAmount>
                   </EvmosInputWrapper>
                 </StakeWrapper>
                 <GetWrapper>
                   <YouWillGet>You will get</YouWillGet>
                   <EvmosInputWrapper>
-                    <EvmosInput>{stake}</EvmosInput>
+                    <EvmosInput value={stake}></EvmosInput>
                     <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
                   </EvmosInputWrapper>
                 </GetWrapper>

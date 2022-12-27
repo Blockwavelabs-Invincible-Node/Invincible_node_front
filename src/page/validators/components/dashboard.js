@@ -19,10 +19,14 @@ const ListTable = styled.table`
   margin: auto;
   padding-top: 3vh;
   padding-bottom: 3vh;
+  text-overflow: hidden;
+  font-size: 1vh;
+
+  /* table-layout: fixed; */
 `;
 const ListTableBox = styled.div`
   background-color: black;
-  width: 90%;
+  width: 95%;
   margin: auto;
   border-radius: 10px;
 `;
@@ -32,7 +36,19 @@ const ListTableHeader = styled.tr`
 const ListTableRow = styled.tr`
   height: 3vh;
 `;
-const ListTableElement = styled.td``;
+const ListTableElement = styled.td`
+  text-overflow: hidden;
+`;
+const Owner = styled(ListTableElement)`
+  max-width: 12vw;
+  text-overflow: hidden;
+  word-wrap: break-word;
+`;
+const Validator = styled(ListTableElement)`
+  max-width: 12vw;
+  text-overflow: hidden;
+  word-wrap: break-word;
+`;
 const FirstText = styled(BoldText)`
   text-align: left;
   margin-left: 5%;
@@ -65,6 +81,9 @@ const LoadingBox = styled.div`
 const SpinnerBox = styled.div`
   height: 2vh;
 `;
+const WhiteLine = styled.hr`
+  width: 100px;
+`;
 
 const goerliProvider = process.env.REACT_APP_GOERLI_RPC_URL;
 const web3Provider = new Web3.providers.HttpProvider(goerliProvider);
@@ -88,6 +107,7 @@ const Dashboard = () => {
   const [commissions, setCommissions] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [blockHeight, setBlockHeight] = useState(0);
 
   // const stableCoinPoolRead = async() => {
   //     const getAccount = await web3.eth.getAccounts();
@@ -103,6 +123,11 @@ const Dashboard = () => {
   //     const retrieved = await liquidStakingContract.methods.unstaked(account).call();
   //     console.log("staked: ", staked-retrieved);
   // }
+
+  const getChainData = async () => {
+    const bh = await web3.eth.getBlockNumber();
+    setBlockHeight(bh);
+  };
 
   const getData = async () => {
     const totalAddresses = await stableTokenPoolContract.methods
@@ -149,8 +174,8 @@ const Dashboard = () => {
         <>
           <ListTableRow>
             <ListTableElement>{i + 1}</ListTableElement>
-            <ListTableElement>{addresses[i]}</ListTableElement>
-            <ListTableElement>{valiAddresses[i]}</ListTableElement>
+            <Owner>{addresses[i]}</Owner>
+            <Validator>{valiAddresses[i]}</Validator>
             <ListTableElement>{commissions[i]}%</ListTableElement>
             <ListTableElement>{lends[i] / 10 ** 18}</ListTableElement>
             <ListTableElement>{score.toFixed(3)}</ListTableElement>
@@ -170,6 +195,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     initData();
+    getChainData();
   }, []);
 
   return loading ? (
@@ -194,7 +220,7 @@ const Dashboard = () => {
         <NodeBoxWrapper>
           <NodeBox>
             <NodeBoxTitle>Block Heights</NodeBoxTitle>
-            <NodeBoxText>111111</NodeBoxText>
+            <NodeBoxText>{blockHeight}</NodeBoxText>
           </NodeBox>
           <NodeBox>
             <NodeBoxTitle>Nodes</NodeBoxTitle>
