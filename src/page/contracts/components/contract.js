@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Web3 from "web3";
+import { useDispatch, useSelector } from "react-redux";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { Button } from "../../../styles/styledComponents/button";
 import { LightText } from "../../../styles/styledComponents/lightText";
-import Web3 from "web3";
 import address from "../../../addresses/contractAddress.json";
 import liquidStaking from "../../../artifacts/liquidStaking.json";
 import rewardToken from "../../../artifacts/rewardToken.json";
@@ -15,6 +16,10 @@ import StableTokenPoolMethodObject from "../../functions/getStableTokenPool";
 import stableTokenPool from "../../../artifacts/stableCoinPool.json";
 import escapeArrow from "../../../assets/images/escapeArrow.png";
 import arrowDownGray from "../../../assets/images/arrowDownGray.png";
+import {
+  selectNetworkName,
+  selectTokenName,
+} from "../../../redux/reducers/networkReducer";
 
 const LeverageWrapper = styled.div`
   margin-bottom: 5vh;
@@ -208,6 +213,13 @@ const Contract = () => {
     setBalance((totalSupply - totalLend) / 10 ** 18);
   };
 
+  const getUsdtData = async () => {
+    const stableTokenPoolContract = new goerliWeb3.eth.Contract(
+      stableTokenPool.output.abi,
+      contractAddress.stableCoinPool
+    );
+  };
+
   useEffect(() => {
     stableCoinPoolRead();
   }, []);
@@ -215,6 +227,8 @@ const Contract = () => {
   function getShortenedAddress(addr) {
     return addr.substring(0, 5) + "..." + addr.substring(25);
   }
+
+  const tokenNameRedux = useSelector(selectTokenName);
 
   return (
     <LeverageWrapper>
@@ -320,9 +334,9 @@ const Contract = () => {
           <Table>
             <TableHeadRow>
               <TableHeader>Recipient Address</TableHeader>
-              <TableHeader>Staked Amount</TableHeader>
-              <TableHeader>Collateral Amount</TableHeader>
-              <TableHeader>Borrowed Amount</TableHeader>
+              <TableHeader>Staked Amount({tokenNameRedux})</TableHeader>
+              <TableHeader>Collateral Amount({tokenNameRedux})</TableHeader>
+              <TableHeader>Borrowed Amount(USDT)</TableHeader>
               <TableHeader>Block Signed At</TableHeader>
             </TableHeadRow>
             <TableRow>
