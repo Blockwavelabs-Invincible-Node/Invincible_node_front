@@ -11,21 +11,21 @@ import modalPageNumberReducer from "../reducers/modalPageNumberReducer";
 import persistReducer from "redux-persist/es/persistReducer";
 import storage from "redux-persist/lib/storage";
 import persistStore from "redux-persist/es/persistStore";
-
+import validatorApplicationReducer from "../reducers/validatorApplicationReducer";
 
 const persistConfig = {
-    key: "root",
-    storage,
-   
+  key: "root",
+  storage,
 };
 
 const rootReducer = combineReducers({
-    // list of reducers
-    stakeAmount: stakeAmountReducer,
-    connectMetamask: connectMetamaskReducer,
-    hedgeAmount: hedgeAmountReducer,
-    network: networkReducer,
-    modalPageNumber: modalPageNumberReducer
+  // list of reducers
+  stakeAmount: stakeAmountReducer,
+  connectMetamask: connectMetamaskReducer,
+  hedgeAmount: hedgeAmountReducer,
+  network: networkReducer,
+  modalPageNumber: modalPageNumberReducer,
+  validatorApplication: validatorApplicationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -33,10 +33,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 //const middleware = applyMiddleware(thunk);
 
 const store = configureStore({
-    // middleware: middleware,
-    reducer: persistedReducer
+  // middleware: middleware,
+  reducer: persistedReducer,
 });
-
 
 export default store;
 

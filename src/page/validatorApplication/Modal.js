@@ -5,8 +5,6 @@ import styled from "styled-components";
 import { selectModalPageNumber } from "../../redux/reducers/modalPageNumberReducer";
 import ModalComponent from "./components/modalComponent";
 
-
-
 const ModalBackground = styled.div`
   display: ${(props) => (props.visible ? "flex" : "none")};
   //   width: 90vw;
@@ -52,10 +50,9 @@ function Modal({ closeModal, visible }) {
 
   const clickModalOutside = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
-        
-        closeModal();
-      
-        console.log("모달 닫았음");
+      closeModal();
+
+      console.log("모달 닫았음");
     }
   };
   useEffect(() => {
@@ -76,9 +73,7 @@ function Modal({ closeModal, visible }) {
         visible={visible}
       >
         <ModalWrapper>
-            <ModalComponent
-              
-            />
+          <ModalComponent />
         </ModalWrapper>
       </ModalBackground>
     </>

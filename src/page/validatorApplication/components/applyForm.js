@@ -22,6 +22,8 @@ import { BoldText } from "../../../styles/styledComponents/boldText";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { Button } from "../../../styles/styledComponents/button";
 import { selectNetworkName } from "../../../redux/reducers/networkReducer";
+import { ToastContainer, toast } from "react-toastify";
+import "../../../../node_modules/react-toastify/dist/ReactToastify.css";
 
 import { RotatingLines } from "react-loader-spinner";
 
@@ -80,6 +82,9 @@ const ValidatorInput = styled.input`
   border: none;
   color: white;
 `;
+const AmountInput = styled(ValidatorInput)`
+  width: 10vw;
+`;
 const NetworkWrapper = styled.div`
   height: 2vh;
   margin-left: 2vw;
@@ -99,6 +104,10 @@ const CheckImg = styled.img`
 const CheckText = styled(LightText)`
   font-size: 1.5vh;
   text-align: left;
+`;
+const USDTText = styled(LightText)`
+  margin-left: 2vw;
+  margin-right: 2vw;
 `;
 
 const web3 = new Web3(window.ethereum);
@@ -130,7 +139,7 @@ const ApplyForm = ({ openModal }) => {
 
   const [secondMessage, setSecondMessage] = useState(false);
   const [thirdMessage, setThirdMessage] = useState(false);
-  const [verifying, setVerifying] = useState(false);
+  const [verifying, setVerifying] = useState(0);
 
   const networkNameRedux = useSelector(selectNetworkName);
 
@@ -162,7 +171,6 @@ const ApplyForm = ({ openModal }) => {
             const value = stableCoinAmount;
             const number = await web3.utils.toBN(value * 10 ** 18);
             console.log("value: ", number);
-            dispatch(increasePageNumber());
             ValidatorApplication(validatorAddress, number);
           }
         });
@@ -171,30 +179,32 @@ const ApplyForm = ({ openModal }) => {
   const ValidatorApplication = async (validatorAddress, amount) => {
     SwitchNetwork(5).then(async () => {
       const getAccount = await web3.eth.getAccounts();
-      console.log("account: ", getAccount[0]);
       console.log(validatorAddress, amount);
       console.log(await testUSDTContract.methods);
-      dispatch(increasePageNumber());
+
       const approve = await testUSDTContract.methods
         .approve(stableCoinPoolContractAddress, amount)
         .send({ from: getAccount[0] })
         .then((result) => {
           console.log(result);
         });
-      dispatch(increasePageNumber());
+
       const receive = await stableCoinPoolContract.methods
         .receiveStableToken(amount, validatorAddress)
         .send({ from: getAccount[0] })
         .then((result) => {
           console.log(result);
+          dispatch(setValidatorAddress(validatorAddress));
+          dispatch(setStableCoinAmount(stableCoinAmount));
+          openModal();
         });
-      dispatch(increasePageNumber());
     });
   };
 
   const verifyValidatorAddress = async () => {
     const getAccount = await web3.eth.getAccounts();
     const account = getAccount[0];
+    const id = toast.loading("Verifying Validator Address..");
     console.log(account);
     const addValidatorAddress = await liquidStakingContract.methods
       .addValidatorAddress(validatorAddress)
@@ -224,13 +234,18 @@ const ApplyForm = ({ openModal }) => {
                 retryCheck();
               } else if (receipt == 1) {
                 //send stable coin
-                setVerifying(false);
+                setVerifying(2);
+                toast.update(id, {
+                  render: "Address Verified!",
+                  type: "success",
+                  isLoading: false,
+                  autoClose: 1000,
+                });
                 const value = stableCoinAmount;
                 const number = await web3.utils.toBN(value * 10 ** 18);
                 console.log("value: ", number);
 
                 setSecondMessage(true);
-                console.log("SecondMessage: ", secondMessage);
                 dispatch(increasePageNumber());
                 SwitchNetwork(5).then(() => {
                   setThirdMessage(true);
@@ -242,22 +257,19 @@ const ApplyForm = ({ openModal }) => {
   };
 
   const Verifying = () => {
-    return (
-      <VerifyBox>
-        <VerifyingText>Verifying</VerifyingText>
-        <RotatingLines
-          strokeColor="grey"
-          strokeWidth="5"
-          animationDuration="0.75"
-          width="20"
-          visible={true}
-        />
-      </VerifyBox>
-    );
+    if (verifying == 0) {
+      return <>Verify</>;
+    } else if (verifying == 1) {
+      return <>Verifying</>;
+    } else if (verifying == 2) {
+      return <>Verified</>;
+    }
   };
 
+  //evmosvaloper142uggw2c6vp80t50c5wwg38qkrl9f5lqdvc92w
   return (
     <ValidatorApplicationWrapper>
+      <ToastContainer />
       <Title>Apply as Validator</Title>
       <SubTitle>Application process</SubTitle>
       <Line></Line>
@@ -281,13 +293,13 @@ const ApplyForm = ({ openModal }) => {
           </NetworkWrapper>
           <VerifyButton
             onClick={async () => {
-              setVerifying(true);
+              setVerifying(1);
               SwitchNetwork(9000).then(async () => {
                 verifyValidatorAddress();
               });
             }}
           >
-            {verifying ? Verifying() : "Verify"}
+            {Verifying()}
           </VerifyButton>
         </InputWrapper>
       </Step1Wrapper>
@@ -309,9 +321,8 @@ const ApplyForm = ({ openModal }) => {
             <CheckText>Provide Stable Coin into the pool </CheckText>
           </CheckWrapper>
           <InputWrapper>
-            <ValidatorInput
-              onChange={handleStableCoinAmountChange}
-            ></ValidatorInput>
+            <AmountInput onChange={handleStableCoinAmountChange}></AmountInput>
+            <USDTText>USDT</USDTText>
             <VerifyButton
               onClick={async () => {
                 const value = stableCoinAmount;
