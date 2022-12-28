@@ -186,8 +186,20 @@ const liquidStakingContractAddress = contractAddress.liquidStaking;
 const rewardTokenContractAddress = contractAddress.rewardToken;
 const stableCoinPoolContractAddress = contractAddress.stableCoinPool;
 const testUSDTAddress = contractAddress.testUSDT;
+const stableTokenPoolContract = new goerliWeb3.eth.Contract(
+  stableTokenPool.output.abi,
+  contractAddress.stableCoinPool
+);
+
 const Contract = () => {
   const [balance, setBalance] = useState();
+  const [totalAddressNumber, setTotalAddressNumber] = useState(0);
+  const [recipientAddress, setRecipientAddress] = useState([]);
+  const [stakeAmount, setStakeAmount] = useState([]);
+  const [collateralAmount, setCollateralAmount] = useState([]);
+  const [borrowedAmount, setBorrowedAmount] = useState([]);
+  const [blockSignedAt, setBlockSignedAt] = useState([]);
+
   let navigate = useNavigate();
   const routeMain = () => {
     let path = "/";
@@ -195,10 +207,6 @@ const Contract = () => {
   };
 
   const stableCoinPoolRead = async () => {
-    const stableTokenPoolContract = new goerliWeb3.eth.Contract(
-      stableTokenPool.output.abi,
-      contractAddress.stableCoinPool
-    );
     const totalSupplyPro = stableTokenPoolContract.methods
       .totalReceived()
       .call();
@@ -214,15 +222,60 @@ const Contract = () => {
   };
 
   const getUsdtData = async () => {
-    const stableTokenPoolContract = new goerliWeb3.eth.Contract(
-      stableTokenPool.output.abi,
-      contractAddress.stableCoinPool
-    );
+    const totalAddressNum = await stableTokenPoolContract.methods
+      .totalAddressNumber()
+      .call();
+    setTotalAddressNumber(totalAddressNum);
+    if (recipientAddress.length == 0) {
+      for (let i = 0; i < totalAddressNumber; i++) {
+        const newAddress = await stableTokenPoolContract.methods
+          .addressList(i)
+          .call();
+        setRecipientAddress((recipientAddress) => [
+          ...recipientAddress,
+          newAddress,
+        ]);
+        const newStakeAmount = await stableTokenPoolContract.methods
+          .balanceOf(i)
+          .call();
+        setStakeAmount((stakeAmount) => [...stakeAmount, newStakeAmount]);
+        const newCollateralAmount = await stableTokenPoolContract.methods
+          .borrowed(i)
+          .call();
+        setCollateralAmount((collateralAmount) => [
+          ...collateralAmount,
+          newCollateralAmount,
+        ]);
+        console.log(newAddress, newStakeAmount, newCollateralAmount);
+      }
+    }
   };
 
+  function TableRows() {
+    let rows = [];
+    for (let i = 0; i < totalAddressNumber; i++) {
+      const row = (
+        <TableRow>
+          <TableElement>{recipientAddress[i]}</TableElement>
+          <TableElement>{stakeAmount[i]}</TableElement>
+          <TableElement>{borrowedAmount[i]}%</TableElement>
+          <TableElement>{borrowedAmount[i] * 0.8}%</TableElement>
+          <TableElement>101</TableElement>
+        </TableRow>
+      );
+      rows.push(row);
+    }
+    return rows;
+  }
+
   useEffect(() => {
-    stableCoinPoolRead();
+    initData();
   }, []);
+
+  const initData = async () => {
+    await stableCoinPoolRead();
+    await getUsdtData();
+  };
 
   function getShortenedAddress(addr) {
     return addr.substring(0, 5) + "..." + addr.substring(25);
@@ -339,27 +392,7 @@ const Contract = () => {
               <TableHeader>Borrowed Amount(USDT)</TableHeader>
               <TableHeader>Block Signed At</TableHeader>
             </TableHeadRow>
-            <TableRow>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-            </TableRow>
-            <TableRow>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-            </TableRow>
-            <TableRow>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>111,111</TableElement>
-            </TableRow>
+            {TableRows()}
           </Table>
           <MoreWrapper>
             <ContentText>More</ContentText>
