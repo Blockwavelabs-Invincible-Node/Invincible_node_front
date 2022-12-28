@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import zeroImg from "../../../assets/images/zero.png";
 import oneImg from "../../../assets/images/one.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,13 +22,11 @@ import {
   selectNetworkName,
   selectTokenName,
 } from "../../../redux/reducers/networkReducer";
+import toggleOn from "../../../assets/images/toggleOn.svg";
+import toggleOff from "../../../assets/images/toggleOff.svg";
+import { Slider } from "@mui/material";
 
-const stage = [
-  { status: "selectToken" },
-  { status: "setAmount" },
-  { status: "??" },
-  { status: "??" },
-];
+const stage = [{ status: "setAmount" }, { status: "stableHedging" }];
 
 const AllWrapper = styled(Wrapper)`
   text-align: left;
@@ -48,6 +46,7 @@ const StageCircle = styled.div`
 const ContentBox = styled.div`
   display: flex;
   width: 100%;
+  margin-bottom: 1vh;
 `;
 const LevelBox = styled.div`
   width: 45px;
@@ -66,7 +65,11 @@ const LevelCircle = styled(BoldText)`
   line-height: calc(30px + 1vw);
   font-size: calc(10px + 0.7vw);
 `;
-const TitleBox = styled.div``;
+const TitleBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
 const TextBox = styled.div``;
 const TextBox2 = styled.div`
   display: flex;
@@ -75,7 +78,7 @@ const TextBox2 = styled.div`
 const FirstText = styled(BoldText)``;
 const SecondText = styled(LightText)`
   font-size: 20px;
-  margin-bottom: 1vh;
+  /* margin-bottom: 1vh; */
 `;
 const ThirdText = styled(LightText)`
   height: 2vh;
@@ -83,7 +86,32 @@ const ThirdText = styled(LightText)`
   margin-bottom: 1vh;
   font-size: 20px;
 `;
-const Checker = styled.div``;
+const FourthText = styled(LightText)`
+  font-size: 10px;
+  margin-left: 1.5vw;
+  ${(props) =>
+    props.top &&
+    css`
+      margin-bottom: 0.5vh;
+    `}
+  ${(props) =>
+    props.under &&
+    css`
+      margin-top: 0.5vh;
+    `}
+`;
+const Checker = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+`;
+
+const ToggleImg = styled.img`
+  width: 70%;
+  height: 70%;
+`;
+
 const EmptyBox = styled.div`
   width: 45px;
   position: relative;
@@ -107,31 +135,63 @@ const SecondBox = styled.div`
   height: 5vh;
   border-radius: 10px;
 `;
-const ThirdBox = styled(SecondBox)``;
+const ThirdBox = styled(SecondBox)`
+  height: 10vh;
+`;
 const FourthBox = styled(SecondBox)`
+  height: 10vh;
   margin-bottom: 15px;
 `;
 const FifthBox = styled(FirstBox)`
   margin-bottom: 15px;
 `;
 const LeftSide = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 2vw;
+  /* margin-top: 2vh; */
+  /* margin-bottom: 2vh; */
+`;
+const LeftSideFromTo = styled(LeftSide)`
+  align-items: flex-start;
   margin-left: 2vw;
   margin-top: 2vh;
 `;
 const RightSide = styled.div`
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
   margin-right: 2vw;
-  margin-top: 2vh;
+  /* margin-top: 2vh; */
 `;
-const VolumeControl = styled.input`
+const RightSideTokenName = styled.div`
+  width: 6vw;
+  height: 5vh;
+  text-align: center;
+  line-height: 5vh;
+  margin-left: 1.5vw;
+  border-radius: 5px;
+  background-color: #1b1b1b;
+  color: white;
+`;
+const RightsideMiniWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const VolumeControl = styled.div`
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  /* border-radius: 20px;
   display: flex;
   justify-content: space-between;
-  border: hidden;
+  border: hidden; */
   margin-bottom: 1vh;
 
-  &::-webkit-slider-thumb {
+  /* &::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 20px;
     height: 20px;
@@ -141,7 +201,14 @@ const VolumeControl = styled.input`
     // background: ${(props) => (props.volume ? "#d9d9d9" : "#E5E7EB")};
     // margin-top: -5px;
     cursor: pointer;
-  }
+  } */
+`;
+const SpecifyButton = styled(Button)`
+  background-color: #ffffff;
+  color: #1f53ff;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 20px;
 `;
 const ConfirmButton = styled(Button)`
   width: 100%;
@@ -167,6 +234,9 @@ const RiskHedge = ({
   const [to, setTo] = useState(0);
   const [receive, setReceive] = useState(0);
   const [stake, setStake] = useState(0);
+  const [isStakeMoved, setIsStakeMoved] = useState(false);
+  const [isToggle, setIsToggle] = useState(true);
+  const [toggleVal, setToggleVal] = useState(0, 60);
 
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const hedgeAmountRedux = useSelector(selectHedgeAmount);
@@ -178,6 +248,13 @@ const RiskHedge = ({
 
   const tempStake = stakeAmountRedux;
   const tempSwapRate = 0.9;
+
+  const marks = [
+    {
+      value: (stake * 3) / 5,
+      label: "Maximum Risk hedging ratio",
+    },
+  ];
 
   useEffect(() => {
     const tempFrom = (tempStake * volume) / 100;
@@ -191,6 +268,29 @@ const RiskHedge = ({
     setStake(tempStakes.toFixed(decimals));
   }, [volume]);
 
+  const handleSliderChange = (e) => {
+    if (Math.ceil((e.target.value / stake) * 100 >= 60)) {
+      e.target.value = (stake * 3) / 5;
+      setVolume(60);
+    } else {
+      setVolume(Math.ceil((e.target.value / stake) * 100));
+    }
+    if (e.target.value === 0) {
+      setIsStakeMoved(false);
+    } else {
+      setIsStakeMoved(true);
+    }
+  };
+
+  const handleToggle = (e) => {
+    if (e.target.alt === "on") {
+      setIsToggle(false);
+      setIsStakeMoved(true);
+    } else if (e.target.alt === "off") {
+      setIsToggle(true);
+    }
+  };
+
   return (
     <AllWrapper>
       <StageBar>
@@ -202,14 +302,24 @@ const RiskHedge = ({
       </StageBar>
       <ContentBox>
         <LevelBox>
-          <LevelCircle>3</LevelCircle>
+          <LevelCircle>2</LevelCircle>
         </LevelBox>
         <TitleBox>
           <TextBox>
-            <FirstText>Risk Hedge with Stable Coin</FirstText>
-            <SecondText>Set your hedging ratio</SecondText>
+            <FirstText>Stable-hedging</FirstText>
+            <SecondText>
+              Set your stable hedging ratio. It’ll be swapped to USDT.
+            </SecondText>
           </TextBox>
-          <Checker></Checker>
+          {/* <EmptyBox></EmptyBox>
+          <EmptyBox></EmptyBox> */}
+          <Checker>
+            {isToggle ? (
+              <ToggleImg alt="on" onClick={handleToggle} src={toggleOn} />
+            ) : (
+              <ToggleImg alt="off" onClick={handleToggle} src={toggleOff} />
+            )}
+          </Checker>
         </TitleBox>
       </ContentBox>
       <ContentBox>
@@ -222,56 +332,85 @@ const RiskHedge = ({
                 {stake} {tokenNameRedux}
               </ThirdText>
             </TextBox2>
-            <VolumeControl
-              type="range"
-              min={0}
-              max={60}
-              step={1}
-              value={volume}
-              onChange={(event) => {
-                setVolume(event.target.valueAsNumber);
-              }}
-              // onChange={(e)=>leverageOnChange(e)}
-            />
+            <VolumeControl>
+              <Slider
+                size="small"
+                aria-label="Small steps"
+                defaultValue={0}
+                step={0.00000001}
+                min={0}
+                max={stake}
+                valueLabelDisplay="auto"
+                marks={marks}
+                onChange={handleSliderChange}
+                disabled={isToggle ? false : true}
+                sx={{
+                  color: "primary.main",
+                  "& .MuiSlider-colorPrimary": {
+                    color: "white",
+                  },
+                  "& .MuiSlider-mark": {
+                    color: "primary",
+                  },
+                  "& .MuiSlider-markLabel": {
+                    color: "white",
+                    fontSize: 0.1,
+                  },
+                }}
+              />
+            </VolumeControl>
           </FirstBox>
           <SecondBox>
-            <LeftSide>Stable Hedge Ratio</LeftSide>
+            <LeftSide>Stable hedging Ratio you've set</LeftSide>
             <RightSide>{volume}%</RightSide>
           </SecondBox>
           <ThirdBox>
-            <LeftSide>From</LeftSide>
+            <LeftSideFromTo>From</LeftSideFromTo>
             <RightSide>
-              {from} {tokenNameRedux}
+              {from}
+              <RightSideTokenName>{tokenNameRedux}</RightSideTokenName>
             </RightSide>
           </ThirdBox>
           <FourthBox>
-            <LeftSide>To</LeftSide>
-            <RightSide>{to} USDT</RightSide>
+            <LeftSideFromTo>To</LeftSideFromTo>
+            <RightSide>
+              {to}
+              <RightsideMiniWrapper>
+                <FourthText top>1{tokenNameRedux} = 0.89 USDT</FourthText>
+                <RightSideTokenName>USDT</RightSideTokenName>
+                <FourthText under>On Ethereum network</FourthText>
+              </RightsideMiniWrapper>
+            </RightSide>
           </FourthBox>
-          <FifthBox>
+          {/* <FifthBox>
             <TextBox2>
               <ThirdText>You will Receive</ThirdText>
               <ThirdText>{receive} USDT</ThirdText>
             </TextBox2>
-          </FifthBox>
+          </FifthBox> */}
         </FormBox>
       </ContentBox>
+
       <ContentBox>
         <EmptyBox></EmptyBox>
-        <ConfirmButton
-          onClick={() => {
-            openModal();
-            const hedge = parseInt(
-              stakeAmountRedux * volume * tempSwapRate * 10 ** 16
-            );
-            stakeDispatch(
-              setStakeAmount((stakeAmountRedux * (100 - volume)) / 100)
-            );
-            hedgeDispatch(setHedgeAmount(hedge));
-          }}
-        >
-          Confirm
-        </ConfirmButton>
+        {isStakeMoved ? (
+          <ConfirmButton
+            onClick={() => {
+              openModal();
+              const hedge = parseInt(
+                stakeAmountRedux * volume * tempSwapRate * 10 ** 16
+              );
+              stakeDispatch(
+                setStakeAmount((stakeAmountRedux * (100 - volume)) / 100)
+              );
+              hedgeDispatch(setHedgeAmount(hedge));
+            }}
+          >
+            Next
+          </ConfirmButton>
+        ) : (
+          <SpecifyButton>Please specify ratio you'll hedge</SpecifyButton>
+        )}
       </ContentBox>
     </AllWrapper>
   );

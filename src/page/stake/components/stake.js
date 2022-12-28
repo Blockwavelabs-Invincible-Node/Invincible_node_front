@@ -194,7 +194,7 @@ const EvmosInput = styled.input`
   font-family: Pretendard;
   font-size: min(18px, 4vw);
   font-weight: 400;
-  &: focus {
+  &:focus {
     outline: none;
   }
   word-wrap: break-word;
@@ -220,12 +220,7 @@ const options = [
   { value: "atom", label: "Atom", udenom: "atom" },
 ];
 
-const stage = [
-  { status: "selectToken" },
-  { status: "setAmount" },
-  { status: "??" },
-  { status: "??" },
-];
+const stage = [{ status: "setAmount" }, { status: "stableHedging" }];
 
 const colourStyles = {
   control: (baseStyles, state) => ({
@@ -284,11 +279,7 @@ const Stake = ({
   }, [stake]);
 
   useEffect(() => {
-    if (stake) {
-      setStageLevel(1);
-    } else {
-      setStageLevel(0);
-    }
+    setStageLevel(0);
   }, [stake]);
 
   const web3 = new Web3(window.ethereum);
@@ -362,14 +353,13 @@ const Stake = ({
               <SelectTokenText>Select Token to stake </SelectTokenText>
               <br />
               <DropboxContainer>
-               
                 <TokenToStake
                   defaultValue={options[0]}
                   options={options}
                   onChange={(e) => handleSelectedOption(e)}
                   styles={colourStyles}
                 ></TokenToStake>
-               
+
                 <SelectButton>Select</SelectButton>
               </DropboxContainer>
             </InputBox>
