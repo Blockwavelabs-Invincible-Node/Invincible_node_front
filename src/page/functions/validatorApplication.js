@@ -10,7 +10,7 @@ import SwitchNetwork from "./switchNetwork";
 const addresses = require("../../addresses/contractAddress.json");
 const stableCoinPoolContractAddress = addresses.stableCoinPool;
 const stableCoinPoolContractABI = stableCoinPoolJSON.output.abi;
-const liquidStakingContractAddress = addresses.liquidStaking;
+const liquidStakingContractAddress = addresses.evmosLiquidStaking;
 const liquidStakingContractABI = liquidStakingJSON.output.abi;
 const testUSDTABI = testUSDTJSON.output.abi;
 const testUSDTAddress = addresses.testUSDT;

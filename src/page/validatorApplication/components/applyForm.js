@@ -114,7 +114,7 @@ const web3 = new Web3(window.ethereum);
 
 const stableCoinPoolContractAddress = address.stableCoinPool;
 const stableCoinPoolContractABI = stableCoinPoolJSON.output.abi;
-const liquidStakingContractAddress = address.liquidStaking;
+const liquidStakingContractAddress = address.evmosLiquidStaking;
 const liquidStakingContractABI = liquidStakingJSON.output.abi;
 const testUSDTABI = testUSDTJSON.output.abi;
 const testUSDTAddress = address.testUSDT;
@@ -127,7 +127,7 @@ const testUSDTContract = new web3.eth.Contract(testUSDTABI, testUSDTAddress);
 const goerliProvider = process.env.REACT_APP_GOERLI_RPC_URL;
 const web3Provider = new Web3.providers.HttpProvider(goerliProvider);
 const goerliWeb3 = new Web3(web3Provider);
-const liquidStakingAddress = address.liquidStaking;
+const liquidStakingAddress = address.evmosLiquidStaking;
 const liquidStakingContract = new web3.eth.Contract(
   liquidStaking.output.abi,
   liquidStakingAddress

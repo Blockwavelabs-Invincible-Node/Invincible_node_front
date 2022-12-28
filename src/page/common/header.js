@@ -16,6 +16,7 @@ import Menu from "./components/menu";
 import HeaderModal from "./headerModal";
 import { selectNetworkName } from "../../redux/reducers/networkReducer";
 //--------------------Styles--------------------------//
+
 const Top = styled.div`
   width: 100%;
   display: flex;

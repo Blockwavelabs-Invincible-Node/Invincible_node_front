@@ -170,23 +170,23 @@ const Leverage = ({ pressStake, token, stakeAmount, getAmount }) => {
   const [leveraged, setLeveraged] = useState(true);
   const [leverage, setLeverage] = useState(2);
   const stake = () => {
-      const doStake = async(amount) => {
-        let realAmount = amount * (web3.utils.toBN(10 ** 18));
-        const getAccount = await web3.eth.getAccounts();
-        const account = getAccount[0];
-        console.log("account: ", account); 
-        web3.eth.sendTransaction({
-            from: account,
-            to: address.liquidStaking,
-            value: realAmount
+    const doStake = async (amount) => {
+      let realAmount = amount * web3.utils.toBN(10 ** 18);
+      const getAccount = await web3.eth.getAccounts();
+      const account = getAccount[0];
+      console.log("account: ", account);
+      web3.eth
+        .sendTransaction({
+          from: account,
+          to: address.evmosLiquidStaking,
+          value: realAmount,
         })
-        .then(function(receipt){
+        .then(function (receipt) {
           console.log(receipt);
           pressStake();
         });
-    }
+    };
     doStake(stakeAmount);
-    
   };
   const switchOnClick = () => {
     setLeveraged(!leveraged);
