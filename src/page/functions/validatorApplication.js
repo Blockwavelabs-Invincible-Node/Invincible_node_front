@@ -23,7 +23,7 @@ const testUSDTAddress = addresses.testUSDT;
 
 // const ethereumProvider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_GOERLI_RPC_URL);
 // const ethereumSigner = new ethers.Wallet(privateKey, ethereumProvider);
-            
+
 // const liquidStakingContractWrite = new ethers.Contract(liquidStakingContractAddress, liquidStakingContractABI, evmosSigner);
 // const liquidStakingContractRead = new ethers.Contract(liquidStakingContractAddress, liquidStakingContractABI, evmosProvider);
 
@@ -41,35 +41,40 @@ const web3 = new Web3(window.ethereum);
 // console.log("goerli Web3: ", goerliWeb3)
 
 // contracts(goerli)
-const stableCoinPoolContract = new web3.eth.Contract(stableCoinPoolContractABI, stableCoinPoolContractAddress);
+const stableCoinPoolContract = new web3.eth.Contract(
+  stableCoinPoolContractABI,
+  stableCoinPoolContractAddress
+);
 const testUSDTContract = new web3.eth.Contract(testUSDTABI, testUSDTAddress);
 
 const owner = "0x3abc249dd82Df7eD790509Fba0cC22498C92cCFc";
 
-
 //function
-const ValidatorApplication = async(validatorAddress, amount) => {
-    const dispatch = useDispatch();
-    SwitchNetwork(5)
-    .then( async() => {
-        const getAccount = await web3.eth.getAccounts();
-        // const getBalance = await web3.eth.getBalance(getAccount[0]);
-        // console.log("balance: ", getBalance);
-        console.log("account: ", getAccount[0]);
-        console.log(validatorAddress, amount);
-        console.log(await testUSDTContract.methods);
-        // dispatch(increasePageNumber());
-        const approve = await testUSDTContract.methods.approve(stableCoinPoolContractAddress, amount).send({from: getAccount[0]})
-        .then((result) => {
-            console.log(result);
-        });
-        // dispatch(increasePageNumber());
-        const receive = await stableCoinPoolContract.methods.receiveStableToken(amount, validatorAddress).send({from: getAccount[0]})
-        .then((result) => {
-            console.log(result);
-        });
-        // dispatch(increasePageNumber());
-    })
- }
+const ValidatorApplication = async (validatorAddress, amount) => {
+  const dispatch = useDispatch();
+  SwitchNetwork(5).then(async () => {
+    const getAccount = await web3.eth.getAccounts();
+    // const getBalance = await web3.eth.getBalance(getAccount[0]);
+    // console.log("balance: ", getBalance);
+    console.log("account: ", getAccount[0]);
+    console.log(validatorAddress, amount);
+    console.log(await testUSDTContract.methods);
+    // dispatch(increasePageNumber());
+    const approve = await testUSDTContract.methods
+      .approve(stableCoinPoolContractAddress, amount)
+      .send({ from: getAccount[0] })
+      .then((result) => {
+        console.log(result);
+      });
+    // dispatch(increasePageNumber());
+    const receive = await stableCoinPoolContract.methods
+      .receiveStableToken(amount, validatorAddress)
+      .send({ from: getAccount[0] })
+      .then((result) => {
+        console.log(result);
+      });
+    // dispatch(increasePageNumber());
+  });
+};
 
- export default ValidatorApplication;
+export default ValidatorApplication;
