@@ -177,7 +177,7 @@ const TableElement = styled.td`
 `;
 
 const goerliWeb3 = new Web3(process.env.REACT_APP_GOERLI_RPC_URL);
-const liquidStakingContractAddress = contractAddress.liquidStaking;
+const liquidStakingContractAddress = contractAddress.evmosLiquidStaking;
 const rewardTokenContractAddress = contractAddress.rewardToken;
 const stableCoinPoolContractAddress = contractAddress.stableCoinPool;
 const testUSDTAddress = contractAddress.testUSDT;

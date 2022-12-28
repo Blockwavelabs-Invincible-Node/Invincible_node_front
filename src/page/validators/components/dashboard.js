@@ -96,7 +96,7 @@ const stableTokenPoolContract = new goerliWeb3.eth.Contract(
 );
 const liquidStakingContract = new web3.eth.Contract(
   liquidStaking.output.abi,
-  contractAddress.liquidStaking
+  contractAddress.evmosLiquidStaking
 );
 
 const Dashboard = () => {

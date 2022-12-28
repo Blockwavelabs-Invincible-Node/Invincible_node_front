@@ -71,7 +71,7 @@ const Info = () => {
     console.log(account);
     const liquidStakingContract = new web3.eth.Contract(
       liquidStaking.output.abi,
-      contractAddress.liquidStaking
+      contractAddress.evmosLiquidStaking
     );
     const staked = await liquidStakingContract.methods
       .balanceOf(account)

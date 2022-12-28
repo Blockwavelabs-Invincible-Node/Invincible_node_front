@@ -1,6 +1,8 @@
 {
-    "rewardToken" : "0x004e2d9d9d0e7fB202eFdc6069d624a4F97841fa",
-    "liquidStaking" : "0x57CfcE35A36890f79225b8Df2528C5DC0F3eaB01",
-    "testUSDT" : "0x2b744b6C5f211Aa65C976a880E94c2dC0fAE4a1a",
-    "stableCoinPool" : "0x418894766B4e9a2Ee1b0Da7543a949d54716C4e8"
+  "rewardToken": "0x912998a3b40286d60DB0663eE8806F1864133958",
+  "evmosLiquidStaking": "0x093c9da6b380Fc261D5C2E3667950D2b22F6232D",
+  "testUSDT": "0x2b744b6C5f211Aa65C976a880E94c2dC0fAE4a1a",
+  "stableCoinPool": "0x418894766B4e9a2Ee1b0Da7543a949d54716C4e8",
+  "kavaLiquidStaking": "",
+  "polygonLiquidStaking": ""
 }

@@ -3,17 +3,19 @@ import Title from "./components/title";
 import Header from "../common/header";
 import Modal from "./Modal";
 import { useState } from "react";
+import { BoldText } from "../../styles/styledComponents/boldText";
+import { textAlign } from "@mui/system";
 
 function Mainpage() {
   const [showModal, setShowModal] = useState(false);
   const [token, setToken] = useState("Evmos");
   const [stakeAmount, setStakeAmount] = useState(0);
   const [getAmount, setGetAmount] = useState(0);
- 
+
   return (
     <div>
       <Header home={0} launchedApp={false}></Header>
-       {showModal && (
+      {showModal && (
         <Modal
           closeModal={() => {
             setShowModal(false);
@@ -24,10 +26,10 @@ function Mainpage() {
           getAmount={getAmount}
         />
       )}
-      <Title 
-      openModal={() => {
-        setShowModal(true);
-      }}
+      <Title
+        openModal={() => {
+          setShowModal(true);
+        }}
       />
       <Footer />
     </div>
