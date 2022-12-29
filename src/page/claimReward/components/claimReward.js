@@ -56,7 +56,7 @@ const UndelegateButton = styled(Button)`
 `;
 
 const web3 = new Web3(window.ethereum);
-const liquidStakingAddress = address;
+const liquidStakingAddress = address.evmosLiquidStaking;
 const liquidStakingContract = new web3.eth.Contract(
   liquidStaking.output.abi,
   liquidStakingAddress

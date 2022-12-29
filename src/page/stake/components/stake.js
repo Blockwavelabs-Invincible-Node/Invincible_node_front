@@ -20,6 +20,7 @@ import {
   selectNetworkName,
   selectTokenName,
 } from "../../../redux/reducers/networkReducer";
+import GetTokenPrice from "../../functions/fetchTokenPrice";
 
 const StakeForm = styled(Form)``;
 const StakingWrapper = styled(Wrapper)`
@@ -261,6 +262,7 @@ const Stake = ({
   const [udenom, setUdenom] = useState(options[0].udenom);
   const [label, setLabel] = useState(options[0].label);
   const [stageLevel, setStageLevel] = useState(0);
+  const [tokenPrice, setTokenPrice] = useState(0);
 
   const tokenNameRedux = useSelector(selectTokenName);
   const stakeAmountRedux = useSelector(selectStakeAmount);
@@ -320,6 +322,9 @@ const Stake = ({
 
   useEffect(() => {
     getAccount();
+    // if (tokenPrice == 0) {
+    //   GetTokenPrice(tokenNameRedux.toUpperCase());
+    // }
     console.log("Token type: ", selectedOption);
   }, []);
 
