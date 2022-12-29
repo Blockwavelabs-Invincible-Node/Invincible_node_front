@@ -162,6 +162,9 @@ const TableRow = styled.tr`
 `;
 const TableHeader = styled.th`
   font-size: 0.8vw;
+  &:nth-child(2n) {
+    text-align: right;
+  }
 `;
 const TableElement = styled.td`
   font-size: 0.8vw;
@@ -179,6 +182,9 @@ const TableElement = styled.td`
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
   }
+  &:nth-child(2n) {
+    text-align: right;
+  }
 `;
 
 const goerliWeb3 = new Web3(process.env.REACT_APP_GOERLI_RPC_URL);
@@ -191,13 +197,14 @@ const stableTokenPoolContract = new goerliWeb3.eth.Contract(
   contractAddress.stableCoinPool
 );
 
+// const getBlockNumOfTrx = () =>
+
 const Contract = () => {
   const [balance, setBalance] = useState();
   const [totalAddressNumber, setTotalAddressNumber] = useState(0);
   const [recipientAddress, setRecipientAddress] = useState([]);
   const [stakeAmount, setStakeAmount] = useState([]);
   const [collateralAmount, setCollateralAmount] = useState([]);
-  const [borrowedAmount, setBorrowedAmount] = useState([]);
   const [blockSignedAt, setBlockSignedAt] = useState([]);
 
   let navigate = useNavigate();
@@ -226,29 +233,37 @@ const Contract = () => {
       .totalAddressNumber()
       .call();
     setTotalAddressNumber(totalAddressNum);
+    console.log("total addr num: ", totalAddressNum);
+    console.log("total addr number: ", totalAddressNumber);
+
     if (recipientAddress.length == 0) {
-      for (let i = 0; i < totalAddressNumber; i++) {
+      for (let i = 0; i < totalAddressNum; i++) {
         const newAddress = await stableTokenPoolContract.methods
           .addressList(i)
           .call();
+        console.log("new addr: ", newAddress);
         setRecipientAddress((recipientAddress) => [
           ...recipientAddress,
           newAddress,
         ]);
+
         const newStakeAmount = await stableTokenPoolContract.methods
-          .balanceOf(i)
+          .balanceOf(newAddress)
           .call();
+        console.log("new stake amount: ", newStakeAmount);
         setStakeAmount((stakeAmount) => [...stakeAmount, newStakeAmount]);
+
         const newCollateralAmount = await stableTokenPoolContract.methods
-          .borrowed(i)
+          .borrowed(newAddress)
           .call();
+        console.log("new Collateral amount: ", newCollateralAmount);
         setCollateralAmount((collateralAmount) => [
           ...collateralAmount,
           newCollateralAmount,
         ]);
-        console.log(newAddress, newStakeAmount, newCollateralAmount);
       }
     }
+    console.log("get data");
   };
 
   function TableRows() {
@@ -256,10 +271,16 @@ const Contract = () => {
     for (let i = 0; i < totalAddressNumber; i++) {
       const row = (
         <TableRow>
-          <TableElement>{recipientAddress[i]}</TableElement>
-          <TableElement>{stakeAmount[i]}</TableElement>
-          <TableElement>{borrowedAmount[i]}%</TableElement>
-          <TableElement>{borrowedAmount[i] * 0.8}%</TableElement>
+          <TableElement>
+            {getShortenedAddress(recipientAddress[i])}
+          </TableElement>
+          <TableElement>
+            {stakeAmount[i]} ({tokenNameRedux})
+          </TableElement>
+          <TableElement>
+            {collateralAmount[i]} ({tokenNameRedux}) -{">"}{" "}
+            {collateralAmount[i] * 0.8} (USDT)
+          </TableElement>
           <TableElement>101</TableElement>
         </TableRow>
       );
@@ -386,10 +407,9 @@ const Contract = () => {
           <Line></Line>
           <Table>
             <TableHeadRow>
-              <TableHeader>Recipient Address</TableHeader>
-              <TableHeader>Staked Amount({tokenNameRedux})</TableHeader>
-              <TableHeader>Collateral Amount({tokenNameRedux})</TableHeader>
-              <TableHeader>Borrowed Amount(USDT)</TableHeader>
+              <TableHeader>Recipient</TableHeader>
+              <TableHeader>Staked</TableHeader>
+              <TableHeader>Hedged (From -{">"} To)</TableHeader>
               <TableHeader>Block Signed At</TableHeader>
             </TableHeadRow>
             {TableRows()}
