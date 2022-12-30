@@ -50,21 +50,28 @@ const Base = ({ component }) => {
     let path = "/stake";
     navigate(path);
   };
- 
+
   return (
     <BaseWrapper>
       {width > 1100 ? (
         <TitleWrapper>
-          <InvincibleNodeText onClick={() => {routeStake();}}>Invincible {networkNameRedux}</InvincibleNodeText>
-          <MaximizeEarningText>
+          {/* <InvincibleNodeText
+            onClick={() => {
+              routeStake();
+            }}
+          >
+            Invincible {networkNameRedux}
+          </InvincibleNodeText> */}
+          {/* <MaximizeEarningText>
             Maximize Profit, Saving Value
-          </MaximizeEarningText>
+          </MaximizeEarningText> */}
           <Menu></Menu>
         </TitleWrapper>
       ) : (
         <></>
       )}
       <FunctionWrapper>{component}</FunctionWrapper>
+      <TitleWrapper></TitleWrapper>
     </BaseWrapper>
   );
 };

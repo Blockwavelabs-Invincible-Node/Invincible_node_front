@@ -3,17 +3,15 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SelectNetworkPopup from "../common/components/selectNetworkPopup";
 
-
-
 const ModalBackground = styled.div`
   display: ${(props) => (props.visible ? "flex" : "none")};
   //   width: 90vw;
   //   height: 90vh;
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: absolute;
   //   left: 5vw;
-  //   top: 5vh;
+  top: 0vh;
   background: rgba(46, 46, 46, 0.92);
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
@@ -31,6 +29,8 @@ const ModalWrapper = styled.div`
   justify-content: center;
   padding: min(43px, 5vh) min(88px, 5vw) min(43px, 5vh) min(88px, 5vw);
   max-width: 90%;
+  position: absolute;
+  top: 380px;
 `;
 
 const ModalOverlay = styled.div`
@@ -43,7 +43,6 @@ const ModalOverlay = styled.div`
   right: 0;
   z-index: 2;
 `;
-
 
 function Modal({ closeModal, visible, token, stakeAmount, getAmount }) {
   const [component, setComponent] = useState(false);
@@ -82,9 +81,7 @@ function Modal({ closeModal, visible, token, stakeAmount, getAmount }) {
         visible={visible}
       >
         <ModalWrapper>
-          <SelectNetworkPopup routePage={routeStake}>
-
-          </SelectNetworkPopup>
+          <SelectNetworkPopup routePage={routeStake}></SelectNetworkPopup>
         </ModalWrapper>
       </ModalBackground>
     </>

@@ -13,14 +13,11 @@ import ValidatorPage from "./page/validators";
 import RiskHedgePage from "./page/riskHedge";
 import ValidatorApplicationPage from "./page/validatorApplication";
 
-
-
 const Background = styled.div`
   background-color: #262626;
   color: white;
   min-height: 100vh;
 `;
-
 
 function App() {
   return (
@@ -32,11 +29,14 @@ function App() {
           <Route path="/my-page" element={<MyPage />}></Route>
           <Route path="/unstake" element={<UnstakePage />}></Route>
           <Route path="/claim" element={<ClaimRewardPage />}></Route>
-          <Route path="/transactions" element={ <TransactionPage /> }></Route>
-          <Route path="/contracts" element={<ContractPage />} ></Route>
-          <Route path="/validators" element={<ValidatorPage />} ></Route>
+          <Route path="/transactions" element={<TransactionPage />}></Route>
+          <Route path="/contracts" element={<ContractPage />}></Route>
+          <Route path="/validators" element={<ValidatorPage />}></Route>
           <Route path="/risk-hedge" element={<RiskHedgePage />}></Route>
-          <Route path="/validator-application" element={<ValidatorApplicationPage />}></Route>
+          <Route
+            path="/validator-application"
+            element={<ValidatorApplicationPage />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </Background>
