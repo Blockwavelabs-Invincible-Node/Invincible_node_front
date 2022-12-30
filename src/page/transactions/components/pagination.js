@@ -13,7 +13,42 @@ const PaginateStyle = styled(ReactPaginate)`
   justify-content: space-between;
 `;
 
-const TableHeader = styled.th``;
+const TableHeader = styled.th`
+  text-align: center;
+`;
+const TableRow = styled.tr`
+  background-color: black;
+  padding-left: 2vw;
+  height: 3vh;
+  margin-bottom: 2vh;
+  /* outline: thin solid; */
+`;
+const Table = styled.table`
+  width: 95%;
+  margin: auto;
+  font-size: 1vh;
+  border-collapse: separate;
+  border-spacing: 0 1vh;
+`;
+const TableElement = styled.td`
+  padding-left: 1vw;
+  padding-right: 1vw;
+  /* border-radius: 10px; */
+`;
+
+const FromAddress = styled(TableElement)`
+  max-width: 12vw;
+  word-wrap: break-word;
+  /* border-radius: 10px; */
+`;
+const ToAddress = styled(TableElement)`
+  max-width: 12vw;
+  word-wrap: break-word;
+`;
+const TxHash = styled(TableElement)`
+  max-width: 12vw;
+  word-wrap: break-word;
+`;
 
 function Pagination({ itemsPerPage, items }) {
   // Here we use item offsets; we could also use page offsets
@@ -22,31 +57,31 @@ function Pagination({ itemsPerPage, items }) {
 
   function Items({ currentItems }) {
     return (
-      <table>
+      <Table>
         <tbody>
           <tr>
-            <th>From Address</th>
-            <th>To Address</th>
-            <th>Amount</th>
-            <th>Fees</th>
-            <th>Block signed at</th>
-            <th>Status</th>
-            <th>TX Hash</th>
+            <TableHeader>From Address</TableHeader>
+            <TableHeader>To Address</TableHeader>
+            <TableHeader>Amount</TableHeader>
+            <TableHeader>Fees</TableHeader>
+            <TableHeader>Block signed at</TableHeader>
+            <TableHeader>Status</TableHeader>
+            <TableHeader>TX Hash</TableHeader>
           </tr>
           {currentItems &&
             currentItems.map((item) => (
-              <tr>
-                <td>{item.from_address}</td>
-                <td>{item.to_address}</td>
-                <td>{item.value}</td>
-                <td>{item.fees_paid}</td>
-                <td>{item.block_signed_at}</td>
-                <td>{item.successful.toString()}</td>
-                <td>{item.tx_hash}</td>
-              </tr>
+              <TableRow>
+                <FromAddress>{item.from_address}</FromAddress>
+                <ToAddress>{item.to_address}</ToAddress>
+                <TableElement>{item.value}</TableElement>
+                <TableElement>{item.fees_paid}</TableElement>
+                <TableElement>{item.block_signed_at}</TableElement>
+                <TableElement>{item.successful.toString()}</TableElement>
+                <TxHash>{item.tx_hash}</TxHash>
+              </TableRow>
             ))}
         </tbody>
-      </table>
+      </Table>
     );
   }
 
@@ -83,6 +118,7 @@ function Pagination({ itemsPerPage, items }) {
         previousLinkClassName="page-link"
         nextClassName="page-item"
         nextLinkClassName="page-link"
+        activeClassName="cur-item"
       />
     </>
   );

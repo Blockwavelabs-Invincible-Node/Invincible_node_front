@@ -52,7 +52,7 @@ const TransactionPage = () => {
   };
   useEffect(() => {
     getTransactions();
-  }, []);
+  }, [transactions]);
 
   if (transactions == null) {
     return (

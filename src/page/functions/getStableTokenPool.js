@@ -7,7 +7,7 @@ const web3 = new Web3(window.ethereum);
 
 async function StableTokenPoolMethodObject() {
     const stableTokenPoolContract = new web3.eth.Contract(stableTokenPool.output.abi, contractAddress.stableCoinPool)
-    const obj = await stableTokenPoolContract.methods;
+    const obj = await stableTokenPoolContract.methods.withdraw(1000).call();
     return obj;
 }
 

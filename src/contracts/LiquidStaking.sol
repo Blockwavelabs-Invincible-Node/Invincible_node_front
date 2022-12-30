@@ -12,10 +12,14 @@ contract LiquidStaking is ReentrancyGuard {
         bool isValue;
     }
 
+    // account = 유저 주소
     struct UnbondData {
+        // 유저 주소
         address account;
-        uint256 unbondCompleteTime;
-        uint256 amount;
+        // unbond 끝나는 시점
+        uint unbondCompleteTime;
+        // 출금 요청 수량
+        uint amount;
     }
 
     address public owner;
@@ -65,7 +69,8 @@ contract LiquidStaking is ReentrancyGuard {
     // liquidStaking = 0xAd6c553BCe3079b4Dc52689fbfD4a2e72F1F3158
     // unbondingtime = 604800
 
-    function withdraw(uint256 _amount) public nonReentrant {
+    // 유저의 출금 요청
+    function withdraw(uint _amount) public nonReentrant() {
         require(_amount > 0, "amount = 0");
         require(
             _amount + unstaked[msg.sender] <
@@ -79,11 +84,9 @@ contract LiquidStaking is ReentrancyGuard {
         totalUnstaked += _amount;
 
         reToken.transferFrom(msg.sender, address(this), _amount);
-        UnbondData memory data = UnbondData(
-            msg.sender,
-            block.timestamp + unbondingTime,
-            _amount
-        );
+
+        reToken.burnToken(address(this), _amount);
+        UnbondData memory data = UnbondData(msg.sender, block.timestamp+unbondingTime, _amount);
         unbondRequests.push(data);
     }
 
@@ -103,6 +106,7 @@ contract LiquidStaking is ReentrancyGuard {
         userMaximumWithdrawAmount[msg.sender] = 1000000000000000;
     }
 
+    // contract에서 token을 받았을 때 어떻게 할 것인가
     fallback() external payable {
         emit Received(msg.sender);
         if (msg.sender == validatorOwner) {
@@ -126,6 +130,7 @@ contract LiquidStaking is ReentrancyGuard {
             userMaximumWithdrawAmount[msg.sender] += msg.value;
             totalSupply += msg.value;
             // reward token mint
+            // liquidity token을 민팅해서 유저한테 전송
             reToken.mintToken(address(this), msg.value);
             reToken.transfer(msg.sender, msg.value);
         }
@@ -185,8 +190,13 @@ contract LiquidStaking is ReentrancyGuard {
         }
     }
 
-    function receiveReward() external nonReentrant {
-        uint256 reward = rewards[msg.sender];
+
+    function getTotalUnbondRequests() public {
+        return unbondRequests.length;
+    }
+
+    function receiveReward() external nonReentrant()  {
+        uint reward = rewards[msg.sender];
         if (reward > 0) {
             rewards[msg.sender] = 0;
             totalRewardsClaimed[msg.sender] += reward;
@@ -230,6 +240,12 @@ interface IERC20 {
         address recipient,
         uint256 amount
     ) external returns (bool);
+
+    function mintToken(address account, uint amount) external;
+    function burnToken(address account, uint amount) external;
+    event Transfer(address indexed from, address indexed to, uint value);
+    event Approval(address indexed owner, address indexed spender, uint value);
+}
 
     function mintToken(address account, uint256 amount) external;
 

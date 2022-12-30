@@ -20,6 +20,7 @@ import {
   selectNetworkName,
   selectTokenName,
 } from "../../../redux/reducers/networkReducer";
+import GetTokenPrice from "../../functions/fetchTokenPrice";
 
 const StakeForm = styled(Form)``;
 const StakingWrapper = styled(Wrapper)`
@@ -181,7 +182,7 @@ const EvmosInputWrapper = styled.div`
   width: 50%;
   align-items: center;
 `;
-const EvmosInput = styled.div`
+const EvmosInput = styled.input`
   width: 7vw;
   margin-right: 1vw;
   height: 30px;
@@ -197,6 +198,7 @@ const EvmosInput = styled.div`
   &:focus {
     outline: none;
   }
+  word-wrap: break-word;
 `;
 
 const StageBar = styled.div`
@@ -260,6 +262,7 @@ const Stake = ({
   const [udenom, setUdenom] = useState(options[0].udenom);
   const [label, setLabel] = useState(options[0].label);
   const [stageLevel, setStageLevel] = useState(0);
+  const [tokenPrice, setTokenPrice] = useState(0);
 
   const tokenNameRedux = useSelector(selectTokenName);
   const stakeAmountRedux = useSelector(selectStakeAmount);
@@ -319,6 +322,9 @@ const Stake = ({
 
   useEffect(() => {
     getAccount();
+    // if (tokenPrice == 0) {
+    //   GetTokenPrice(tokenNameRedux.toUpperCase());
+    // }
     console.log("Token type: ", selectedOption);
   }, []);
 
@@ -390,14 +396,14 @@ const Stake = ({
                 <StakeWrapper>
                   <YouWillStake>You will stake</YouWillStake>
                   <EvmosInputWrapper>
-                    <EvmosInput>{stake}</EvmosInput>
+                    <EvmosInput value={stake}></EvmosInput>
                     <EvmosAmount>{tokenNameRedux}</EvmosAmount>
                   </EvmosInputWrapper>
                 </StakeWrapper>
                 <GetWrapper>
                   <YouWillGet>You will get</YouWillGet>
                   <EvmosInputWrapper>
-                    <EvmosInput>{stake}</EvmosInput>
+                    <EvmosInput value={stake}></EvmosInput>
                     <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
                   </EvmosInputWrapper>
                 </GetWrapper>

@@ -17,6 +17,7 @@ import HeaderModal from "./headerModal";
 import { selectNetworkName } from "../../redux/reducers/networkReducer";
 import { BoldText } from "../../styles/styledComponents/boldText";
 //--------------------Styles--------------------------//
+
 const Top = styled.div`
   width: 100%;
   display: flex;
@@ -231,13 +232,13 @@ function Header({ launchedApp }) {
           <>
             {launchedApp ? (
               <>
-                <MyPageButton
+                {/* <MyPageButton
                   onClick={() => {
                     routeMyPage();
                   }}
                 >
                   My Page
-                </MyPageButton>
+                </MyPageButton> */}
                 <NetworkButton
                   onClick={() => {
                     setModalType(0);

@@ -25,6 +25,7 @@ import {
 import toggleOn from "../../../assets/images/toggleOn.svg";
 import toggleOff from "../../../assets/images/toggleOff.svg";
 import { Slider } from "@mui/material";
+import GetTokenPrice from "../../functions/fetchTokenPrice";
 
 const stage = [{ status: "setAmount" }, { status: "stableHedging" }];
 
@@ -237,6 +238,8 @@ const RiskHedge = ({
   const [isStakeMoved, setIsStakeMoved] = useState(false);
   const [isToggle, setIsToggle] = useState(true);
   const [toggleVal, setToggleVal] = useState(0, 60);
+  const [tokenPrice, setTokenPrice] = useState(0);
+  const [swapRate, setSwapRate] = useState();
 
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const hedgeAmountRedux = useSelector(selectHedgeAmount);
@@ -260,13 +263,23 @@ const RiskHedge = ({
     const tempFrom = (tempStake * volume) / 100;
     console.log("set values");
     setFrom(tempFrom.toFixed(decimals));
-    const tempTo = (tempStake * volume * tempSwapRate) / 100;
+    const tempTo = (tempStake * volume * swapRate) / 100;
     setTo(tempTo.toFixed(decimals));
-    const tempReceive = (tempStake * volume * tempSwapRate) / 100;
+    const tempReceive = (tempStake * volume * swapRate) / 100;
     setReceive(tempReceive.toFixed(decimals));
     const tempStakes = (stakeAmountRedux * (100 - volume)) / 100;
     setStake(tempStakes.toFixed(decimals));
+    if (tokenPrice == 0) {
+      fetchPrice();
+    }
   }, [volume]);
+
+  const fetchPrice = async () => {
+    const tp = await GetTokenPrice(tokenNameRedux.toUpperCase());
+    console.log(tp);
+    setTokenPrice(tp);
+    setSwapRate(tp);
+  };
 
   const handleSliderChange = (e) => {
     if (Math.ceil((e.target.value / stake) * 100 >= 60)) {
@@ -376,7 +389,9 @@ const RiskHedge = ({
             <RightSide>
               {to}
               <RightsideMiniWrapper>
-                <FourthText top>1{tokenNameRedux} = 0.89 USDT</FourthText>
+                <FourthText top>
+                  1{tokenNameRedux} = {tokenPrice} USDT
+                </FourthText>
                 <RightSideTokenName>USDT</RightSideTokenName>
                 <FourthText under>On Ethereum network</FourthText>
               </RightsideMiniWrapper>

@@ -199,7 +199,7 @@ const Confirm = ({ pressStake, token }) => {
       web3.eth
         .sendTransaction({
           from: account,
-          to: address.liquidStaking,
+          to: address.evmosLiquidStaking,
           value: realAmount,
           data:
             hedgeAmountRedux != 0

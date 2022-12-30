@@ -3,6 +3,8 @@ import Title from "./components/title";
 import Header from "../common/header";
 import Modal from "./Modal";
 import { useState } from "react";
+import { BoldText } from "../../styles/styledComponents/boldText";
+import { textAlign } from "@mui/system";
 
 function Mainpage() {
   const [showModal, setShowModal] = useState(false);
