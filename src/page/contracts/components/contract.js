@@ -16,10 +16,17 @@ import StableTokenPoolMethodObject from "../../functions/getStableTokenPool";
 import stableTokenPool from "../../../artifacts/stableCoinPool.json";
 import escapeArrow from "../../../assets/images/escapeArrow.png";
 import arrowDownGray from "../../../assets/images/arrowDownGray.png";
+import toolTip, {
+  TooltipProps,
+  tooltipClasses,
+} from "../../../assets/images/toolTip.svg";
+import { styled as mStyled } from "@mui/material/styles";
+
 import {
   selectNetworkName,
   selectTokenName,
 } from "../../../redux/reducers/networkReducer";
+import Tooltip from "@mui/material/Tooltip";
 
 const LeverageWrapper = styled.div`
   margin-bottom: 5vh;
@@ -98,6 +105,12 @@ const StakedTitleWrapper = styled.div`
   justify-content: space-between;
 `;
 
+const ToolTipWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const EscapeArrow = styled.img`
   margin-left: auto;
   width: 10px;
@@ -115,6 +128,16 @@ const ArrowDownGray = styled.img`
   height: 4.5px;
 
   margin-left: 3px;
+`;
+
+const ToolTipIcon = styled.img`
+  /* width: 10px; */
+  /* height: 10px; */
+
+  width: 0.6vw;
+  height: 0.6vw;
+
+  margin-left: 5px;
 `;
 
 const TextBox = styled.div`
@@ -165,6 +188,7 @@ const TableHeader = styled.th`
   &:nth-child(2n) {
     text-align: right;
   }
+  vertical-align: middle;
 `;
 const TableElement = styled.td`
   font-size: 0.8vw;
@@ -206,7 +230,8 @@ const Contract = () => {
   const [stakeAmount, setStakeAmount] = useState([]);
   const [collateralAmount, setCollateralAmount] = useState([]);
   const [blockSignedAt, setBlockSignedAt] = useState([]);
-
+  const toolTipComment =
+    "This indicates the token amounts that you had requested as stable-hedging. Staking rewards are calculated in proportion to your principal amounts.";
   let navigate = useNavigate();
   const routeMain = () => {
     let path = "/";
@@ -233,15 +258,15 @@ const Contract = () => {
       .totalAddressNumber()
       .call();
     setTotalAddressNumber(totalAddressNum);
-    console.log("total addr num: ", totalAddressNum);
-    console.log("total addr number: ", totalAddressNumber);
+    // console.log("total addr num: ", totalAddressNum);
+    // console.log("total addr number: ", totalAddressNumber);
 
     if (recipientAddress.length == 0) {
       for (let i = 0; i < totalAddressNum; i++) {
         const newAddress = await stableTokenPoolContract.methods
           .addressList(i)
           .call();
-        console.log("new addr: ", newAddress);
+        // console.log("new addr: ", newAddress);
         setRecipientAddress((recipientAddress) => [
           ...recipientAddress,
           newAddress,
@@ -250,13 +275,13 @@ const Contract = () => {
         const newStakeAmount = await stableTokenPoolContract.methods
           .balanceOf(newAddress)
           .call();
-        console.log("new stake amount: ", newStakeAmount);
+        // console.log("new stake amount: ", newStakeAmount);
         setStakeAmount((stakeAmount) => [...stakeAmount, newStakeAmount]);
 
         const newCollateralAmount = await stableTokenPoolContract.methods
           .borrowed(newAddress)
           .call();
-        console.log("new Collateral amount: ", newCollateralAmount);
+        // console.log("new Collateral amount: ", newCollateralAmount);
         setCollateralAmount((collateralAmount) => [
           ...collateralAmount,
           newCollateralAmount,
@@ -269,22 +294,25 @@ const Contract = () => {
   function TableRows() {
     let rows = [];
     for (let i = 0; i < totalAddressNumber; i++) {
-      const row = (
-        <TableRow>
-          <TableElement>
-            {getShortenedAddress(recipientAddress[i])}
-          </TableElement>
-          <TableElement>
-            {stakeAmount[i]} ({tokenNameRedux})
-          </TableElement>
-          <TableElement>
-            {collateralAmount[i]} ({tokenNameRedux}) -{">"}{" "}
-            {collateralAmount[i] * 0.8} (USDT)
-          </TableElement>
-          <TableElement>101</TableElement>
-        </TableRow>
-      );
-      rows.push(row);
+      if (typeof recipientAddress[i] != "undefined") {
+        const row = (
+          <TableRow>
+            <TableElement>
+              {getShortenedAddress(recipientAddress[i])}
+              {console.log("row val :", i, recipientAddress[i])}
+            </TableElement>
+            <TableElement>
+              {stakeAmount[i]} {tokenNameRedux}
+            </TableElement>
+            <TableElement>
+              {collateralAmount[i]} {tokenNameRedux} -{">"}{" "}
+              {collateralAmount[i] * 0.8} USDT
+            </TableElement>
+            <TableElement>101</TableElement>
+          </TableRow>
+        );
+        rows.push(row);
+      }
     }
     return rows;
   }
@@ -409,7 +437,26 @@ const Contract = () => {
             <TableHeadRow>
               <TableHeader>Recipient</TableHeader>
               <TableHeader>Staked</TableHeader>
-              <TableHeader>Hedged (From -{">"} To)</TableHeader>
+              <TableHeader>
+                <ToolTipWrapper>
+                  Hedged (From -{">"} To)
+                  <Tooltip
+                    title={toolTipComment}
+                    arrow
+                    componentsProps={{
+                      tooltip: {
+                        sx: {
+                          width: 250,
+                          color: "white",
+                          backgroundColor: "black",
+                        },
+                      },
+                    }}
+                  >
+                    <ToolTipIcon src={toolTip} />
+                  </Tooltip>
+                </ToolTipWrapper>
+              </TableHeader>
               <TableHeader>Block Signed At</TableHeader>
             </TableHeadRow>
             {TableRows()}

@@ -22,51 +22,57 @@ import dydxDisabled from "../../../assets/images/dydxDisabled.svg";
 import kavaEnabled from "../../../assets/images/kavaEnabled.svg";
 import kavaDisabled from "../../../assets/images/kavaDisabled.svg";
 
-const SwitchNetworkWrapper = styled.div``;
+const SwitchNetworkWrapper = styled.div`
+  width: 420px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+`;
 const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 2vh;
+  margin-bottom: 21px;
 `;
 const FirstText = styled(BoldText)`
-  font-size: 1.2vw;
+  font-size: 20px;
 `;
 const ComponentWrapper = styled.div`
-  width: 50vw;
-  height: 30vh;
+  width: 420px;
+  height: 100px;
   display: flex;
-  justify-content: center;
-  margin-bottom: 2vh;
-  padding: 2vh;
+  /* justify-content: center; */
+  padding: 7px;
   background-color: #232323;
   border-radius: 5px;
+  margin-bottom: 10px;
 `;
 const LeftBoxWrapper = styled.div`
-  width: 11vw;
-  display: flex;
+  width: 70px;
+  height: 90px;
+  /* display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 1vh;
+  align-items: flex-start; */
+  padding: 0.5vh;
   background-color: #1a1a1a;
   border-radius: 5px;
 `;
 const TextBox = styled.div`
-  width: 100%;
+  font-size: 10px;
   font-weight: 500;
-  font-size: 1.2vw;
   text-align: left;
 `;
 const TextBoxSmall = styled.div`
-  width: 100%;
+  font-size: 10px;
+  zoom: 0.6;
   font-weight: 500;
-  font-size: 0.8vw;
   text-align: left;
 `;
 const NetworkBox = styled.div`
   display: flex;
   justify-content: space-evenly;
-  width: 100%;
+  width: 322px;
+  padding: 6px;
 `;
 const NetworkComponent = styled.div`
   display: flex;
@@ -81,7 +87,7 @@ const NetworkLogo = styled.img`
 `;
 const ConfirmButton = styled(Button)`
   width: 100%;
-  margin-top: 2vh;
+  height: 40px;
   border-radius: 5px;
 `;
 
@@ -143,7 +149,6 @@ const SwitchNetworkPopup = ({ routePage, closeModal }) => {
   return (
     <SwitchNetworkWrapper>
       <TitleWrapper>
-        <FirstText>Wanna switch?</FirstText>
         <FirstText>Please select network to switch</FirstText>
       </TitleWrapper>
       <ComponentWrapper>

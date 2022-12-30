@@ -9,11 +9,11 @@ function Mainpage() {
   const [token, setToken] = useState("Evmos");
   const [stakeAmount, setStakeAmount] = useState(0);
   const [getAmount, setGetAmount] = useState(0);
- 
+
   return (
     <div>
       <Header home={0} launchedApp={false}></Header>
-       {showModal && (
+      {showModal && (
         <Modal
           closeModal={() => {
             setShowModal(false);
@@ -24,10 +24,10 @@ function Mainpage() {
           getAmount={getAmount}
         />
       )}
-      <Title 
-      openModal={() => {
-        setShowModal(true);
-      }}
+      <Title
+        openModal={() => {
+          setShowModal(true);
+        }}
       />
       <Footer />
     </div>

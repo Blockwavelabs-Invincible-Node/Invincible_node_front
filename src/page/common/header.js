@@ -15,6 +15,7 @@ import SwitchNetwork from "../functions/switchNetwork";
 import Menu from "./components/menu";
 import HeaderModal from "./headerModal";
 import { selectNetworkName } from "../../redux/reducers/networkReducer";
+import { BoldText } from "../../styles/styledComponents/boldText";
 //--------------------Styles--------------------------//
 const Top = styled.div`
   width: 100%;
@@ -23,11 +24,19 @@ const Top = styled.div`
   padding-left: 5vw;
   padding-right: 5vw;
 `;
-const LeftTop = styled.div``;
+const LeftTop = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const RightTop = styled.div`
   display: flex;
-  margin-top: 50px;
-  white-space: nowrap;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  /* white-space: nowrap; */
 `;
 const WalletConnect = styled(Button)`
   width: auto;
@@ -36,28 +45,29 @@ const WalletConnect = styled(Button)`
 `;
 const WalletAddress = styled.div`
   display: flex;
+  height: 30px;
   background-color: #f1f1f1;
   margin-left: 10px;
-  border: 1px solid #146dd8;
-  border-radius: 10px;
+  /* border: 1px solid #146dd8; */
+  border-radius: 5px;
   padding-left: 3vw;
   padding-right: 3vw;
+  /* justify-content: center; */
   align-items: center;
-  height: 55px;
 `;
 const WalletAddressText = styled.div`
   color: #146dd8;
   text-align: center;
   font-family: Pretendard;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 18px;
   letter-spacing: 0em;
-  text-align: center;
+  /* text-align: center; */
 `;
 const Logo = styled.img`
-  margin-top: 4vh;
-  width: 40px;
+  width: 25px;
+  margin-right: 1vw;
 `;
 const UnstakeButton = styled.button`
   font-size: 15px;
@@ -111,14 +121,21 @@ const StyledDropdownMenu = styled(Dropdown.Menu)`
   flex-direction: column;
 `;
 const NetworkButton = styled(Button)`
-  width: 10vw;
+  width: 160px;
+  height: 30px;
+  font-size: 13px;
 `;
 const MyPageButton = styled(Button)`
-  width: 5vw;
+  width: 160px;
+  height: 30px;
   margin-right: 10px;
-  background-color: gray;
+  background-color: #333333;
 `;
-
+const InvincibleNodeText = styled(BoldText)`
+  color: #fdf5e9;
+  font-size: 25px;
+  text-align: left;
+`;
 //--------------------------------------------------------------//
 
 const web3 = new Web3(window.ethereum);
@@ -207,6 +224,7 @@ function Header({ launchedApp }) {
               routeMain();
             }}
           ></Logo>
+          <InvincibleNodeText>Invincible {networkNameRedux}</InvincibleNodeText>
         </LeftTop>
 
         <RightTop>

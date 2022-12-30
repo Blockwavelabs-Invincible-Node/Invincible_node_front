@@ -24,22 +24,21 @@ const SwitchNetworkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 40vw;
-  height: 35vh;
+  width: 500px;
+  height: 250px;
 `;
 const FirstText = styled(BoldText)`
-  font-size: 1.2vw;
+  font-size: 20px;
   text-align: left;
-  margin-bottom: 2vh;
 `;
 const NetworkWrapper = styled.div`
-  height: 15vh;
+  height: 8vh;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
 `;
 const NetworkComponent = styled.div`
-  padding-left: 2vw;
-  padding-right: 2vw;
+  padding-left: 1vw;
+  padding-right: 1vw;
 `;
 
 const NetworkLogo = styled.img`
@@ -48,7 +47,7 @@ const NetworkLogo = styled.img`
 `;
 const ConfirmButton = styled(Button)`
   width: 100%;
-  margin-top: 2vh;
+  height: 40px;
   border-radius: 5px;
 `;
 
