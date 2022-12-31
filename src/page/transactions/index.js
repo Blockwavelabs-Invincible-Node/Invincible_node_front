@@ -51,8 +51,10 @@ const TransactionPage = () => {
     setTransactions(data);
   };
   useEffect(() => {
-    getTransactions();
-  }, [transactions]);
+    if (transactions == null) {
+      getTransactions();
+    }
+  }, []);
 
   if (transactions == null) {
     return (

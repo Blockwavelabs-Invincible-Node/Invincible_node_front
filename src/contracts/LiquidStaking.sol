@@ -22,7 +22,9 @@ contract LiquidStaking is ReentrancyGuard {
         uint amount;
     }
 
+    // 컨트랙트 배포자
     address public owner;
+    // 밸리데이터 관리자
     address public validatorOwner;
     // address list
     address[] public addressList;
@@ -34,8 +36,6 @@ contract LiquidStaking is ReentrancyGuard {
     uint256 public unbondingTime;
     // User address => rewards to be claimed
     mapping(address => uint256) public rewards;
-    // maximum amount user can withdraw
-    mapping(address => uint256) public userMaximumWithdrawAmount;
     // total reward claimed
     mapping(address => uint256) public totalRewardsClaimed;
 
@@ -72,12 +72,6 @@ contract LiquidStaking is ReentrancyGuard {
     // 유저의 출금 요청
     function withdraw(uint _amount) public nonReentrant() {
         require(_amount > 0, "amount = 0");
-        require(
-            _amount + unstaked[msg.sender] <
-                userMaximumWithdrawAmount[msg.sender],
-            "too much amount"
-        );
-        // require(_amount <= userMaximumWithdrawAmount[msg.sender], "too much amount");
         emit Unbond(msg.sender, _amount);
 
         unstaked[msg.sender] += _amount;
@@ -101,9 +95,6 @@ contract LiquidStaking is ReentrancyGuard {
         reToken = IERC20(_reToken);
         totalAddressNumber = 0;
         unbondingTime = _unbondingTime;
-
-        //for test
-        userMaximumWithdrawAmount[msg.sender] = 1000000000000000;
     }
 
     // contract에서 token을 받았을 때 어떻게 할 것인가
@@ -127,7 +118,6 @@ contract LiquidStaking is ReentrancyGuard {
             emit Transfer(msg.sender, address(this), msg.value, msg.data);
             addAddressList(msg.sender);
             balanceOf[msg.sender] += msg.value;
-            userMaximumWithdrawAmount[msg.sender] += msg.value;
             totalSupply += msg.value;
             // reward token mint
             // liquidity token을 민팅해서 유저한테 전송
@@ -141,12 +131,14 @@ contract LiquidStaking is ReentrancyGuard {
         _;
     }
 
+    // 밸리데이터 주소를 추가
     function addValidatorAddress(string memory _validatorAddress) public {
         validatorAddresses[_validatorAddress] = 0;
         validatorRequests[msg.sender] = _validatorAddress;
         emit UpdateRequest(_validatorAddress);
     }
 
+    // 밸리데이터 주소 검증 결과 입력
     function setValidatorAddress(
         string memory _validatorAddress,
         uint256 _result
@@ -155,25 +147,27 @@ contract LiquidStaking is ReentrancyGuard {
         validatorAddresses[_validatorAddress] = _result;
     }
 
+    // unstake 시간 설정
     function setUnbondingTime(uint256 _period) public onlyOwner {
         unbondingTime = _period;
     }
 
+    // stake 한 사람의 reward를 업데이트
     function updateAccountReward(address _account, uint256 _amount) private {
         // uint dailyReward = _amount * balanceOf[_account] / totalSupply - _amount * balanceOf[_account] / totalUnstaked;
         uint256 supply = totalSupply - totalUnstaked;
         uint256 dailyReward = (_amount * balanceOf[_account]) / supply;
         rewards[_account] += dailyReward;
-        // user가 withdraw 할 수 있는 금액 증가
-        userMaximumWithdrawAmount[_account] += dailyReward;
     }
 
+    // 모든 stake 한 사람의 reward를 업데이트
     function updateReward(uint256 _amount) public {
         for (uint256 i = 0; i < addressList.length; i++) {
             updateAccountReward(addressList[i], _amount);
         }
     }
 
+    // 존재하는 주소인지 확인해주는 함수
     function exists(address _account) public view returns (bool) {
         for (uint256 i = 0; i < addressList.length; i++) {
             if (addressList[i] == _account) {
@@ -183,6 +177,7 @@ contract LiquidStaking is ReentrancyGuard {
         return false;
     }
 
+    // 주소 리스트에 추가
     function addAddressList(address _account) public {
         if (!exists(_account)) {
             addressList.push(_account);
@@ -190,11 +185,12 @@ contract LiquidStaking is ReentrancyGuard {
         }
     }
 
-
+    // 총 unbond request 개수
     function getTotalUnbondRequests() public {
         return unbondRequests.length;
     }
 
+    // 유저가 reward를 수령할 수 있도록 하는 함수
     function receiveReward() external nonReentrant()  {
         uint reward = rewards[msg.sender];
         if (reward > 0) {
@@ -206,10 +202,7 @@ contract LiquidStaking is ReentrancyGuard {
         }
     }
 
-    function _min(uint256 x, uint256 y) private pure returns (uint256) {
-        return x <= y ? x : y;
-    }
-
+    // unbond request 에서 제거
     function popFromUnbondRequest(uint256 index) private {
         // UnbondData memory element = unbondRequests[index];
         for (uint256 i = index; i < unbondRequests.length - 1; i++) {
@@ -245,14 +238,5 @@ interface IERC20 {
     function burnToken(address account, uint amount) external;
     event Transfer(address indexed from, address indexed to, uint value);
     event Approval(address indexed owner, address indexed spender, uint value);
-}
 
-    function mintToken(address account, uint256 amount) external;
-
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(
-        address indexed owner,
-        address indexed spender,
-        uint256 value
-    );
 }

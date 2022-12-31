@@ -29,6 +29,7 @@ contract StableTokenPool is ReentrancyGuard{
 
     }
 
+    // 컨트랙트 내에 존재하는 주소인지 확인
     function exists(address _account) public view returns(bool) {
         for (uint i = 0; i< addressList.length; i++) {
             if (addressList[i] == _account) {
@@ -38,6 +39,7 @@ contract StableTokenPool is ReentrancyGuard{
         return false;
     }
 
+    // 주소 리스트에 추가
     function addAddressList(address _account) public {
         if (!exists(_account)) {
             addressList.push(_account);
@@ -50,6 +52,7 @@ contract StableTokenPool is ReentrancyGuard{
         _;
     }
 
+    // stable token을 유저에게 보내는 함수
     function sendStableToken(address _recipient, uint _amount) public onlyOwner {
         require(_amount + totalSent < totalReceived, "not enough supply");
         totalSent += _amount;
@@ -57,6 +60,7 @@ contract StableTokenPool is ReentrancyGuard{
         stableToken.transfer(_recipient, _amount);
     }
 
+    // validator 신청자로부터 stable token을 받는 함수
     function receiveStableToken(uint _amount, string memory _validatorAddress) public{
         totalReceived += _amount;
         stableToken.transferFrom(msg.sender, address(this), _amount);

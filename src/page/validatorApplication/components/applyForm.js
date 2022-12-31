@@ -153,29 +153,29 @@ const ApplyForm = ({ openModal }) => {
   const handleValidatorAddressChange = (event) => {
     setValidatorAddress(event.target.value);
   };
-  const retryCheck = async () => {
-    setTimeout(async () => {
-      const checkValidatorAddress = await liquidStakingContract.methods
-        .validatorAddresses(validatorAddress)
-        .call()
-        .catch((err) => {
-          console.log(err.message);
-        })
-        .then(async function (receipt) {
-          console.log("check result: ", receipt);
-          if (receipt == 0) {
-            //retry
-            console.log("retry");
-          } else if (receipt == 1) {
-            //send stable coin
-            const value = stableCoinAmount;
-            const number = await web3.utils.toBN(value * 10 ** 18);
-            console.log("value: ", number);
-            ValidatorApplication(validatorAddress, number);
-          }
-        });
-    }, 10000);
-  };
+  // const retryCheck = async () => {
+  //   setTimeout(async () => {
+  //     const checkValidatorAddress = await liquidStakingContract.methods
+  //       .validatorAddresses(validatorAddress)
+  //       .call()
+  //       .catch((err) => {
+  //         console.log(err.message);
+  //       })
+  //       .then(async function (receipt) {
+  //         console.log("check result: ", receipt);
+  //         if (receipt == 0) {
+  //           // invalid validator address
+            
+  //         } else if (receipt == 1) {
+  //           //send stable coin
+  //           const value = stableCoinAmount;
+  //           const number = await web3.utils.toBN(value * 10 ** 18);
+  //           console.log("value: ", number);
+  //           ValidatorApplication(validatorAddress, number);
+  //         }
+  //       });
+  //   }, 10000);
+  // };
   const ValidatorApplication = async (validatorAddress, amount) => {
     SwitchNetwork(5).then(async () => {
       const getAccount = await web3.eth.getAccounts();
@@ -218,41 +218,51 @@ const ApplyForm = ({ openModal }) => {
       })
       // check if it is right address
       .then(async () => {
-        // 20초 간격으로 세 번 반복
-        setTimeout(async () => {
-          const checkValidatorAddress = await liquidStakingContract.methods
-            .validatorAddresses(validatorAddress)
-            .call()
-            .catch((err) => {
-              console.log(err.message);
-            })
-            .then(async function (receipt) {
-              console.log("check result: ", receipt);
-              if (receipt == 0) {
-                //retry
-                console.log("Retry");
-                retryCheck();
-              } else if (receipt == 1) {
-                //send stable coin
-                setVerifying(2);
-                toast.update(id, {
-                  render: "Address Verified!",
-                  type: "success",
-                  isLoading: false,
-                  autoClose: 1000,
-                });
-                const value = stableCoinAmount;
-                const number = await web3.utils.toBN(value * 10 ** 18);
-                console.log("value: ", number);
-
-                setSecondMessage(true);
-                dispatch(increasePageNumber());
-                SwitchNetwork(5).then(() => {
-                  setThirdMessage(true);
-                });
-              }
-            });
-        }, 10000);
+        // 10초 간격으로 세 번 반복
+        for (let i = 0 ; i < 3; i++) {
+          setTimeout(async () => {
+            const checkValidatorAddress = await liquidStakingContract.methods
+              .validatorAddresses(validatorAddress)
+              .call()
+              .catch((err) => {
+                console.log(err.message);
+              })
+              .then(async function (receipt) {
+                console.log("check result: ", receipt);
+                if (receipt == 0) {
+                  //retry
+                  console.log("Retry");
+                  if (i == 2) {
+                    toast.update(id, {
+                      render: "Invalid Address. Please Try again",
+                      type: "error",
+                      isLoading: false,
+                      autoClose: 1000,
+                    });
+                    setVerifying(0);
+                  }
+                } else if (receipt == 1) {
+                  //send stable coin
+                  setVerifying(2);
+                  toast.update(id, {
+                    render: "Address Verified!",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 1000,
+                  });
+                  const value = stableCoinAmount;
+                  const number = await web3.utils.toBN(value * 10 ** 18);
+                  console.log("value: ", number);
+  
+                  setSecondMessage(true);
+                  dispatch(increasePageNumber());
+                  SwitchNetwork(5).then(() => {
+                    setThirdMessage(true);
+                  });
+                }
+              });
+          }, 10000*(i+1));
+        }
       });
   };
 
