@@ -240,6 +240,7 @@ const RiskHedge = ({
   const [toggleVal, setToggleVal] = useState(0, 60);
   const [tokenPrice, setTokenPrice] = useState(0);
   const [swapRate, setSwapRate] = useState();
+  const [sliderValue, setSliderValue] = useState(0);
 
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const hedgeAmountRedux = useSelector(selectHedgeAmount);
@@ -281,17 +282,19 @@ const RiskHedge = ({
     setSwapRate(tp);
   };
 
-  const handleSliderChange = (e) => {
-    if (Math.ceil((e.target.value / stake) * 100 >= 60)) {
-      e.target.value = (stake * 3) / 5;
-      setVolume(60);
-    } else {
-      setVolume(Math.ceil((e.target.value / stake) * 100));
-    }
+  const handleSliderChange = (e, newValue) => {
     if (e.target.value === 0) {
       setIsStakeMoved(false);
     } else {
       setIsStakeMoved(true);
+    }
+    const limitVal = (e.target.value / stake) * 100;
+    if (limitVal > 60) {
+      setVolume(60);
+      setSliderValue((stake * 3) / 5);
+    } else {
+      setVolume(Math.ceil((e.target.value / stake) * 100));
+      setSliderValue(newValue);
     }
   };
 
@@ -349,7 +352,7 @@ const RiskHedge = ({
               <Slider
                 size="small"
                 aria-label="Small steps"
-                defaultValue={0}
+                value={sliderValue}
                 step={0.00000001}
                 min={0}
                 max={stake}

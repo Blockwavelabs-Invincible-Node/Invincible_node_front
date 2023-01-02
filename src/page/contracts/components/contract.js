@@ -37,6 +37,7 @@ const FirstText = styled(BoldText)`
   width: 20vw;
   font-size: 1.2vw;
   margin-bottom: 1px;
+  color: #f6f7fc;
 `;
 const TitleText = styled(BoldText)`
   font-size: 0.8vw;

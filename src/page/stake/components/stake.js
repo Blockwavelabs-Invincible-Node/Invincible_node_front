@@ -117,7 +117,7 @@ const InEvmosAmount = styled(LightText)`
 const ZeroImage = styled(NumberImg)``;
 const OneImage = styled(NumberImg)``;
 const StakeButton = styled(Button)`
-  width: 90%;
+  width: 100%;
   height: 60px;
   margin: auto;
   font-size: 23px;
@@ -178,12 +178,12 @@ const ResultContainer = styled.div`
 
 const EvmosInputWrapper = styled.div`
   display: flex;
-  /* justify-content: center; */
+  justify-content: space-between;
   width: 50%;
   align-items: center;
 `;
 const EvmosInput = styled.input`
-  width: 7vw;
+  width: 8vw;
   margin-right: 1vw;
   height: 30px;
   background-color: #292929;
@@ -404,7 +404,7 @@ const Stake = ({
                   <YouWillGet>You will get</YouWillGet>
                   <EvmosInputWrapper>
                     <EvmosInput value={stake}></EvmosInput>
-                    <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
+                    <InEvmosAmount>in {tokenNameRedux}</InEvmosAmount>
                   </EvmosInputWrapper>
                 </GetWrapper>
               </ResultContainer>
