@@ -16,7 +16,7 @@ const BaseWrapper = styled.div`
   padding-bottom: 50px;
 `;
 const TitleWrapper = styled.div`
-  width: 30vw;
+  width: 15vw;
   height: 80vh;
 `;
 

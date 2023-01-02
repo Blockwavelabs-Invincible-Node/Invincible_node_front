@@ -26,13 +26,14 @@ const StyledDropdownButton = styled(Dropdown.Toggle)`
   color: white;
   border: hidden;
   background-color: transparent;
-  font-size: 15px;
+  font-size: 20px;
   border-radius: 5px;
   font-family: Pretendard;
   font-weight: 700;
   display: flex;
   margin-top: 3vh;
   z-index: 2;
+  align-items: center;
 `;
 const StyledDropdownItem = styled(Dropdown.Item)`
   color: white;

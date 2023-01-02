@@ -5,4 +5,5 @@ export const BoldText = styled.div`
   /* font-size: 23px; */
   font-size: 13px;
   // line-height: 27px;
+  color: #f6f7fc;
 `;
