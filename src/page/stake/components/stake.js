@@ -270,10 +270,12 @@ const Stake = ({
 
   let navigate = useNavigate();
   const routeRiskHedge = () => {
+    console.log("compare : ", stake, ethBalance);
     //stake가 ethBalance보다 큰 경우 에러 발생
-    if(stake > ethBalance){
+    if (stake > ethBalance / 10 ** 18) {
       alert("Invalid Amount!");
-      return;}
+      return;
+    }
 
     let path = "/risk-hedge";
     navigate(path);
