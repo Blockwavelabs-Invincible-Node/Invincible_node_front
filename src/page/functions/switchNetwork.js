@@ -18,11 +18,12 @@ const SwitchNetwork = async (networkId) => {
     .catch((e) => {
       if (e.code === 4902) {
         console.log("network is not available, add it");
+        AddNetwork(networkId);
       } else {
         console.log("could not set network");
       }
       res = 0;
-      AddNetwork(networkId);
+      // AddNetwork(networkId);
     });
   return res;
 };

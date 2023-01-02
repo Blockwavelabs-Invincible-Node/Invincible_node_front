@@ -17,10 +17,12 @@ import Web3 from "web3";
 import { Button } from "../../../styles/styledComponents/button";
 import { useNavigate } from "react-router-dom";
 import {
+  selectNetworkId,
   selectNetworkName,
   selectTokenName,
 } from "../../../redux/reducers/networkReducer";
 import GetTokenPrice from "../../functions/fetchTokenPrice";
+import CheckNetwork from "../../functions/checkNetwork";
 
 const StakeForm = styled(Form)``;
 const StakingWrapper = styled(Wrapper)`
@@ -266,6 +268,7 @@ const Stake = ({
 
   const tokenNameRedux = useSelector(selectTokenName);
   const stakeAmountRedux = useSelector(selectStakeAmount);
+  const networkIdRedux = useSelector(selectNetworkId);
   const dispatch = useDispatch();
 
   let navigate = useNavigate();
@@ -357,26 +360,6 @@ const Stake = ({
             ))}
           </StageBar>
 
-          {/* <ContentBox>
-            <LevelBox>
-              <LevelCircle>0</LevelCircle>
-            </LevelBox>
-            <InputBox>
-              <SelectTokenText>Select Token to stake </SelectTokenText>
-              <br />
-              <DropboxContainer>
-                <TokenToStake
-                  defaultValue={options[0]}
-                  options={options}
-                  onChange={(e) => handleSelectedOption(e)}
-                  styles={colourStyles}
-                ></TokenToStake>
-
-                <SelectButton>Select</SelectButton>
-              </DropboxContainer>
-            </InputBox>
-          </ContentBox> */}
-
           <ContentBox>
             <LevelBox>
               <LevelCircle>1</LevelCircle>
@@ -417,9 +400,15 @@ const Stake = ({
               </ResultContainer>
               <StakeButton
                 onClick={() => {
-                  liquidStake();
-                  setPressStake(true);
-                  routeRiskHedge();
+                  CheckNetwork(networkIdRedux).then((result) => {
+                    if (result == 1) {
+                      liquidStake();
+                      setPressStake(true);
+                      routeRiskHedge();
+                    } else {
+                      alert("Switch Network and reload Application");
+                    }
+                  });
                 }}
               >
                 Continue
