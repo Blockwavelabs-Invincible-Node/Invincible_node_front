@@ -62,30 +62,44 @@ const SelectNetworkPopup = ({ routePage }) => {
     const temp = () => {
       if (selectedNetwork == 1) {
         //evmos testnet
-        SwitchNetwork(9000).then(() => {
-          console.log("Connected to Evmos Testnet");
-          dispatch(setNetworkId(9000));
-          dispatch(setNetworkName("Evmos"));
-          dispatch(setTokenName("Evmos"));
-          routePage();
+        SwitchNetwork(9000).then((result) => {
+          if (result == 1) {
+            console.log("Connected to Evmos Testnet");
+            dispatch(setNetworkId(9000));
+            dispatch(setNetworkName("Evmos"));
+            dispatch(setTokenName("Evmos"));
+            routePage();
+          } else {
+            // alert("Add network and Retry");
+          }
         });
       } else if (selectedNetwork == 2) {
         //mumbai
-        SwitchNetwork(80001).then(() => {
-          console.log("Connected to Mumbai");
-          dispatch(setNetworkId(80001));
-          dispatch(setNetworkName("Polygon"));
-          dispatch(setTokenName("Matic"));
-          routePage();
+        SwitchNetwork(80001).then((result) => {
+          console.log("res", result);
+          if (result == 1) {
+            console.log(result);
+            console.log("Connected to Mumbai");
+            dispatch(setNetworkId(80001));
+            dispatch(setNetworkName("Polygon"));
+            dispatch(setTokenName("Matic"));
+            routePage();
+          } else {
+            // alert("Add network and Retry");
+          }
         });
       } else if (selectedNetwork == 3) {
         //kava testnet
-        SwitchNetwork(2221).then(() => {
-          console.log("Connected to kava testnet");
-          dispatch(setNetworkId(2221));
-          dispatch(setNetworkName("Kava"));
-          dispatch(setTokenName("Kava"));
-          routePage();
+        SwitchNetwork(2221).then((result) => {
+          if (result == 1) {
+            console.log("Connected to kava testnet");
+            dispatch(setNetworkId(2221));
+            dispatch(setNetworkName("Kava"));
+            dispatch(setTokenName("Kava"));
+            routePage();
+          } else {
+            // alert("Add network and Retry");
+          }
         });
       }
     };
