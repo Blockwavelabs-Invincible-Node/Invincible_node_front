@@ -221,16 +221,31 @@ const stableTokenPoolContract = new goerliWeb3.eth.Contract(
   stableTokenPool.output.abi,
   contractAddress.stableCoinPool
 );
+const web3 = new Web3(window.ethereum);
+const liquidStakingContract = new web3.eth.Contract(
+  liquidStaking.output.abi,
+  contractAddress.evmosLiquidStaking
+);
 
 // const getBlockNumOfTrx = () =>
 
 const Contract = () => {
   const [balance, setBalance] = useState();
+
+  // Staked
+  const [stTotalAddressNumber, setStTotalAddressNumber] = useState(0);
+  const [stAddress, setStAddress] = useState([]);
+  const [stTotalAmount, setStTotalAmount] = useState([]);
+  const [stTxHash, setStTxHash] = useState([]);
+  const [stBlockHeight, setStBlockHeight] = useState([]);
+
+  // USDT Reserved
   const [totalAddressNumber, setTotalAddressNumber] = useState(0);
   const [recipientAddress, setRecipientAddress] = useState([]);
   const [stakeAmount, setStakeAmount] = useState([]);
   const [collateralAmount, setCollateralAmount] = useState([]);
   const [blockSignedAt, setBlockSignedAt] = useState([]);
+
   const toolTipComment =
     "This indicates the token amounts that you had requested as stable-hedging. Staking rewards are calculated in proportion to your principal amounts.";
   let navigate = useNavigate();
@@ -252,6 +267,33 @@ const Contract = () => {
 
     console.log(totalSupply, totalLend);
     setBalance((totalSupply - totalLend) / 10 ** 18);
+  };
+
+  const getStakedData = async () => {
+    const totalAddressNum = await liquidStakingContract.methods
+      .totalAddressNumber()
+      .call();
+    setStTotalAddressNumber(totalAddressNum);
+
+    console.log(liquidStakingContract);
+    console.log(stableTokenPoolContract);
+
+    if (recipientAddress.length == 0) {
+      for (let i = 0; i < totalAddressNum; i++) {
+        const newAddress = await liquidStakingContract.methods
+          .addressList(i)
+          .call();
+        console.log("new addr: ", newAddress);
+        setStAddress((stAddress) => [...stAddress, newAddress]);
+
+        const newTotalAmount = await liquidStakingContract.methods
+          .balanceOf(newAddress)
+          .call();
+        console.log("new total amount: ", newTotalAmount);
+        setStTotalAmount((stTotalAmount) => [...stTotalAmount, newTotalAmount]);
+      }
+    }
+    console.log("StakedData Done");
   };
 
   const getUsdtData = async () => {
@@ -292,7 +334,28 @@ const Contract = () => {
     console.log("get data");
   };
 
-  function TableRows() {
+  function stTableRows() {
+    let rows = [];
+    for (let i = 0; i < stTotalAddressNumber; i++) {
+      if (typeof stAddress[i] != "undefined") {
+        const row = (
+          <TableRow>
+            <TableElement>
+              {getShortenedAddress(stAddress[i])}
+              {/* {console.log("row val :", i, recipientAddress[i])} */}
+            </TableElement>
+            <TableElement>{stTotalAmount[i]}</TableElement>
+            <TableElement>Not Yet</TableElement>
+            <TableElement>101</TableElement>
+          </TableRow>
+        );
+        rows.push(row);
+      }
+    }
+    return rows;
+  }
+
+  function usdtTableRows() {
     let rows = [];
     for (let i = 0; i < totalAddressNumber; i++) {
       if (typeof recipientAddress[i] != "undefined") {
@@ -300,7 +363,7 @@ const Contract = () => {
           <TableRow>
             <TableElement>
               {getShortenedAddress(recipientAddress[i])}
-              {console.log("row val :", i, recipientAddress[i])}
+              {/* {console.log("row val :", i, recipientAddress[i])} */}
             </TableElement>
             <TableElement>
               {stakeAmount[i]} {tokenNameRedux}
@@ -323,8 +386,11 @@ const Contract = () => {
   }, []);
 
   const initData = async () => {
-    await stableCoinPoolRead();
-    await getUsdtData();
+    // await stableCoinPoolRead();
+    // await getStakedData();
+    // await getUsdtData();
+
+    Promise.all([stableCoinPoolRead(), getStakedData(), getUsdtData()]);
   };
 
   function getShortenedAddress(addr) {
@@ -404,24 +470,7 @@ const Contract = () => {
               <TableHeader>TX Hash</TableHeader>
               <TableHeader>Block Signed At</TableHeader>
             </TableHeadRow>
-            <TableRow>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-            </TableRow>
-            <TableRow>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-            </TableRow>
-            <TableRow>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-              <TableElement>0x0000</TableElement>
-              <TableElement>111,111</TableElement>
-            </TableRow>
+            {stTableRows()}
           </Table>
           <MoreWrapper>
             <ContentText>More</ContentText>
@@ -460,7 +509,7 @@ const Contract = () => {
               </TableHeader>
               <TableHeader>Block Signed At</TableHeader>
             </TableHeadRow>
-            {TableRows()}
+            {usdtTableRows()}
           </Table>
           <MoreWrapper>
             <ContentText>More</ContentText>

@@ -39,10 +39,14 @@ const RightTop = styled.div`
 
   /* white-space: nowrap; */
 `;
-const WalletConnect = styled(Button)`
-  width: auto;
-  padding-left: 3vw;
-  padding-right: 3vw;
+const WalletConnect = styled.div`
+  color: #146dd8;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0em;
 `;
 const WalletAddress = styled.div`
   display: flex;
@@ -266,13 +270,15 @@ function Header({ launchedApp }) {
               </WalletAddressText>
             </WalletAddress>
           ) : (
-            <WalletConnect
-              onClick={() => {
-                ConnectToMetamask();
-              }}
-            >
-              Connect Wallet
-            </WalletConnect>
+            <WalletAddress>
+              <WalletConnect
+                onClick={() => {
+                  ConnectToMetamask();
+                }}
+              >
+                Connect Wallet
+              </WalletConnect>
+            </WalletAddress>
           )}
         </RightTop>
       </Top>
