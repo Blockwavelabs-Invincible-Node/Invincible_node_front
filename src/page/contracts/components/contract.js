@@ -21,7 +21,7 @@ import toolTip, {
   tooltipClasses,
 } from "../../../assets/images/toolTip.svg";
 import { styled as mStyled } from "@mui/material/styles";
-import { PacmanLoader } from "react-spinners";
+import { RingLoader } from "react-spinners";
 
 import {
   selectNetworkName,
@@ -415,7 +415,7 @@ const Contract = () => {
   return loading ? (
     <>
       <SpinnerBox>
-        <PacmanLoader size={40} color="#f6f7fc" />
+        <RingLoader size={80} color="#f6f7fc" />
       </SpinnerBox>
     </>
   ) : (
