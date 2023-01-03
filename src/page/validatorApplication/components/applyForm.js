@@ -2,7 +2,7 @@ import { useState } from "react";
 import Web3 from "web3";
 // import ValidatorApplication from "../../functions/validatorApplication";
 import address from "../../../addresses/contractAddress.json";
-import liquidStaking from "../../../artifacts/liquidStaking.json";
+import evmosLiquidStaking from "../../../artifacts/liquidStaking.json";
 import SwitchNetwork from "../../functions/switchNetwork";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -127,10 +127,10 @@ const testUSDTContract = new web3.eth.Contract(testUSDTABI, testUSDTAddress);
 const goerliProvider = process.env.REACT_APP_GOERLI_RPC_URL;
 const web3Provider = new Web3.providers.HttpProvider(goerliProvider);
 const goerliWeb3 = new Web3(web3Provider);
-const liquidStakingAddress = address.evmosLiquidStaking;
-const liquidStakingContract = new web3.eth.Contract(
-  liquidStaking.output.abi,
-  liquidStakingAddress
+const evmosLiquidStakingAddress = address.evmosLiquidStaking;
+const evmosLiquidStakingContract = new web3.eth.Contract(
+  evmosLiquidStaking.output.abi,
+  evmosLiquidStakingAddress
 );
 
 const ApplyForm = ({ openModal }) => {
@@ -155,7 +155,7 @@ const ApplyForm = ({ openModal }) => {
   };
   // const retryCheck = async () => {
   //   setTimeout(async () => {
-  //     const checkValidatorAddress = await liquidStakingContract.methods
+  //     const checkValidatorAddress = await evmosLiquidStakingContract.methods
   //       .validatorAddresses(validatorAddress)
   //       .call()
   //       .catch((err) => {
@@ -165,7 +165,7 @@ const ApplyForm = ({ openModal }) => {
   //         console.log("check result: ", receipt);
   //         if (receipt == 0) {
   //           // invalid validator address
-            
+
   //         } else if (receipt == 1) {
   //           //send stable coin
   //           const value = stableCoinAmount;
@@ -206,7 +206,7 @@ const ApplyForm = ({ openModal }) => {
     const account = getAccount[0];
     const id = toast.loading("Verifying Validator Address..");
     console.log(account);
-    const addValidatorAddress = await liquidStakingContract.methods
+    const addValidatorAddress = await evmosLiquidStakingContract.methods
       .addValidatorAddress(validatorAddress)
       .send({ from: account })
       .catch((err) => {
@@ -219,49 +219,50 @@ const ApplyForm = ({ openModal }) => {
       // check if it is right address
       .then(async () => {
         // 10초 간격으로 세 번 반복
-        for (let i = 0 ; i < 3; i++) {
+        for (let i = 0; i < 3; i++) {
           setTimeout(async () => {
-            const checkValidatorAddress = await liquidStakingContract.methods
-              .validatorAddresses(validatorAddress)
-              .call()
-              .catch((err) => {
-                console.log(err.message);
-              })
-              .then(async function (receipt) {
-                console.log("check result: ", receipt);
-                if (receipt == 0) {
-                  //retry
-                  console.log("Retry");
-                  if (i == 2) {
+            const checkValidatorAddress =
+              await evmosLiquidStakingContract.methods
+                .validatorAddresses(validatorAddress)
+                .call()
+                .catch((err) => {
+                  console.log(err.message);
+                })
+                .then(async function (receipt) {
+                  console.log("check result: ", receipt);
+                  if (receipt == 0) {
+                    //retry
+                    console.log("Retry");
+                    if (i == 2) {
+                      toast.update(id, {
+                        render: "Invalid Address. Please Try again",
+                        type: "error",
+                        isLoading: false,
+                        autoClose: 1000,
+                      });
+                      setVerifying(0);
+                    }
+                  } else if (receipt == 1) {
+                    //send stable coin
+                    setVerifying(2);
                     toast.update(id, {
-                      render: "Invalid Address. Please Try again",
-                      type: "error",
+                      render: "Address Verified!",
+                      type: "success",
                       isLoading: false,
                       autoClose: 1000,
                     });
-                    setVerifying(0);
+                    const value = stableCoinAmount;
+                    const number = await web3.utils.toBN(value * 10 ** 18);
+                    console.log("value: ", number);
+
+                    setSecondMessage(true);
+                    dispatch(increasePageNumber());
+                    SwitchNetwork(5).then(() => {
+                      setThirdMessage(true);
+                    });
                   }
-                } else if (receipt == 1) {
-                  //send stable coin
-                  setVerifying(2);
-                  toast.update(id, {
-                    render: "Address Verified!",
-                    type: "success",
-                    isLoading: false,
-                    autoClose: 1000,
-                  });
-                  const value = stableCoinAmount;
-                  const number = await web3.utils.toBN(value * 10 ** 18);
-                  console.log("value: ", number);
-  
-                  setSecondMessage(true);
-                  dispatch(increasePageNumber());
-                  SwitchNetwork(5).then(() => {
-                    setThirdMessage(true);
-                  });
-                }
-              });
-          }, 10000*(i+1));
+                });
+          }, 10000 * (i + 1));
         }
       });
   };

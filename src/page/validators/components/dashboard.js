@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Web3 from "web3";
 import contractAddress from "../../../addresses/contractAddress.json";
 import stableTokenPool from "../../../artifacts/stableCoinPool.json";
-import liquidStaking from "../../../artifacts/liquidStaking.json";
+import evmosLiquidStaking from "../../../artifacts/liquidStaking.json";
 import { useState } from "react";
 import { useEffect } from "react";
 import { BoldText } from "../../../styles/styledComponents/boldText";
@@ -94,8 +94,8 @@ const stableTokenPoolContract = new goerliWeb3.eth.Contract(
   stableTokenPool.output.abi,
   contractAddress.stableCoinPool
 );
-const liquidStakingContract = new web3.eth.Contract(
-  liquidStaking.output.abi,
+const evmosLiquidStakingContract = new web3.eth.Contract(
+  evmosLiquidStaking.output.abi,
   contractAddress.evmosLiquidStaking
 );
 
@@ -119,8 +119,8 @@ const Dashboard = () => {
   //     const getAccount = await web3.eth.getAccounts();
   //     const account = getAccount[0];
   //     console.log(account);
-  //     const staked = await liquidStakingContract.methods.balanceOf(account).call();
-  //     const retrieved = await liquidStakingContract.methods.unstaked(account).call();
+  //     const staked = await evmosLiquidStakingContract.methods.balanceOf(account).call();
+  //     const retrieved = await evmosLiquidStakingContract.methods.unstaked(account).call();
   //     console.log("staked: ", staked-retrieved);
   // }
 

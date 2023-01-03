@@ -6,9 +6,20 @@ import { Button } from "../../../styles/styledComponents/button";
 import { LightText } from "../../../styles/styledComponents/lightText";
 import Web3 from "web3";
 import address from "../../../addresses/contractAddress.json";
-import liquidStaking from "../../../artifacts/liquidStaking.json";
-import rewardToken from "../../../artifacts/rewardToken.json";
+import networkId from "../../../network/networkId.json";
 import { useNavigate } from "react-router-dom";
+
+import evmosLiquidStaking from "../../../artifacts/liquidStaking.json";
+import evmosRewardToken from "../../../artifacts/rewardToken.json";
+
+import { useSelector } from "react-redux";
+import {
+  selectNetworkId,
+  selectNetworkName,
+  selectTokenName,
+} from "../../../redux/reducers/networkReducer";
+import GetTokenPrice from "../../functions/fetchTokenPrice";
+import GetAddressAndContract from "../../functions/getAddressAndContract";
 
 const LeverageWrapper = styled.div`
   margin-top: 5vh;
@@ -55,18 +66,16 @@ const UndelegateButton = styled(Button)`
   width: 100%;
 `;
 
+// address and contracts
 const web3 = new Web3(window.ethereum);
-const liquidStakingAddress = address.evmosLiquidStaking;
-const liquidStakingContract = new web3.eth.Contract(
-  liquidStaking.output.abi,
-  liquidStakingAddress
-);
-const rewardTokenAddress = address.rewardToken;
-const rewardTokenContract = new web3.eth.Contract(
-  rewardToken.output.abi,
-  rewardTokenAddress
-);
+const [
+  liquidStakingAddress,
+  liquidStakingContract,
+  rewardTokenAddress,
+  rewardTokenContract,
+] = GetAddressAndContract();
 
+console.log(liquidStakingContract);
 const ClaimReward = ({ token, getAmount }) => {
   const [leveraged, setLeveraged] = useState(true);
   const [leverage, setLeverage] = useState(2);
@@ -76,6 +85,13 @@ const ClaimReward = ({ token, getAmount }) => {
   const [ethBalance, setEthBalance] = useState(null);
   const [stageLevel, setStageLevel] = useState(0);
   const [evmosPrice, setEvmosPrice] = useState(0);
+  // const [liquidStakingAddress, setLiquidStakingAddress] = useState(null);
+  // const [rewardTokenAddress, setRewardTokenAddress] = useState();
+  // const [liquidStakingContract, setLiquidStakingContract] = useState(null);
+  // const [rewardTokenContract, setRewardTokenContract] = useState();
+
+  const networkIdRedux = useSelector(selectNetworkId);
+  const tokenNameRedux = useSelector(selectTokenName);
 
   let navigate = useNavigate();
   const routeStake = () => {
@@ -113,32 +129,14 @@ const ClaimReward = ({ token, getAmount }) => {
     setRewardAmount(gReward / 10 ** 18);
     // console.log("staked amount: ", gStaked);
   };
-
-  const getEvmosPrice = async () => {
-    const APIKEY = process.env.REACT_APP_APIKEY;
-    const baseURL = "https://api.covalenthq.com/v1";
-    const blockchainChainId = "9001";
-    const demoAddress = "0x3abc249dd82Df7eD790509Fba0cC22498C92cCFc";
-
-    async function getWalletBalance(chainId, address) {
-      const url = new URL(
-        `${baseURL}/${chainId}/address/${address}/balances_v2/?key=${APIKEY}`
-      );
-      const response = await fetch(url);
-      const result = await response.json();
-      const data = result.data;
-      const evmos_price = Math.round(data.items[0].quote_rate * 100) / 100;
-      console.log(evmos_price);
-      setEvmosPrice(evmos_price);
-      return data;
-    }
-
-    const data = await getWalletBalance(blockchainChainId, demoAddress);
-    console.log(data);
+  const fetchTokenPrice = async () => {
+    const price = await GetTokenPrice(tokenNameRedux.toUpperCase());
+    setEvmosPrice(price);
   };
+
   useEffect(() => {
     getReward();
-    getEvmosPrice();
+    fetchTokenPrice();
   }, []);
 
   return (
@@ -148,9 +146,13 @@ const ClaimReward = ({ token, getAmount }) => {
       <StakeStatusWrapper>
         <StakeStatusText>
           <YouStaked>Claimable</YouStaked>
-          <Price>1Evmos ≈ ${evmosPrice}</Price>
+          <Price>
+            1{tokenNameRedux} ≈ ${evmosPrice}
+          </Price>
         </StakeStatusText>
-        <StakeAmountText>{rewardAmount} EVMOS</StakeAmountText>
+        <StakeAmountText>
+          {rewardAmount} {tokenNameRedux}
+        </StakeAmountText>
       </StakeStatusWrapper>
       <UndelegateButton
         onClick={() => {

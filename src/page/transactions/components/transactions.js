@@ -6,8 +6,8 @@ import { Button } from "../../../styles/styledComponents/button";
 import { LightText } from "../../../styles/styledComponents/lightText";
 import Web3 from "web3";
 import address from "../../../addresses/contractAddress.json";
-import liquidStaking from "../../../artifacts/liquidStaking.json";
-import rewardToken from "../../../artifacts/rewardToken.json";
+import evmosLiquidStaking from "../../../artifacts/liquidStaking.json";
+import evmosRewardToken from "../../../artifacts/rewardToken.json";
 import { useNavigate } from "react-router-dom";
 import Pagination from "./pagination";
 

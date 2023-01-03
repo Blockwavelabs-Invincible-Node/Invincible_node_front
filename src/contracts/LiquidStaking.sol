@@ -3,7 +3,7 @@ pragma solidity ^0.8;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract LiquidStaking is ReentrancyGuard {
+contract evmosLiquidStaking is ReentrancyGuard {
     // Reward로 지급 받는 토큰 type
     IERC20 public immutable reToken;
 
@@ -65,8 +65,8 @@ contract LiquidStaking is ReentrancyGuard {
     event UpdateRequest(string indexed validatorAddress);
 
     // validatorOwner = 0x3abc249dd82Df7eD790509Fba0cC22498C92cCFc
-    // rewardToken = 0x89a7D248d7520387963F5d164De9D8a3A77A4200
-    // liquidStaking = 0xAd6c553BCe3079b4Dc52689fbfD4a2e72F1F3158
+    // evmosRewardToken = 0x89a7D248d7520387963F5d164De9D8a3A77A4200
+    // evmosLiquidStaking = 0xAd6c553BCe3079b4Dc52689fbfD4a2e72F1F3158
     // unbondingtime = 604800
 
     // 유저의 출금 요청

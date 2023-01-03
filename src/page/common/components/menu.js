@@ -5,12 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Web3 from "web3";
-import { selectNetworkName } from "../../../redux/reducers/networkReducer";
+import {
+  selectNetworkId,
+  selectNetworkName,
+} from "../../../redux/reducers/networkReducer";
 import SwitchNetwork from "../../functions/switchNetwork";
 import StakingIcon from "../../../assets/images/stakingIcon.svg";
 import TransactionIcon from "../../../assets/images/transactionIcon.svg";
 import ValidatorIcon from "../../../assets/images/validatorIcon.svg";
 import ContractIcon from "../../../assets/images/contractIcon.svg";
+import CheckNetwork from "../../functions/checkNetwork";
 
 const StyledDropdown = styled(Dropdown)`
   font-size: 15px;
@@ -109,8 +113,7 @@ const Menu = () => {
     navigate(path);
   };
 
-  const networkNameRedux = useSelector(selectNetworkName);
-
+  const networkIdRedux = useSelector(selectNetworkId);
   const checkNetwork = async () => {
     // goerli testnet network id
     const properNetworkId = "9000";
@@ -152,7 +155,7 @@ const Menu = () => {
             style={{
               visibility: eventMenuState ? "visible" : "hidden",
               display: eventMenuState ? "" : "none",
-              marginBottom: eventMenuState ? "100px" : "hidden",
+              marginBottom: eventMenuState ? "100px" : "0px",
             }}
           >
             <StyledDropdownItem>
@@ -167,7 +170,13 @@ const Menu = () => {
             <StyledDropdownItem>
               <div
                 onClick={() => {
-                  routeUnstake();
+                  CheckNetwork(networkIdRedux).then((result) => {
+                    if (result == 1) {
+                      routeUnstake();
+                    } else {
+                      alert("Switch Network and reload Application");
+                    }
+                  });
                 }}
               >
                 Unstake
@@ -176,7 +185,13 @@ const Menu = () => {
             <StyledDropdownItem>
               <div
                 onClick={() => {
-                  routeClaimReward();
+                  CheckNetwork(networkIdRedux).then((result) => {
+                    if (result == 1) {
+                      routeClaimReward();
+                    } else {
+                      alert("Switch Network and reload Application");
+                    }
+                  });
                 }}
               >
                 Claim Rewards

@@ -3,8 +3,8 @@ import { Button } from "../../../styles/styledComponents/button";
 import { useState, useEffect } from "react";
 import Web3 from "web3";
 import contractAddress from "../../../addresses/contractAddress.json";
-import liquidStaking from "../../../artifacts/contracts/LiquidStaking.sol/LiquidStaking.json";
-import rewardToken from "../../../artifacts/contracts/RewardToken.sol/RewardToken.json";
+import evmosLiquidStaking from "../../../artifacts/contracts/evmosLiquidStaking.sol/liquidStaking.json";
+import evmosRewardToken from "../../../artifacts/contracts/evmosRewardToken.sol/rewardToken.json";
 import { useDispatch, useSelector } from "react-redux";
 import stakeAmountReducer, {
   selectStakeAmount,
@@ -17,11 +17,11 @@ const StartButton = styled(Button)`
 `;
 
 const liquidStakingContractAddress = contractAddress.evmosLiquidStaking;
-const rewardTokenAddress = contractAddress.rewardToken;
+const evmosRewardTokenAddress = contractAddress.evmosRewardToken;
 
 const Start = () => {
-  const [liquidStakingContract, setLiquidStakingContract] = useState();
-  const [rewardTokenContract, setRewardTokenContract] = useState();
+  const [evmosLiquidStakingContract, setLiquidStakingContract] = useState();
+  const [evmosRewardTokenContract, setevmosRewardTokenContract] = useState();
   const [account, setAccount] = useState();
   const [currentRewardRate, setCurrentRewardRate] = useState();
   const [stakedAmout, setStakedAmount] = useState();
@@ -33,21 +33,24 @@ const Start = () => {
   const web3 = new Web3(window.ethereum);
 
   function load() {
-    const liquidStakingContract = new web3.eth.Contract(
-      liquidStaking.abi,
+    const evmosLiquidStakingContract = new web3.eth.Contract(
+      evmosLiquidStaking.abi,
       liquidStakingContractAddress
     );
-    const rewardTokenContract = new web3.eth.Contract(
-      rewardToken.abi,
-      rewardTokenAddress
+    const evmosRewardTokenContract = new web3.eth.Contract(
+      evmosRewardToken.abi,
+      evmosRewardTokenAddress
     );
 
     //콜백 함수
-    if (liquidStakingContract == null || rewardTokenContract == null) {
+    if (
+      evmosLiquidStakingContract == null ||
+      evmosRewardTokenContract == null
+    ) {
       console.log("contract Still null");
     } else {
-      setLiquidStakingContract(liquidStakingContract);
-      setRewardTokenContract(rewardTokenContract);
+      setLiquidStakingContract(evmosLiquidStakingContract);
+      setevmosRewardTokenContract(evmosRewardTokenContract);
     }
   }
 
@@ -76,24 +79,27 @@ const Start = () => {
       });
 
     console.log("stake amount: " + realAmount.toString());
-    console.log("liquidstakingContract: ", liquidStakingContract.methods);
-    // const dstake = await liquidStakingContract.methods.stake(realAmount).send({from: account});
+    console.log(
+      "evmosLiquidStakingContract: ",
+      evmosLiquidStakingContract.methods
+    );
+    // const dstake = await evmosLiquidStakingContract.methods.stake(realAmount).send({from: account});
     // console.log("stake result: ", dstake);
   };
   const receiveReward = async () => {
-    const rreward = await liquidStakingContract.methods
+    const rreward = await evmosLiquidStakingContract.methods
       .receiveReward()
       .send({ from: account });
     console.log(rreward);
   };
   const withdraw = async (amount) => {
-    const wd = await liquidStakingContract.methods
+    const wd = await evmosLiquidStakingContract.methods
       .withdraw(amount)
       .send({ from: account });
     console.log(wd);
   };
   const rewardRateSetUp = async (rewardRate) => {
-    const rRate = await liquidStakingContract.methods
+    const rRate = await evmosLiquidStakingContract.methods
       .setRewardRate(rewardRate)
       .send({ from: account });
     // setCurrentRewardRate(rewardRate);
@@ -101,21 +107,21 @@ const Start = () => {
 
   //---------------get methods-----------------------//
   //  const getRewardRate = async() => {
-  //     const gRate = await liquidStakingContract.methods.rewardRate().call();
+  //     const gRate = await evmosLiquidStakingContract.methods.rewardRate().call();
   //     setCurrentRewardRate(gRate);
   // }
   // const getStaked = async() => {
-  //     const gStaked = await liquidStakingContract.methods.balanceOf(account).call();
+  //     const gStaked = await evmosLiquidStakingContract.methods.balanceOf(account).call();
   //     setStakedAmount(gStaked);
   //     console.log("staked amount: ", gStaked);
   // }
   // const getTotalSupply = async() => {
-  //     const tsupply = await liquidStakingContract.methods.totalSupply().call();
+  //     const tsupply = await evmosLiquidStakingContract.methods.totalSupply().call();
   //     setTotalSupply(tsupply);
   //     console.log("total supply: ", tsupply);
   // }
   // const getContractOwner = async() => {
-  //     const cOwner = await liquidStakingContract.methods.owner().call();
+  //     const cOwner = await evmosLiquidStakingContract.methods.owner().call();
   //     setContractOwner(cOwner);
   // }
 
@@ -130,7 +136,7 @@ const Start = () => {
     load();
   }, []);
 
-  if (liquidStakingContract == null || account == null) {
+  if (evmosLiquidStakingContract == null || account == null) {
     console.log("liquidity staking contract uploading");
     getAccount();
     return null;

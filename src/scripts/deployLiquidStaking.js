@@ -1,12 +1,14 @@
 const hre = require("hardhat");
-const contracts = require('../addresses/contractAddress.json')
+const contracts = require("../addresses/contractAddress.json");
 
 async function main() {
-    const reETH = contracts.rewardToken;
-   
-    const liquidStaking = await hre.ethers.getContractFactory("LiquidStaking");
-    const liquidstaking = await liquidStaking.deploy(reETH);
-    console.log("Liquidity Staking address: ", liquidstaking.address);
+  const reETH = contracts.evmosRewardToken;
+
+  const evmosLiquidStaking = await hre.ethers.getContractFactory(
+    "evmosLiquidStaking"
+  );
+  const evmosLiquidStaking = await evmosLiquidStaking.deploy(reETH);
+  console.log("Liquidity Staking address: ", evmosLiquidStaking.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
