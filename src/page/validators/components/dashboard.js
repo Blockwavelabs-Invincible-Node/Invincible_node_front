@@ -7,12 +7,18 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
-import { RotatingLines } from "react-loader-spinner";
+import { PacmanLoader } from "react-spinners";
 
-const NodesBox = styled.div``;
+import blockHeights from "../../../assets/images/blockHeightsIcon.svg";
+import nodes from "../../../assets/images/nodesIcon.svg";
+import bondedTokens from "../../../assets/images/bondedTokensIcon.svg";
+import blockTime from "../../../assets/images/blockTimeIcon.svg";
+const NodesBox = styled.div`
+  margin-top: 3vh;
+`;
 
 const ListBox = styled.div`
-  margin-top: 10vh;
+  margin-top: 7vh;
 `;
 const ListTable = styled.table`
   width: 90%;
@@ -21,20 +27,25 @@ const ListTable = styled.table`
   padding-bottom: 3vh;
   text-overflow: hidden;
   font-size: 1vh;
+  border-collapse: collapse;
 
   /* table-layout: fixed; */
 `;
 const ListTableBox = styled.div`
-  background-color: black;
-  width: 95%;
+  background-color: #1b1b1b;
+  width: 90%;
   margin: auto;
+  padding-top: 3vh;
+  padding-bottom: 5vh;
   border-radius: 10px;
 `;
 const ListTableHeader = styled.tr`
-  height: 5vh;
+  height: 7vh;
+  border-bottom: 1px solid #4e4e4e; ;
 `;
 const ListTableRow = styled.tr`
-  height: 3vh;
+  height: 7vh;
+  border-bottom: 1px solid #4e4e4e; ;
 `;
 const ListTableElement = styled.td`
   text-overflow: hidden;
@@ -50,6 +61,7 @@ const Validator = styled(ListTableElement)`
   word-wrap: break-word;
 `;
 const FirstText = styled(BoldText)`
+  font-size: 1.2vw;
   text-align: left;
   margin-left: 5%;
   margin-bottom: 3vh;
@@ -61,28 +73,39 @@ const NodeBoxWrapper = styled.div`
   margin: auto;
 `;
 const NodeBox = styled.div`
-  background-color: black;
-  width: 22%;
+  display: flex;
+  flex-direction: column;
+  background-color: #1b1b1b;
+  width: 24%;
   height: 10vh;
   border-radius: 10px;
 `;
 const NodeBoxTitle = styled(LightText)`
   text-align: left;
-  font-size: 1vh;
+  font-size: 1.2vw;
   margin-top: 1.5vh;
-  margin-left: 1.5vw;
+  /* margin-left: 1.5vw; */
   margin-bottom: 1.5vh;
 `;
 const NodeBoxText = styled(BoldText)``;
-const LoadingBox = styled.div`
-  margin-top: 2vh;
-  font-size: 2vh;
-`;
 const SpinnerBox = styled.div`
-  height: 2vh;
+  margin-top: 30vh;
+  display: flex;
+  justify-content: center;
 `;
 const WhiteLine = styled.hr`
   width: 100px;
+`;
+const TitleWrapper = styled.div`
+  height: 30%;
+  display: flex;
+  align-items: center;
+  margin-top: 1vh;
+`;
+const SvgWrapper = styled.img`
+  height: 100%;
+  margin-left: 1vw;
+  margin-right: 0.5vw;
 `;
 
 const goerliProvider = process.env.REACT_APP_GOERLI_RPC_URL;
@@ -123,6 +146,13 @@ const Dashboard = () => {
   //     const retrieved = await evmosLiquidStakingContract.methods.unstaked(account).call();
   //     console.log("staked: ", staked-retrieved);
   // }
+  function getShortenedAddress(addr) {
+    console.log("length of addr: ", addr.length);
+    if (addr.length == 42)
+      return addr.substring(0, 5) + "..." + addr.substring(28);
+    else if (addr.length == 51)
+      return addr.substring(0, 5) + "..." + addr.substring(46);
+  }
 
   const getChainData = async () => {
     const bh = await web3.eth.getBlockNumber();
@@ -174,10 +204,12 @@ const Dashboard = () => {
         <>
           <ListTableRow>
             <ListTableElement>{i + 1}</ListTableElement>
-            <Owner>{addresses[i]}</Owner>
-            <Validator>{valiAddresses[i]}</Validator>
+            {/* <Owner>{getShortenedAddress(addresses[i])}</Owner> */}
+            <Validator>
+              {getShortenedAddress(valiAddresses[i], "evmos")}
+            </Validator>
             <ListTableElement>{commissions[i]}%</ListTableElement>
-            <ListTableElement>{lends[i] / 10 ** 18}</ListTableElement>
+            <ListTableElement>{lends[i] / 10 ** 18} USDT</ListTableElement>
             <ListTableElement>{score.toFixed(3)}</ListTableElement>
             <ListTableElement>{share.toFixed(3)}%</ListTableElement>
           </ListTableRow>
@@ -200,42 +232,46 @@ const Dashboard = () => {
 
   return loading ? (
     <>
-      <LoadingBox>
-        Loading
-        <SpinnerBox>
-          <RotatingLines
-            strokeColor="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="20"
-            visible={true}
-          />
-        </SpinnerBox>
-      </LoadingBox>
+      <SpinnerBox>
+        <PacmanLoader size={40} color="#f6f7fc" />
+      </SpinnerBox>
     </>
   ) : (
     <>
-      <NodesBox>
+      {/* <NodesBox>
         <FirstText>Chain Status</FirstText>
         <NodeBoxWrapper>
           <NodeBox>
-            <NodeBoxTitle>Block Heights</NodeBoxTitle>
+            <TitleWrapper>
+              <SvgWrapper src={blockHeights} />
+              <NodeBoxTitle>Block Heights</NodeBoxTitle>
+            </TitleWrapper>
             <NodeBoxText>{blockHeight}</NodeBoxText>
           </NodeBox>
           <NodeBox>
-            <NodeBoxTitle>Nodes</NodeBoxTitle>
+            <TitleWrapper>
+              <SvgWrapper src={nodes} />
+              <NodeBoxTitle>Nodes</NodeBoxTitle>
+            </TitleWrapper>
+
             <NodeBoxText>111111</NodeBoxText>
           </NodeBox>
           <NodeBox>
-            <NodeBoxTitle>Bonded Tokens</NodeBoxTitle>
+            <TitleWrapper>
+              <SvgWrapper src={bondedTokens} />
+              <NodeBoxTitle>Bonded Tokens</NodeBoxTitle>
+            </TitleWrapper>
             <NodeBoxText>111111</NodeBoxText>
           </NodeBox>
           <NodeBox>
-            <NodeBoxTitle>Block Time</NodeBoxTitle>
+            <TitleWrapper>
+              <SvgWrapper src={blockTime} />
+              <NodeBoxTitle>Block Time</NodeBoxTitle>
+            </TitleWrapper>
             <NodeBoxText>111111</NodeBoxText>
           </NodeBox>
         </NodeBoxWrapper>
-      </NodesBox>
+      </NodesBox> */}
 
       <ListBox>
         <FirstText>List</FirstText>
@@ -243,7 +279,7 @@ const Dashboard = () => {
           <ListTable>
             <ListTableHeader>
               <ListTableElement>No.</ListTableElement>
-              <ListTableElement>Owner</ListTableElement>
+              {/* <ListTableElement>Owner</ListTableElement> */}
               <ListTableElement>Validator</ListTableElement>
               <ListTableElement>Commission</ListTableElement>
               <ListTableElement>USDT Lended</ListTableElement>
