@@ -11,6 +11,16 @@
             "internalType": "address",
             "name": "_liquidStakingOwner",
             "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "_tokenFullName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "_tokenName",
+            "type": "string"
           }
         ],
         "stateMutability": "nonpayable",
@@ -417,11 +427,11 @@
       ]
     },
     "contracts/reward.sol": {
-      "keccak256": "0xc6bb12a7ed6201b7683f5eb34aba7a64bdd78e8da8c024fd76852465de5ad52e",
+      "keccak256": "0xc708fed302cc742466af3a4e9522e2469cc982d087393b4780cea4c35fe64ceb",
       "license": "MIT",
       "urls": [
-        "bzz-raw://5a19cc38eee71be229cc989fb35b29a46cb3c879409125e560203082cfa1d69b",
-        "dweb:/ipfs/QmZj9JUPKSqa1hg957mVHFzSn55iZ89bFok7KpGSnQA1m9"
+        "bzz-raw://b5e6b9fef147ea7b6409ecfcc837863c5519d84e70edb0e56705de961a59e645",
+        "dweb:/ipfs/QmbBPeF7S3ToGBmbUa7NEegCxeYrTQEwMVF2B4cF3rUbvj"
       ]
     }
   },
