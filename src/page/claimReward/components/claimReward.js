@@ -69,13 +69,21 @@ const UndelegateButton = styled(Button)`
 // address and contracts
 const web3 = new Web3(window.ethereum);
 const [
-  liquidStakingAddress,
-  liquidStakingContract,
-  rewardTokenAddress,
-  rewardTokenContract,
+  evmosLiquidStakingAddress,
+  evmosLiquidStakingContract,
+  evmosRewardTokenAddress,
+  evmosRewardTokenContract,
+  kavaLiquidStakingAddress,
+  kavaLiquidStakingContract,
+  kavaRewardTokenAddress,
+  kavaRewardTokenContract,
 ] = GetAddressAndContract();
 
-console.log(liquidStakingContract);
+let liquidStakingContract;
+let rewardTokenContract;
+let liquidStakingAddress;
+let rewardTokenAddress;
+
 const ClaimReward = ({ token, getAmount }) => {
   const [leveraged, setLeveraged] = useState(true);
   const [leverage, setLeverage] = useState(2);
@@ -84,7 +92,7 @@ const ClaimReward = ({ token, getAmount }) => {
   const [rewardAmount, setRewardAmount] = useState();
   const [ethBalance, setEthBalance] = useState(null);
   const [stageLevel, setStageLevel] = useState(0);
-  const [evmosPrice, setEvmosPrice] = useState(0);
+  const [tokenPrice, setTokenPrice] = useState(0);
   // const [liquidStakingAddress, setLiquidStakingAddress] = useState(null);
   // const [rewardTokenAddress, setRewardTokenAddress] = useState();
   // const [liquidStakingContract, setLiquidStakingContract] = useState(null);
@@ -99,7 +107,7 @@ const ClaimReward = ({ token, getAmount }) => {
     navigate(path);
   };
 
-  const claimRewards = () => {
+  const claimRewards = (liquidStakingContract) => {
     const doClaim = async () => {
       const getAccount = await web3.eth.getAccounts();
       const account = getAccount[0];
@@ -122,7 +130,7 @@ const ClaimReward = ({ token, getAmount }) => {
     }
   };
 
-  const getReward = async () => {
+  const getReward = async (liquidStakingContract) => {
     const getAccount = await web3.eth.getAccounts();
     const account = getAccount[0];
     const gReward = await liquidStakingContract.methods.rewards(account).call();
@@ -131,11 +139,22 @@ const ClaimReward = ({ token, getAmount }) => {
   };
   const fetchTokenPrice = async () => {
     const price = await GetTokenPrice(tokenNameRedux.toUpperCase());
-    setEvmosPrice(price);
+    setTokenPrice(price);
   };
 
   useEffect(() => {
-    getReward();
+    if (networkIdRedux == networkId.evmos) {
+      liquidStakingContract = evmosLiquidStakingContract;
+      liquidStakingAddress = evmosLiquidStakingAddress;
+      rewardTokenContract = evmosRewardTokenContract;
+      rewardTokenAddress = evmosRewardTokenAddress;
+    } else if (networkIdRedux == networkId.kava) {
+      liquidStakingContract = kavaLiquidStakingContract;
+      liquidStakingAddress = kavaLiquidStakingAddress;
+      rewardTokenContract = kavaRewardTokenContract;
+      rewardTokenAddress = kavaRewardTokenAddress;
+    }
+    getReward(liquidStakingContract);
     fetchTokenPrice();
   }, []);
 
@@ -147,7 +166,7 @@ const ClaimReward = ({ token, getAmount }) => {
         <StakeStatusText>
           <YouStaked>Claimable</YouStaked>
           <Price>
-            1{tokenNameRedux} ≈ ${evmosPrice}
+            1{tokenNameRedux} ≈ ${tokenPrice}
           </Price>
         </StakeStatusText>
         <StakeAmountText>
@@ -156,7 +175,7 @@ const ClaimReward = ({ token, getAmount }) => {
       </StakeStatusWrapper>
       <UndelegateButton
         onClick={() => {
-          claimRewards();
+          claimRewards(liquidStakingContract);
         }}
       >
         Claim Rewards

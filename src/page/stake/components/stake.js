@@ -264,7 +264,6 @@ const Stake = ({
   const [udenom, setUdenom] = useState(options[0].udenom);
   const [label, setLabel] = useState(options[0].label);
   const [stageLevel, setStageLevel] = useState(0);
-  const [tokenPrice, setTokenPrice] = useState(0);
 
   const tokenNameRedux = useSelector(selectTokenName);
   const stakeAmountRedux = useSelector(selectStakeAmount);
