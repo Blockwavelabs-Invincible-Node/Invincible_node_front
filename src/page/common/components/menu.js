@@ -139,6 +139,7 @@ const Menu = () => {
                 console.log(eventMenuState);
               } else {
                 setEventMenuState(true);
+                // setValidatorMenuState(false);
                 console.log(eventMenuState);
               }
             }}
@@ -184,6 +185,7 @@ const Menu = () => {
           </div>
         </StyledDropdownMenu>
       </StyledDropdown>
+
       <StyledDropdownButton
         variant="success"
         id="dropdown-basic"
@@ -272,6 +274,7 @@ const Menu = () => {
                 setValidatorMenuState(false);
               } else {
                 setValidatorMenuState(true);
+                // setEventMenuState(false);
               }
             }}
           >
