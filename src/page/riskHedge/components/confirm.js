@@ -196,9 +196,10 @@ const Confirm = ({ pressStake, token }) => {
 
   const stake = () => {
     //stake redux 값 변경
-    stakeDispatch(
-      setStakeAmount((stakeAmountRedux * (100 - hedgeRatioRedux)) / 100)
-    );
+    // stakeDispatch(
+    //   setStakeAmount((stakeAmountRedux * (100 - hedgeRatioRedux)) / 100)
+    // );
+    const amount = (stakeAmountRedux * (100 - hedgeRatioRedux)) / 100;
     const doStake = async (amount) => {
       let realAmount = amount * web3.utils.toBN(10 ** 18);
       const getAccount = await web3.eth.getAccounts();
@@ -229,15 +230,16 @@ const Confirm = ({ pressStake, token }) => {
             // change network (network id)
             // SwitchNetwork(5);
             // console.log("Network change");
-            sendStableCoin();
+            sendStableCoin(hedgeAmountRedux);
           }
           pressStake();
         });
     };
-    doStake(stakeAmountRedux);
+    doStake(amount);
   };
 
   const sendStableCoin = async (amount) => {
+    console.log("amount: ", amount);
     const getAccount = await web3.eth.getAccounts();
     const account = getAccount[0];
     const testUSDTContract = new web3.eth.Contract(
