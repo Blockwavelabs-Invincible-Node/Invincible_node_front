@@ -18,6 +18,8 @@ import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
 import { setStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
 import { RotatingLines } from "react-loader-spinner";
 import { selectHedgeRatio } from "../../../redux/reducers/hedgeRatioReducer";
+import { selectNetworkId } from "../../../redux/reducers/networkReducer";
+import networkId from "../../../network/networkId.json";
 
 const LeverageWrapper = styled.div`
   margin-top: 5vh;
@@ -190,11 +192,13 @@ const Confirm = ({ pressStake, token }) => {
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const hedgeRatioRedux = useSelector(selectHedgeRatio);
   const stakeDispatch = useDispatch();
+  const networkIdRedux = useSelector(selectNetworkId);
 
   const stake = () => {
     //stake redux 값 변경
     stakeDispatch(
-      setStakeAmount((stakeAmountRedux * (100 - hedgeRatioRedux)) / 100));
+      setStakeAmount((stakeAmountRedux * (100 - hedgeRatioRedux)) / 100)
+    );
     const doStake = async (amount) => {
       let realAmount = amount * web3.utils.toBN(10 ** 18);
       const getAccount = await web3.eth.getAccounts();
@@ -202,10 +206,17 @@ const Confirm = ({ pressStake, token }) => {
       console.log("account: ", account);
       // data = hex encoded
       console.log("hedge amount: ", hedgeAmountRedux);
+      let liquidStaking;
+      // get network Id and stake
+      if (networkIdRedux == networkId.evmos) {
+        liquidStaking = address.evmosLiquidStaking;
+      } else if (networkIdRedux == networkId.kava) {
+        liquidStaking = address.kavaLiquidStaking;
+      }
       web3.eth
         .sendTransaction({
           from: account,
-          to: address.evmosLiquidStaking,
+          to: liquidStaking,
           value: realAmount,
           data:
             hedgeAmountRedux != 0

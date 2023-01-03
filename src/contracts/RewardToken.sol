@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract evmosRewardToken is ERC20 {
     address liquidStakingOwner;
-    constructor(address _liquidStakingOwner) ERC20("Reward Evmos", "inEVMOS") {
+    constructor(address _liquidStakingOwner, string memory _tokenName) ERC20("Reward " + _tokenName, "in" + _tokenName) {
         liquidStakingOwner = _liquidStakingOwner;
     }
 

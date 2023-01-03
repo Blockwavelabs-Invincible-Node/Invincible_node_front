@@ -16,6 +16,7 @@ import {
   selectTokenName,
 } from "../../../redux/reducers/networkReducer";
 import GetTokenPrice from "../../functions/fetchTokenPrice";
+import networkId from "../../../network/networkId.json";
 
 const LeverageWrapper = styled.div`
   margin-top: 5vh;
@@ -131,12 +132,21 @@ const [
   evmosLiquidStakingContract,
   evmosRewardTokenAddress,
   evmosRewardTokenContract,
+  kavaLiquidStakingAddress,
+  kavaLiquidStakingContract,
+  kavaRewardTokenAddress,
+  kavaRewardTokenContract,
 ] = GetAddressAndContract();
+
+let liquidStakingContract;
+let rewardTokenContract;
+let liquidStakingAddress;
+let rewardTokenAddress;
 
 const Unstake = () => {
   const [stakeAmount, setStakeAmount] = useState();
   const [stakedAmount, setStakedAmount] = useState();
-  const [evmosPrice, setEvmosPrice] = useState(0);
+  const [tokenPrice, setTokenPrice] = useState(0);
 
   let navigate = useNavigate();
   const routeStake = () => {
@@ -147,7 +157,11 @@ const Unstake = () => {
   const networkIdRedux = useSelector(selectNetworkId);
   console.log(networkIdRedux);
 
-  const unstake = (liquidStakingContract, rewardTokenContract) => {
+  const unstake = (
+    liquidStakingContract,
+    rewardTokenContract,
+    liquidStakingAddress
+  ) => {
     const doUnstake = async (amount) => {
       const getAccount = await web3.eth.getAccounts();
       const account = getAccount[0];
@@ -155,7 +169,7 @@ const Unstake = () => {
       const realAmount = web3.utils.toBN(amount * 10 ** 18);
       console.log("ra ", realAmount);
       const approve = await rewardTokenContract.methods
-        .approve(evmosLiquidStakingAddress, realAmount)
+        .approve(liquidStakingAddress, realAmount)
         .send({ from: account })
         .then(function (receipt) {
           console.log(receipt);
@@ -171,11 +185,15 @@ const Unstake = () => {
     };
     doUnstake(stakeAmount);
   };
-  const maxOnClick = () => {
-    setStakeAmount(stakedAmount ? stakedAmount : 0);
-  };
-  const handleStakeAmountChange = (event) => {
-    setStakeAmount(event.target.value);
+
+  const unstakeByNetwork = () => {
+    if (networkIdRedux == networkId.evmos) {
+      unstake(
+        evmosLiquidStakingContract,
+        evmosRewardTokenContract,
+        evmosLiquidStakingAddress
+      );
+    }
   };
   const getTotalStaked = async (liquidStakingContract) => {
     const getAccount = await web3.eth.getAccounts();
@@ -190,12 +208,31 @@ const Unstake = () => {
 
   const fetchTokenPrice = async () => {
     const price = await GetTokenPrice(tokenNameRedux.toUpperCase());
-    setEvmosPrice(price);
+    setTokenPrice(price);
   };
+
   useEffect(() => {
-    getTotalStaked();
+    if (networkIdRedux == networkId.evmos) {
+      liquidStakingContract = evmosLiquidStakingContract;
+      liquidStakingAddress = evmosLiquidStakingAddress;
+      rewardTokenContract = evmosRewardTokenContract;
+      rewardTokenAddress = evmosRewardTokenAddress;
+    } else if (networkIdRedux == networkId.kava) {
+      liquidStakingContract = kavaLiquidStakingContract;
+      liquidStakingAddress = kavaLiquidStakingAddress;
+      rewardTokenContract = kavaRewardTokenContract;
+      rewardTokenAddress = kavaRewardTokenAddress;
+    }
+    getTotalStaked(liquidStakingContract);
     fetchTokenPrice();
   }, []);
+
+  const maxOnClick = () => {
+    setStakeAmount(stakedAmount ? stakedAmount : 0);
+  };
+  const handleStakeAmountChange = (event) => {
+    setStakeAmount(event.target.value);
+  };
 
   return (
     <LeverageWrapper>
@@ -216,9 +253,13 @@ const Unstake = () => {
       <StakeStatusWrapper>
         <StakeStatusText>
           <YouStaked>You Staked</YouStaked>
-          <Price>1Evmos ≈ ${evmosPrice}</Price>
+          <Price>
+            1{tokenNameRedux} ≈ ${tokenPrice}
+          </Price>
         </StakeStatusText>
-        <StakeAmountText>{stakedAmount} EVMOS</StakeAmountText>
+        <StakeAmountText>
+          {stakedAmount} {tokenNameRedux}
+        </StakeAmountText>
       </StakeStatusWrapper>
       <UndelegateAmountWrapper>
         <AmountUndelegate>Amount to Undelegate</AmountUndelegate>
@@ -235,7 +276,7 @@ const Unstake = () => {
       </UndelegateAmountWrapper>
       <UndelegateButton
         onClick={() => {
-          unstake();
+          unstakeByNetwork();
         }}
       >
         UnStake
