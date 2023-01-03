@@ -4,7 +4,7 @@ import zeroImg from "../../../assets/images/zero.png";
 import oneImg from "../../../assets/images/one.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
-import { setStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
+
 import { setHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
@@ -26,6 +26,7 @@ import toggleOn from "../../../assets/images/toggleOn.svg";
 import toggleOff from "../../../assets/images/toggleOff.svg";
 import { Slider } from "@mui/material";
 import GetTokenPrice from "../../functions/fetchTokenPrice";
+import { setHedgeRatio } from "../../../redux/reducers/hedgeRatioReducer";
 
 const stage = [{ status: "setAmount" }, { status: "stableHedging" }];
 
@@ -239,7 +240,7 @@ const RiskHedge = ({
   const [isToggle, setIsToggle] = useState(true);
   const [toggleVal, setToggleVal] = useState(0, 60);
   const [tokenPrice, setTokenPrice] = useState(0);
-  const [swapRate, setSwapRate] = useState();
+  const [swapRate, setSwapRate] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
 
   const stakeAmountRedux = useSelector(selectStakeAmount);
@@ -266,6 +267,7 @@ const RiskHedge = ({
     setFrom(tempFrom.toFixed(decimals));
     const tempTo = (tempStake * volume * swapRate) / 100;
     setTo(tempTo.toFixed(decimals));
+    console.log("TO : ", to);
     const tempReceive = (tempStake * volume * swapRate) / 100;
     setReceive(tempReceive.toFixed(decimals));
     const tempStakes = (stakeAmountRedux * (100 - volume)) / 100;
@@ -418,10 +420,9 @@ const RiskHedge = ({
               const hedge = parseInt(
                 stakeAmountRedux * volume * tempSwapRate * 10 ** 16
               );
-              stakeDispatch(
-                setStakeAmount((stakeAmountRedux * (100 - volume)) / 100)
-              );
+
               hedgeDispatch(setHedgeAmount(hedge));
+              hedgeRatioDispatch(setHedgeRatio(volume));
             }}
           >
             Next
