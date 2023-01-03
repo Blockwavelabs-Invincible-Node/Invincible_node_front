@@ -75,8 +75,10 @@ const YouWillGet = styled(LightText)`
 
 
 const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
+  const hedgeRatioRedux = useSelector(selectHedgeRatio);
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const tokenNameRedux = useSelector(selectTokenName);
+  const tempSwapRate = 0.9;
 
   return (
     <>
@@ -86,7 +88,7 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
             {status == "success" ? "You staked" : "You will stake"}
           </YouWillStake>
           <EvmosInputWrapper>
-            <EvmosInput value={stakeAmountRedux} />
+            <EvmosInput value={(stakeAmountRedux * (100 - hedgeRatioRedux)) / 100} />
             <EvmosAmount>{tokenNameRedux}</EvmosAmount>
           </EvmosInputWrapper>
         </StakeWrapper>
@@ -95,7 +97,7 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
             {status == "success" ? "You can get" : "You will get"}
           </YouWillGet>
           <EvmosInputWrapper>
-            <EvmosInput value={stakeAmountRedux} />
+            <EvmosInput value={(stakeAmountRedux * (100 - hedgeRatioRedux)) / 100} />
             <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
           </EvmosInputWrapper>
         </GetWrapper>

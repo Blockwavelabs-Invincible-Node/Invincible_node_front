@@ -12,11 +12,12 @@ import HedgeInput from "../utils/hedgeInput";
 import SwitchNetwork from "../../functions/switchNetwork";
 import testUSDT from "../../../artifacts/testUSDT.json";
 import contractAddress from "../../../addresses/contractAddress.json";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
 import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
-
+import { setStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
 import { RotatingLines } from "react-loader-spinner";
+import { selectHedgeRatio } from "../../../redux/reducers/hedgeRatioReducer";
 
 const LeverageWrapper = styled.div`
   margin-top: 5vh;
@@ -187,8 +188,13 @@ const Confirm = ({ pressStake, token }) => {
   const [inProgress, setInProgress] = useState(false);
   const hedgeAmountRedux = useSelector(selectHedgeAmount);
   const stakeAmountRedux = useSelector(selectStakeAmount);
+  const hedgeRatioRedux = useSelector(selectHedgeRatio);
+  const stakeDispatch = useDispatch();
 
   const stake = () => {
+    //stake redux 값 변경
+    stakeDispatch(
+      setStakeAmount((stakeAmountRedux * (100 - hedgeRatioRedux)) / 100));
     const doStake = async (amount) => {
       let realAmount = amount * web3.utils.toBN(10 ** 18);
       const getAccount = await web3.eth.getAccounts();

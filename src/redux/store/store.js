@@ -7,11 +7,13 @@ import stakeAmountReducer from "../reducers/stakeAmountReducer";
 import connectMetamaskReducer from "../reducers/connectMetamaskReducer";
 import hedgeAmountReducer from "../reducers/hedgeAmountReducer";
 import networkReducer from "../reducers/networkReducer";
+import hedgeRatioReducer from "../reducers/hedgeRatioReducer";
 import modalPageNumberReducer from "../reducers/modalPageNumberReducer";
 import persistReducer from "redux-persist/es/persistReducer";
 import storage from "redux-persist/lib/storage";
 import persistStore from "redux-persist/es/persistStore";
 import validatorApplicationReducer from "../reducers/validatorApplicationReducer";
+
 
 const persistConfig = {
   key: "root",
@@ -26,6 +28,7 @@ const rootReducer = combineReducers({
   network: networkReducer,
   modalPageNumber: modalPageNumberReducer,
   validatorApplication: validatorApplicationReducer,
+  hedgeRatio: hedgeRatioReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
