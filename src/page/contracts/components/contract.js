@@ -7,8 +7,8 @@ import { BoldText } from "../../../styles/styledComponents/boldText";
 import { Button } from "../../../styles/styledComponents/button";
 import { LightText } from "../../../styles/styledComponents/lightText";
 import address from "../../../addresses/contractAddress.json";
-import liquidStaking from "../../../artifacts/liquidStaking.json";
-import rewardToken from "../../../artifacts/rewardToken.json";
+import evmosLiquidStaking from "../../../artifacts/liquidStaking.json";
+import evmosRewardToken from "../../../artifacts/rewardToken.json";
 import { useNavigate } from "react-router-dom";
 import { useTable } from "react-table";
 import contractAddress from "../../../addresses/contractAddress.json";
@@ -213,7 +213,7 @@ const TableElement = styled.td`
 
 const goerliWeb3 = new Web3(process.env.REACT_APP_GOERLI_RPC_URL);
 const liquidStakingContractAddress = contractAddress.evmosLiquidStaking;
-const rewardTokenContractAddress = contractAddress.rewardToken;
+const evmosRewardTokenContractAddress = contractAddress.evmosRewardToken;
 const stableCoinPoolContractAddress = contractAddress.stableCoinPool;
 const testUSDTAddress = contractAddress.testUSDT;
 const stableTokenPoolContract = new goerliWeb3.eth.Contract(

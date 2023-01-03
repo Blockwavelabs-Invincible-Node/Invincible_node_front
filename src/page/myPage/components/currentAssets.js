@@ -6,11 +6,11 @@ import { Wrapper } from "../../../styles/styledComponents/wrapper";
 import { React, useState, useEffect } from "react";
 import Web3 from "web3";
 // import contractAddress from "../../../addresses/contractAddress.json"
-// import liquidStaking from "../../../artifacts/contracts/LiquidStaking.sol/LiquidStaking.json";
-// import rewardToken from "../../../artifacts/contracts/RewardToken.sol/RewardToken.json";
+// import evmosLiquidStaking from "../../../artifacts/contracts/evmosLiquidStaking.sol/liquidStaking.json";
+// import evmosRewardToken from "../../../artifacts/contracts/evmosRewardToken.sol/rewardToken.json";
 
 // const liquidStakingContractAddress = contractAddress.evmosLiquidStaking;
-// const rewardTokenAddress = contractAddress.rewardToken;
+// const evmosRewardTokenAddress = contractAddress.evmosRewardToken;
 
 const AssetWrapper = styled.div`
   margin-bottom: 80px;
@@ -48,24 +48,24 @@ const ValueTextSmall = styled(BoldText)`
 const CurrentAssets = () => {
   const [totalStaked, setTotalStaked] = useState(0);
   const [ethBalance, setEthBalance] = useState(null);
-  const [liquidStakingContract, setLiquidStakingContract] = useState();
-  const [rewardTokenContract, setRewardTokenContract] = useState();
+  const [evmosLiquidStakingContract, setLiquidStakingContract] = useState();
+  const [evmosRewardTokenContract, setevmosRewardTokenContract] = useState();
   const [account, setAccount] = useState();
   const [accumulatedRewards, setAccumulatedRewards] = useState(0);
 
   const web3 = new Web3(window.ethereum);
 
   // function load() {
-  //     const liquidStakingContract = new web3.eth.Contract(liquidStaking.abi, liquidStakingContractAddress);
-  //     const rewardTokenContract = new web3.eth.Contract(rewardToken.abi, rewardTokenAddress);
+  //     const evmosLiquidStakingContract = new web3.eth.Contract(evmosLiquidStaking.abi, liquidStakingContractAddress);
+  //     const evmosRewardTokenContract = new web3.eth.Contract(evmosRewardToken.abi, evmosRewardTokenAddress);
 
   //     //콜백 함수
-  //     if (liquidStakingContract == null || rewardTokenContract == null) {
+  //     if (evmosLiquidStakingContract == null || evmosRewardTokenContract == null) {
   //         console.log("contract Still null");
   //     }
   //     else {
-  //         setLiquidStakingContract(liquidStakingContract);
-  //         setRewardTokenContract(rewardTokenContract);
+  //         setLiquidStakingContract(evmosLiquidStakingContract);
+  //         setevmosRewardTokenContract(evmosRewardTokenContract);
   //     }
   // }
 
@@ -94,7 +94,7 @@ const CurrentAssets = () => {
   };
 
   const getTotalStaked = async () => {
-    const gStaked = await liquidStakingContract.methods
+    const gStaked = await evmosLiquidStakingContract.methods
       .balanceOf(account)
       .call();
     const sliceStaked = gStaked / 10 ** 18;
@@ -107,7 +107,7 @@ const CurrentAssets = () => {
   //     load();
   // }, []);
 
-  if (account == null || liquidStakingContract == null) {
+  if (account == null || evmosLiquidStakingContract == null) {
     return (
       <AssetWrapper>
         <MyAssetText>My Asset</MyAssetText>

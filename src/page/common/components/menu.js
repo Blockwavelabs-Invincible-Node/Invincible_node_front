@@ -153,7 +153,7 @@ const Menu = () => {
             style={{
               visibility: eventMenuState ? "visible" : "hidden",
               display: eventMenuState ? "" : "none",
-              marginBottom: eventMenuState ? "100px" : "hidden",
+              marginBottom: eventMenuState ? "100px" : "0px",
             }}
           >
             <StyledDropdownItem>

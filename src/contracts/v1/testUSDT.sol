@@ -8,7 +8,7 @@ contract TestUSDT is ERC20 {
        _mint(msg.sender, 100000000000000000000);
     }
 
-    // liquidStaking 주인만 민팅이 가능하다
+    // evmosLiquidStaking 주인만 민팅이 가능하다
     modifier onlyLiquidStakingOwner(address _account) {
         require(msg.sender == _account, "not authorized");
         _;

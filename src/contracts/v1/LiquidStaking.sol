@@ -3,7 +3,7 @@ pragma solidity ^0.8;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol"; 
 
-contract LiquidStaking is ReentrancyGuard{
+contract evmosLiquidStaking is ReentrancyGuard{
     // Reward로 지급 받는 토큰 type
     IERC20 public immutable reETH;
 
