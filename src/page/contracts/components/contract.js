@@ -21,6 +21,7 @@ import toolTip, {
   tooltipClasses,
 } from "../../../assets/images/toolTip.svg";
 import { styled as mStyled } from "@mui/material/styles";
+import { PacmanLoader } from "react-spinners";
 
 import {
   selectNetworkName,
@@ -212,6 +213,12 @@ const TableElement = styled.td`
   }
 `;
 
+const SpinnerBox = styled.div`
+  margin-top: 30vh;
+  display: flex;
+  justify-content: center;
+`;
+
 const goerliWeb3 = new Web3(process.env.REACT_APP_GOERLI_RPC_URL);
 const liquidStakingContractAddress = contractAddress.evmosLiquidStaking;
 const rewardTokenContractAddress = contractAddress.rewardToken;
@@ -231,6 +238,7 @@ const liquidStakingContract = new web3.eth.Contract(
 
 const Contract = () => {
   const [balance, setBalance] = useState();
+  const [loading, setLoading] = useState(true);
 
   // Staked
   const [stTotalAddressNumber, setStTotalAddressNumber] = useState(0);
@@ -386,20 +394,31 @@ const Contract = () => {
   }, []);
 
   const initData = async () => {
-    // await stableCoinPoolRead();
-    // await getStakedData();
-    // await getUsdtData();
+    await stableCoinPoolRead();
+    await getStakedData();
+    await getUsdtData();
+    setLoading(false);
 
-    Promise.all([stableCoinPoolRead(), getStakedData(), getUsdtData()]);
+    // Promise.all([stableCoinPoolRead(), getStakedData(), getUsdtData()]);
   };
 
   function getShortenedAddress(addr) {
-    return addr.substring(0, 5) + "..." + addr.substring(25);
+    console.log("length of addr: ", addr.length);
+    if (addr.length == 42)
+      return addr.substring(0, 5) + "..." + addr.substring(28);
+    else if (addr.length == 51)
+      return addr.substring(0, 5) + "..." + addr.substring(46);
   }
 
   const tokenNameRedux = useSelector(selectTokenName);
 
-  return (
+  return loading ? (
+    <>
+      <SpinnerBox>
+        <PacmanLoader size={40} color="#f6f7fc" />
+      </SpinnerBox>
+    </>
+  ) : (
     <LeverageWrapper>
       <FirstWrapper>
         <ComponentWrapper>
