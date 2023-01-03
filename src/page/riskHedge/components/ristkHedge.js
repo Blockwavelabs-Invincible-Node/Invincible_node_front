@@ -250,6 +250,7 @@ const RiskHedge = ({
 
   const stakeDispatch = useDispatch();
   const hedgeDispatch = useDispatch();
+  const hedgeRatioDispatch = useDispatch();
 
   const tempStake = stakeAmountRedux;
   const tempSwapRate = 0.9;

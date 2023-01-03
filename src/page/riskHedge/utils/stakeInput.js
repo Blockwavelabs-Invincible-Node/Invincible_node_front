@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { selectTokenName } from "../../../redux/reducers/networkReducer";
 import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
+import { selectHedgeRatio } from "../../../redux/reducers/hedgeRatioReducer";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
@@ -72,7 +73,6 @@ const YouWillGet = styled(LightText)`
   font-size: 20px;
   font-weight: 400;
 `;
-
 
 const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
   const hedgeRatioRedux = useSelector(selectHedgeRatio);
