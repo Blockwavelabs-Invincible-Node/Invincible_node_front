@@ -253,7 +253,7 @@ const RiskHedge = ({
   const hedgeRatioDispatch = useDispatch();
 
   const tempStake = stakeAmountRedux;
-  const tempSwapRate = 0.9;
+  // const tempSwapRate = 0.9;
 
   const marks = [
     {
@@ -418,10 +418,11 @@ const RiskHedge = ({
           <ConfirmButton
             onClick={() => {
               openModal();
-              const hedge = parseInt(
-                stakeAmountRedux * volume * tempSwapRate * 10 ** 16
-              );
 
+              const hedge = parseInt(
+                stakeAmountRedux * volume * swapRate * 10 ** 16
+              );
+              console.log("hedge: ", hedge);
               hedgeDispatch(setHedgeAmount(hedge));
               hedgeRatioDispatch(setHedgeRatio(volume));
             }}
