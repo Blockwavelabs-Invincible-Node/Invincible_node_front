@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import { useDispatch } from "react-redux";
 import Web3 from "web3";
-import liquidStakingJSON from "../../artifacts/liquidStaking.json";
 import stableCoinPoolJSON from "../../artifacts/stableCoinPool.json";
 import testUSDTJSON from "../../artifacts/testUSDT.json";
 import { increasePageNumber } from "../../redux/reducers/modalPageNumberReducer";
@@ -10,8 +9,7 @@ import SwitchNetwork from "./switchNetwork";
 const addresses = require("../../addresses/contractAddress.json");
 const stableCoinPoolContractAddress = addresses.stableCoinPool;
 const stableCoinPoolContractABI = stableCoinPoolJSON.output.abi;
-const liquidStakingContractAddress = addresses.evmosLiquidStaking;
-const liquidStakingContractABI = liquidStakingJSON.output.abi;
+
 const testUSDTABI = testUSDTJSON.output.abi;
 const testUSDTAddress = addresses.testUSDT;
 

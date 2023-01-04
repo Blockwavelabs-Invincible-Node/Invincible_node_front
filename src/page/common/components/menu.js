@@ -174,7 +174,7 @@ const Menu = () => {
                     if (result == 1) {
                       routeUnstake();
                     } else {
-                      alert("Switch Network and reload Application");
+                      alert("Please reload Application");
                     }
                   });
                 }}

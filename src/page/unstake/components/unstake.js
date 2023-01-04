@@ -136,6 +136,10 @@ const [
   kavaLiquidStakingContract,
   kavaRewardTokenAddress,
   kavaRewardTokenContract,
+  polygonLiquidStakingAddress,
+  polygonLiquidStakingContract,
+  polygonRewardTokenAddress,
+  polygonRewardTokenContract,
 ] = GetAddressAndContract();
 
 let liquidStakingContract;
@@ -193,8 +197,21 @@ const Unstake = () => {
         evmosRewardTokenContract,
         evmosLiquidStakingAddress
       );
+    } else if (networkIdRedux == networkId.kava) {
+      unstake(
+        kavaLiquidStakingContract,
+        kavaRewardTokenContract,
+        kavaLiquidStakingAddress
+      );
+    } else if (networkIdRedux == networkId.polygon) {
+      unstake(
+        polygonLiquidStakingContract,
+        polygonRewardTokenContract,
+        polygonLiquidStakingAddress
+      );
     }
   };
+
   const getTotalStaked = async (liquidStakingContract) => {
     const getAccount = await web3.eth.getAccounts();
     const account = getAccount[0];
@@ -222,6 +239,11 @@ const Unstake = () => {
       liquidStakingAddress = kavaLiquidStakingAddress;
       rewardTokenContract = kavaRewardTokenContract;
       rewardTokenAddress = kavaRewardTokenAddress;
+    } else if (networkIdRedux == networkId.polygon) {
+      liquidStakingContract = polygonLiquidStakingContract;
+      liquidStakingAddress = polygonLiquidStakingAddress;
+      rewardTokenContract = polygonRewardTokenContract;
+      rewardTokenAddress = polygonRewardTokenAddress;
     }
     getTotalStaked(liquidStakingContract);
     fetchTokenPrice();

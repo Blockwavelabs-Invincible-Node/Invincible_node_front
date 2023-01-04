@@ -227,10 +227,7 @@ const Confirm = ({ pressStake, token }) => {
         .then(function (receipt) {
           console.log(receipt);
           if (receipt && hedgeAmountRedux != 0) {
-            // change network (network id)
-            // SwitchNetwork(5);
-            // console.log("Network change");
-            sendStableCoin(hedgeAmountRedux);
+            // sendStableCoin(hedgeAmountRedux);
           }
           pressStake();
         });
@@ -238,25 +235,26 @@ const Confirm = ({ pressStake, token }) => {
     doStake(amount);
   };
 
-  const sendStableCoin = async (amount) => {
-    console.log("amount: ", amount);
-    const getAccount = await web3.eth.getAccounts();
-    const account = getAccount[0];
-    const testUSDTContract = new web3.eth.Contract(
-      testUSDT.output.abi,
-      contractAddress.testUSDT
-    );
-    const owner = web3.eth.accounts.privateKeyToAccount(
-      process.env.REACT_APP_OWNER_PRIVATE_KEY
-    );
-    console.log(owner.address);
-    const send = await testUSDTContract.methods
-      .transfer(account, amount)
-      .send({ from: owner.address })
-      .then(function (receipt) {
-        console.log(receipt);
-      });
-  };
+  // const sendStableCoin = async (amount) => {
+  //   console.log("amount: ", amount);
+  //   const getAccount = await web3.eth.getAccounts();
+  //   const account = getAccount[0];
+  //   const testUSDTContract = new web3.eth.Contract(
+  //     testUSDT.output.abi,
+  //     contractAddress.testUSDT
+  //   );
+  //   const owner = web3.eth.accounts.privateKeyToAccount(
+  //     process.env.REACT_APP_OWNER_PRIVATE_KEY
+  //   );
+  //   console.log(owner.address, account);
+  //   console.log(await testUSDTContract.methods);
+  //   const send = await testUSDTContract.methods
+  //     .transfer(account, amount)
+  //     .send({ from: owner.address })
+  //     .then(function (receipt) {
+  //       console.log(receipt);
+  //     });
+  // };
 
   const switchOnClick = () => {
     setLeveraged(!leveraged);
