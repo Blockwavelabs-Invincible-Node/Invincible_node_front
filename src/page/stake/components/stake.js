@@ -405,7 +405,7 @@ const Stake = ({
                       setPressStake(true);
                       routeRiskHedge();
                     } else {
-                      alert("Switch Network and reload Application");
+                      alert("Please reload Application");
                     }
                   });
                 }}

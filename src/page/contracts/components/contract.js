@@ -6,13 +6,11 @@ import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { Button } from "../../../styles/styledComponents/button";
 import { LightText } from "../../../styles/styledComponents/lightText";
-import address from "../../../addresses/contractAddress.json";
-import liquidStaking from "../../../artifacts/liquidStaking.json";
-import rewardToken from "../../../artifacts/rewardToken.json";
+
 import { useNavigate } from "react-router-dom";
 import { useTable } from "react-table";
 import contractAddress from "../../../addresses/contractAddress.json";
-import StableTokenPoolMethodObject from "../../functions/getStableTokenPool";
+
 import stableTokenPool from "../../../artifacts/stableCoinPool.json";
 import escapeArrow from "../../../assets/images/escapeArrow.png";
 import arrowDownGray from "../../../assets/images/arrowDownGray.png";
@@ -24,10 +22,13 @@ import { styled as mStyled } from "@mui/material/styles";
 import { RingLoader } from "react-spinners";
 
 import {
+  selectNetworkId,
   selectNetworkName,
   selectTokenName,
 } from "../../../redux/reducers/networkReducer";
 import Tooltip from "@mui/material/Tooltip";
+import GetAddressAndContract from "../../functions/getAddressAndContract";
+import networkId from "../../../network/networkId.json";
 
 const LeverageWrapper = styled.div`
   margin-bottom: 5vh;
@@ -220,8 +221,8 @@ const SpinnerBox = styled.div`
 `;
 
 const goerliWeb3 = new Web3(process.env.REACT_APP_GOERLI_RPC_URL);
-const liquidStakingContractAddress = contractAddress.evmosLiquidStaking;
-const evmosRewardTokenContractAddress = contractAddress.evmosRewardToken;
+// const liquidStakingContractAddress = contractAddress.evmosLiquidStaking;
+// const evmosRewardTokenContractAddress = contractAddress.evmosRewardToken;
 const stableCoinPoolContractAddress = contractAddress.stableCoinPool;
 const testUSDTAddress = contractAddress.testUSDT;
 const stableTokenPoolContract = new goerliWeb3.eth.Contract(
@@ -229,12 +230,30 @@ const stableTokenPoolContract = new goerliWeb3.eth.Contract(
   contractAddress.stableCoinPool
 );
 const web3 = new Web3(window.ethereum);
-const liquidStakingContract = new web3.eth.Contract(
-  liquidStaking.output.abi,
-  contractAddress.evmosLiquidStaking
-);
+// const liquidStakingContract = new web3.eth.Contract(
+//   liquidStaking.output.abi,
+//   contractAddress.evmosLiquidStaking
+// );
 
-// const getBlockNumOfTrx = () =>
+const [
+  evmosLiquidStakingAddress,
+  evmosLiquidStakingContract,
+  evmosRewardTokenAddress,
+  evmosRewardTokenContract,
+  kavaLiquidStakingAddress,
+  kavaLiquidStakingContract,
+  kavaRewardTokenAddress,
+  kavaRewardTokenContract,
+  polygonLiquidStakingAddress,
+  polygonLiquidStakingContract,
+  polygonRewardTokenAddress,
+  polygonRewardTokenContract,
+] = GetAddressAndContract();
+
+let liquidStakingContract;
+let rewardTokenContract;
+let liquidStakingAddress;
+let rewardTokenAddress;
 
 const Contract = () => {
   const [balance, setBalance] = useState();
@@ -253,6 +272,8 @@ const Contract = () => {
   const [stakeAmount, setStakeAmount] = useState([]);
   const [collateralAmount, setCollateralAmount] = useState([]);
   const [blockSignedAt, setBlockSignedAt] = useState([]);
+
+  const networkIdRedux = useSelector(selectNetworkId);
 
   const toolTipComment =
     "This indicates the token amounts that you had requested as stable-hedging. Staking rewards are calculated in proportion to your principal amounts.";
@@ -277,7 +298,7 @@ const Contract = () => {
     setBalance((totalSupply - totalLend) / 10 ** 18);
   };
 
-  const getStakedData = async () => {
+  const getStakedData = async (liquidStakingContract) => {
     const totalAddressNum = await liquidStakingContract.methods
       .totalAddressNumber()
       .call();
@@ -394,8 +415,24 @@ const Contract = () => {
   }, []);
 
   const initData = async () => {
+    if (networkIdRedux == networkId.evmos) {
+      liquidStakingContract = evmosLiquidStakingContract;
+      liquidStakingAddress = evmosLiquidStakingAddress;
+      rewardTokenContract = evmosRewardTokenContract;
+      rewardTokenAddress = evmosRewardTokenAddress;
+    } else if (networkIdRedux == networkId.kava) {
+      liquidStakingContract = kavaLiquidStakingContract;
+      liquidStakingAddress = kavaLiquidStakingAddress;
+      rewardTokenContract = kavaRewardTokenContract;
+      rewardTokenAddress = kavaRewardTokenAddress;
+    } else if (networkIdRedux == networkId.polygon) {
+      liquidStakingContract = polygonLiquidStakingContract;
+      liquidStakingAddress = polygonLiquidStakingAddress;
+      rewardTokenContract = polygonRewardTokenContract;
+      rewardTokenAddress = polygonRewardTokenAddress;
+    }
     await stableCoinPoolRead();
-    await getStakedData();
+    await getStakedData(liquidStakingContract);
     await getUsdtData();
     setLoading(false);
 
@@ -428,7 +465,7 @@ const Contract = () => {
               <TitleText>Address</TitleText>
               <TextBox>
                 <ContentText>
-                  {getShortenedAddress(liquidStakingContractAddress)}
+                  {getShortenedAddress(liquidStakingAddress)}
                 </ContentText>
               </TextBox>
             </Element1>

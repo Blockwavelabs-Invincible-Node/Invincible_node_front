@@ -21,11 +21,16 @@ import CheckTrue from "../../../assets/images/checkTrue.svg";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { Button } from "../../../styles/styledComponents/button";
-import { selectNetworkName } from "../../../redux/reducers/networkReducer";
+import {
+  selectNetworkId,
+  selectNetworkName,
+} from "../../../redux/reducers/networkReducer";
 import { ToastContainer, toast } from "react-toastify";
 import "../../../../node_modules/react-toastify/dist/ReactToastify.css";
 
 import { RotatingLines } from "react-loader-spinner";
+import GetAddressAndContract from "../../functions/getAddressAndContract";
+import networkId from "../../../network/networkId.json";
 
 const Title = styled(BoldText)`
   text-align: left;
@@ -114,8 +119,6 @@ const web3 = new Web3(window.ethereum);
 
 const stableCoinPoolContractAddress = address.stableCoinPool;
 const stableCoinPoolContractABI = stableCoinPoolJSON.output.abi;
-const liquidStakingContractAddress = address.evmosLiquidStaking;
-const liquidStakingContractABI = liquidStakingJSON.output.abi;
 const testUSDTABI = testUSDTJSON.output.abi;
 const testUSDTAddress = address.testUSDT;
 const stableCoinPoolContract = new web3.eth.Contract(
@@ -127,11 +130,26 @@ const testUSDTContract = new web3.eth.Contract(testUSDTABI, testUSDTAddress);
 const goerliProvider = process.env.REACT_APP_GOERLI_RPC_URL;
 const web3Provider = new Web3.providers.HttpProvider(goerliProvider);
 const goerliWeb3 = new Web3(web3Provider);
-const evmosLiquidStakingAddress = address.evmosLiquidStaking;
-const evmosLiquidStakingContract = new web3.eth.Contract(
-  evmosLiquidStaking.output.abi,
-  evmosLiquidStakingAddress
-);
+
+const [
+  evmosLiquidStakingAddress,
+  evmosLiquidStakingContract,
+  evmosRewardTokenAddress,
+  evmosRewardTokenContract,
+  kavaLiquidStakingAddress,
+  kavaLiquidStakingContract,
+  kavaRewardTokenAddress,
+  kavaRewardTokenContract,
+  polygonLiquidStakingAddress,
+  polygonLiquidStakingContract,
+  polygonRewardTokenAddress,
+  polygonRewardTokenContract,
+] = GetAddressAndContract();
+
+let liquidStakingContract;
+let rewardTokenContract;
+let liquidStakingAddress;
+let rewardTokenAddress;
 
 const ApplyForm = ({ openModal }) => {
   const [stableCoinAmount, setStableCoinAmount] = useState(0);
@@ -142,6 +160,7 @@ const ApplyForm = ({ openModal }) => {
   const [verifying, setVerifying] = useState(0);
 
   const networkNameRedux = useSelector(selectNetworkName);
+  const networkIdRedux = useSelector(selectNetworkId);
 
   const dispatch = useDispatch();
   //console.log(dispatch(setStakeAmount(event.target.value)));
@@ -201,12 +220,12 @@ const ApplyForm = ({ openModal }) => {
     });
   };
 
-  const verifyValidatorAddress = async () => {
+  const verifyValidatorAddress = async (liquidStakingContract) => {
     const getAccount = await web3.eth.getAccounts();
     const account = getAccount[0];
     const id = toast.loading("Verifying Validator Address..");
     console.log(account);
-    const addValidatorAddress = await evmosLiquidStakingContract.methods
+    const addValidatorAddress = await liquidStakingContract.methods
       .addValidatorAddress(validatorAddress)
       .send({ from: account })
       .catch((err) => {
@@ -221,47 +240,46 @@ const ApplyForm = ({ openModal }) => {
         // 10초 간격으로 세 번 반복
         for (let i = 0; i < 3; i++) {
           setTimeout(async () => {
-            const checkValidatorAddress =
-              await evmosLiquidStakingContract.methods
-                .validatorAddresses(validatorAddress)
-                .call()
-                .catch((err) => {
-                  console.log(err.message);
-                })
-                .then(async function (receipt) {
-                  console.log("check result: ", receipt);
-                  if (receipt == 0) {
-                    //retry
-                    console.log("Retry");
-                    if (i == 2) {
-                      toast.update(id, {
-                        render: "Invalid Address. Please Try again",
-                        type: "error",
-                        isLoading: false,
-                        autoClose: 1000,
-                      });
-                      setVerifying(0);
-                    }
-                  } else if (receipt == 1) {
-                    //send stable coin
-                    setVerifying(2);
+            const checkValidatorAddress = await liquidStakingContract.methods
+              .validatorAddresses(validatorAddress)
+              .call()
+              .catch((err) => {
+                console.log(err.message);
+              })
+              .then(async function (receipt) {
+                console.log("check result: ", receipt);
+                if (receipt == 0) {
+                  //retry
+                  console.log("Retry");
+                  if (i == 2) {
                     toast.update(id, {
-                      render: "Address Verified!",
-                      type: "success",
+                      render: "Invalid Address. Please Try again",
+                      type: "error",
                       isLoading: false,
                       autoClose: 1000,
                     });
-                    const value = stableCoinAmount;
-                    const number = await web3.utils.toBN(value * 10 ** 18);
-                    console.log("value: ", number);
-
-                    setSecondMessage(true);
-                    dispatch(increasePageNumber());
-                    SwitchNetwork(5).then(() => {
-                      setThirdMessage(true);
-                    });
+                    setVerifying(0);
                   }
-                });
+                } else if (receipt == 1) {
+                  //send stable coin
+                  setVerifying(2);
+                  toast.update(id, {
+                    render: "Address Verified!",
+                    type: "success",
+                    isLoading: false,
+                    autoClose: 1000,
+                  });
+                  const value = stableCoinAmount;
+                  const number = await web3.utils.toBN(value * 10 ** 18);
+                  console.log("value: ", number);
+
+                  setSecondMessage(true);
+                  dispatch(increasePageNumber());
+                  SwitchNetwork(5).then(() => {
+                    setThirdMessage(true);
+                  });
+                }
+              });
           }, 10000 * (i + 1));
         }
       });
@@ -306,7 +324,23 @@ const ApplyForm = ({ openModal }) => {
             onClick={async () => {
               setVerifying(1);
               SwitchNetwork(9000).then(async () => {
-                verifyValidatorAddress();
+                if (networkIdRedux == networkId.evmos) {
+                  liquidStakingContract = evmosLiquidStakingContract;
+                  liquidStakingAddress = evmosLiquidStakingAddress;
+                  rewardTokenContract = evmosRewardTokenContract;
+                  rewardTokenAddress = evmosRewardTokenAddress;
+                } else if (networkIdRedux == networkId.kava) {
+                  liquidStakingContract = kavaLiquidStakingContract;
+                  liquidStakingAddress = kavaLiquidStakingAddress;
+                  rewardTokenContract = kavaRewardTokenContract;
+                  rewardTokenAddress = kavaRewardTokenAddress;
+                } else if (networkIdRedux == networkId.polygon) {
+                  liquidStakingContract = polygonLiquidStakingContract;
+                  liquidStakingAddress = polygonLiquidStakingAddress;
+                  rewardTokenContract = polygonRewardTokenContract;
+                  rewardTokenAddress = polygonRewardTokenAddress;
+                }
+                verifyValidatorAddress(liquidStakingAddress);
               });
             }}
           >

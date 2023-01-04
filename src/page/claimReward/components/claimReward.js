@@ -77,6 +77,10 @@ const [
   kavaLiquidStakingContract,
   kavaRewardTokenAddress,
   kavaRewardTokenContract,
+  polygonLiquidStakingAddress,
+  polygonLiquidStakingContract,
+  polygonRewardTokenAddress,
+  polygonRewardTokenContract,
 ] = GetAddressAndContract();
 
 let liquidStakingContract;
@@ -93,10 +97,6 @@ const ClaimReward = ({ token, getAmount }) => {
   const [ethBalance, setEthBalance] = useState(null);
   const [stageLevel, setStageLevel] = useState(0);
   const [tokenPrice, setTokenPrice] = useState(0);
-  // const [liquidStakingAddress, setLiquidStakingAddress] = useState(null);
-  // const [rewardTokenAddress, setRewardTokenAddress] = useState();
-  // const [liquidStakingContract, setLiquidStakingContract] = useState(null);
-  // const [rewardTokenContract, setRewardTokenContract] = useState();
 
   const networkIdRedux = useSelector(selectNetworkId);
   const tokenNameRedux = useSelector(selectTokenName);
@@ -153,6 +153,11 @@ const ClaimReward = ({ token, getAmount }) => {
       liquidStakingAddress = kavaLiquidStakingAddress;
       rewardTokenContract = kavaRewardTokenContract;
       rewardTokenAddress = kavaRewardTokenAddress;
+    } else if (networkIdRedux == networkId.polygon) {
+      liquidStakingContract = polygonLiquidStakingContract;
+      liquidStakingAddress = polygonLiquidStakingAddress;
+      rewardTokenContract = polygonRewardTokenContract;
+      rewardTokenAddress = polygonRewardTokenAddress;
     }
     getReward(liquidStakingContract);
     fetchTokenPrice();

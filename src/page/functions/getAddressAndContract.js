@@ -23,10 +23,22 @@ const GetAddressAndContract = () => {
     liquidStaking.output.abi,
     kavaLiquidStakingAddress
   );
-  const kavaRewardTokenAddress = address.evmosRewardToken;
+  const kavaRewardTokenAddress = address.kavaRewardToken;
   const kavaRewardTokenContract = new web3.eth.Contract(
     rewardToken.output.abi,
     kavaRewardTokenAddress
+  );
+
+  // polygon
+  const polygonLiquidStakingAddress = address.polygonLiquidStaking;
+  const polygonLiquidStakingContract = new web3.eth.Contract(
+    liquidStaking.output.abi,
+    polygonLiquidStakingAddress
+  );
+  const polygonRewardTokenAddress = address.polygonRewardToken;
+  const polygonRewardTokenContract = new web3.eth.Contract(
+    rewardToken.output.abi,
+    polygonRewardTokenAddress
   );
 
   return [
@@ -38,6 +50,10 @@ const GetAddressAndContract = () => {
     kavaLiquidStakingContract,
     kavaRewardTokenAddress,
     kavaRewardTokenContract,
+    polygonLiquidStakingAddress,
+    polygonLiquidStakingContract,
+    polygonRewardTokenAddress,
+    polygonRewardTokenContract,
   ];
 };
 
