@@ -23,8 +23,9 @@ import kavaEnabled from "../../../assets/images/kavaEnabled.svg";
 import kavaDisabled from "../../../assets/images/kavaDisabled.svg";
 
 const SwitchNetworkWrapper = styled.div`
-  width: 420px;
-  height: 300px;
+  width: 30vw;
+  margin: auto;
+  height: 33vh;
   display: flex;
   flex-direction: column;
 `;
@@ -38,8 +39,8 @@ const FirstText = styled(BoldText)`
   font-size: 20px;
 `;
 const ComponentWrapper = styled.div`
-  width: 420px;
-  height: 100px;
+  /* width: 420px;
+  height: 100px; */
   display: flex;
   /* justify-content: center; */
   padding: 7px;
@@ -48,22 +49,22 @@ const ComponentWrapper = styled.div`
   margin-bottom: 10px;
 `;
 const LeftBoxWrapper = styled.div`
-  width: 70px;
-  height: 90px;
-  /* display: flex;
+  width: 5vw;
+  height: 100%;
+  display: flex;
   flex-direction: column;
-  align-items: flex-start; */
+  align-items: flex-start;
   padding: 0.5vh;
   background-color: #1a1a1a;
   border-radius: 5px;
 `;
 const TextBox = styled.div`
-  font-size: 10px;
+  font-size: 20px;
   font-weight: 500;
   text-align: left;
 `;
 const TextBoxSmall = styled.div`
-  font-size: 10px;
+  font-size: 15px;
   zoom: 0.6;
   font-weight: 500;
   text-align: left;
@@ -71,7 +72,7 @@ const TextBoxSmall = styled.div`
 const NetworkBox = styled.div`
   display: flex;
   justify-content: space-evenly;
-  width: 322px;
+  width: 100%;
   padding: 6px;
 `;
 const NetworkComponent = styled.div`
