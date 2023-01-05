@@ -7,6 +7,8 @@ sudo rm -rf node_modules/
 sudo npm install
 sudo npm run build
 sudo kill $(sudo lsof -t -i:3000)
-sudo nohup npx serve -s build
+sudo nohup npx serve -s build &
+sleep 3
+echo "> 배포 종료
 
 
