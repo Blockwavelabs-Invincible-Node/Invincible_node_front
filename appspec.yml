@@ -13,5 +13,5 @@ permissions:
 hooks:
   AfterInstall:
     - location: gh_deploy.sh
-      timeout: 600
+      timeout: 300
       runas: root
