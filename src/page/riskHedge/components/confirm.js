@@ -19,7 +19,7 @@ import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
 import { RotatingLines } from "react-loader-spinner";
 
 const LeverageWrapper = styled.div`
-  margin-top: 5vh;
+  /* margin-top: 5vh; */
   margin-bottom: 5vh;
   text-align: left;
   max-width: 100%;
@@ -32,7 +32,6 @@ const FirstText = styled(BoldText)`
 const SecondText = styled(LightText)`
   font-size: 15px;
   font-weight: 400;
-  margin-bottom: 22px;
 `;
 const ThirdText = styled(BoldText)`
   font-size: 20px;
@@ -248,12 +247,13 @@ const Confirm = ({ pressStake, token }) => {
   };
   return (
     <LeverageWrapper>
-      <FirstText>Confirm Request</FirstText>
-      <ThirdText>Stake Status</ThirdText>
+      <FirstText>Bill</FirstText>
+      <SecondText>
+        Check this bill again and confirm your final position.
+      </SecondText>
       <CurrentStatusWrapper>
         <StakeInput token={token} />
       </CurrentStatusWrapper>
-      <ThirdText>Risk Hedge Status</ThirdText>
       <CurrentStatusWrapper>
         <HedgeInput token={token} />
       </CurrentStatusWrapper>
