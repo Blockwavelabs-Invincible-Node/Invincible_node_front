@@ -38,10 +38,10 @@ const InEvmosAmount = styled(LightText)`
 `;
 
 const ResultContainer = styled.div`
-  //   width: 100%;
-  max-width: 468px;
-  margin: 0px auto;
-  padding: min(34px, 5vw);
+  /* width: 100%; */
+  /* max-width: 468px; */
+  /* margin: 0px auto; */
+  /* padding: min(34px, 5vw); */
   //   padding: 34px;
 `;
 
@@ -50,7 +50,7 @@ const StakeWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 3%;
-  max-width: 400px;
+  /* max-width: 400px; */
   align-items: center;
 `;
 const YouWillStake = styled(LightText)`
@@ -66,7 +66,7 @@ const GetWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 5%;
-  max-width: 400px;
+  /* max-width: 400px; */
   align-items: center;
 `;
 const YouWillGet = styled(LightText)`
@@ -95,7 +95,7 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
         </StakeWrapper>
         <GetWrapper>
           <YouWillGet>
-            {status == "success" ? "You can get" : "You will get"}
+            {status == "success" ? "You received" : "You will get"}
           </YouWillGet>
           <EvmosInputWrapper>
             <EvmosInput

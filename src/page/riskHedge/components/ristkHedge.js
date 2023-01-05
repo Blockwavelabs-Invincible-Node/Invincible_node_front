@@ -185,26 +185,40 @@ const RightsideMiniWrapper = styled.div`
 `;
 
 const VolumeControl = styled.div`
-  width: 100%;
+  position: relative;
+  width: 60%;
+  height: 5vh;
+  /* border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  border: hidden; */
+  /* margin-top: 1vh; */
+  /* margin-bottom: 5vh; */
+`;
+const VolumeControlOver1 = styled.div`
+  position: absolute;
+  width: 25vw;
   height: 100%;
   /* border-radius: 20px;
   display: flex;
   justify-content: space-between;
   border: hidden; */
   margin-bottom: 1vh;
-
-  /* &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 15px;
-    // box-shadow: 0px 0px 0px 5px #146dd8 inset;
-    background-color: #1f53ff;
-    // background: ${(props) => (props.volume ? "#d9d9d9" : "#E5E7EB")};
-    // margin-top: -5px;
-    cursor: pointer;
-  } */
 `;
+const VolumeControlOver2 = styled.div`
+  position: absolute;
+  width: 15vw;
+  height: 100%;
+  /* border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  border: hidden; */
+  margin-bottom: 1vh;
+`;
+// const SliderLine = styled.hr`
+//   width: 100%;
+//   border-top: 2px solid #4e4e4e;
+// `;
 const SpecifyButton = styled(Button)`
   background-color: #ffffff;
   color: #1f53ff;
@@ -258,7 +272,7 @@ const RiskHedge = ({
   const marks = [
     {
       value: (stake * 3) / 5,
-      label: "Maximum Risk hedging ratio",
+      label: "Maximum Risk Hedging Ratio",
     },
   ];
 
@@ -291,14 +305,11 @@ const RiskHedge = ({
     } else {
       setIsStakeMoved(true);
     }
-    const limitVal = (e.target.value / stake) * 100;
-    if (limitVal > 60) {
-      setVolume(60);
-      setSliderValue((stake * 3) / 5);
-    } else {
-      setVolume(Math.ceil((e.target.value / stake) * 100));
-      setSliderValue(newValue);
-    }
+    setVolume(Math.floor((e.target.value / stake) * 100));
+    setSliderValue(newValue);
+
+    console.log(volume);
+    console.log(sliderValue, newValue);
   };
 
   const handleToggle = (e) => {
@@ -352,31 +363,56 @@ const RiskHedge = ({
               </ThirdText>
             </TextBox2>
             <VolumeControl>
-              <Slider
-                size="small"
-                aria-label="Small steps"
-                value={sliderValue}
-                step={0.00000001}
-                min={0}
-                max={stake}
-                valueLabelDisplay="auto"
-                marks={marks}
-                onChange={handleSliderChange}
-                disabled={isToggle ? false : true}
-                sx={{
-                  color: "primary.main",
-                  "& .MuiSlider-colorPrimary": {
-                    color: "white",
-                  },
-                  "& .MuiSlider-mark": {
-                    color: "primary",
-                  },
-                  "& .MuiSlider-markLabel": {
-                    color: "white",
-                    fontSize: 0.1,
-                  },
-                }}
-              />
+              <VolumeControlOver1>
+                <Slider
+                  size="small"
+                  aria-label="Small steps"
+                  value={stake}
+                  min={0}
+                  max={(stake * 3) / 5}
+                  valueLabelDisplay="auto"
+                  disabled={true}
+                  sx={{
+                    "& .MuiSlider-thumb": {
+                      height: 0,
+                      width: 0,
+                    },
+                  }}
+                />
+              </VolumeControlOver1>
+              <VolumeControlOver2>
+                <Slider
+                  size="small"
+                  aria-label="Small steps"
+                  value={sliderValue}
+                  step={0.00000001}
+                  min={0}
+                  max={(stake * 3) / 5}
+                  marks={marks}
+                  onChange={handleSliderChange}
+                  valueLabelDisplay="off"
+                  disabled={isToggle ? false : true}
+                  sx={{
+                    color: "primary.main",
+                    "& .MuiSlider-colorPrimary": {
+                      color: "white",
+                    },
+                    "& .MuiSlider-mark": {
+                      color: "primary",
+                      height: "1vh",
+                    },
+                    "& .MuiSlider-markLabel": {
+                      color: "white",
+                      fontSize: 0.1,
+                    },
+                    "& .MuiSlider-thumb": {
+                      display: "none",
+                      height: 0,
+                      width: 0,
+                    },
+                  }}
+                />
+              </VolumeControlOver2>
             </VolumeControl>
           </FirstBox>
           <SecondBox>
