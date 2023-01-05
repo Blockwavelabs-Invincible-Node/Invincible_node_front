@@ -229,7 +229,7 @@ function Header({ launchedApp }) {
               routeMain();
             }}
           ></Logo>
-          <InvincibleNodeText>Invincible {networkNameRedux}</InvincibleNodeText>
+          <InvincibleNodeText>Invincible Node</InvincibleNodeText>
         </LeftTop>
 
         <RightTop>
