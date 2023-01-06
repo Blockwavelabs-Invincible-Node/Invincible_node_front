@@ -25,7 +25,7 @@ import kavaDisabled from "../../../assets/images/kavaDisabled.svg";
 const SwitchNetworkWrapper = styled.div`
   width: 30vw;
   margin: auto;
-  height: 33vh;
+  /* height: 33vh; */
   display: flex;
   flex-direction: column;
 `;
@@ -50,7 +50,7 @@ const ComponentWrapper = styled.div`
 `;
 const LeftBoxWrapper = styled.div`
   width: 5vw;
-  height: 100%;
+  height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -73,6 +73,7 @@ const NetworkBox = styled.div`
   display: flex;
   justify-content: space-evenly;
   width: 100%;
+  height: 10vh;
   padding: 6px;
 `;
 const NetworkComponent = styled.div`

@@ -340,7 +340,7 @@ const ApplyForm = ({ openModal }) => {
                   rewardTokenContract = polygonRewardTokenContract;
                   rewardTokenAddress = polygonRewardTokenAddress;
                 }
-                verifyValidatorAddress(liquidStakingAddress);
+                verifyValidatorAddress(liquidStakingContract);
               });
             }}
           >
