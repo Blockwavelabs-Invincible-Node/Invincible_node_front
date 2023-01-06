@@ -9,4 +9,4 @@ sleep 5
 echo "[log] start server in background"
 sudo nohup npx serve -s $DEPLOY_ROOT/build 1>stdout.txt 2>stderr.txt &
 sleep 3
-echo "[log] 배포 종료
+echo "[log] 배포 종료"
