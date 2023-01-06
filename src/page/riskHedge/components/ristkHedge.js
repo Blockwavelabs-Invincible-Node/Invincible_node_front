@@ -12,7 +12,6 @@ import { NumberImg } from "../../../styles/styledComponents/numberImg";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { Wrapper } from "../../../styles/styledComponents/wrapper";
 import { Form } from "../../../styles/styledComponents/form";
-import Select from "react-select";
 import Web3 from "web3";
 import { Button } from "../../../styles/styledComponents/button";
 import { useNavigate } from "react-router-dom";
@@ -24,9 +23,19 @@ import {
 } from "../../../redux/reducers/networkReducer";
 import toggleOn from "../../../assets/images/toggleOn.svg";
 import toggleOff from "../../../assets/images/toggleOff.svg";
+import riskHedgeArrow from "../../../assets/images/riskHedgeArrow.svg";
 import { Slider } from "@mui/material";
 import GetTokenPrice from "../../functions/fetchTokenPrice";
 import { setHedgeRatio } from "../../../redux/reducers/hedgeRatioReducer";
+
+import { alpha, styled as muiStyled } from "@mui/material/styles";
+import FormControl from "@mui/material/FormControl";
+import FilledInput from "@mui/material/FilledInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormHelperText from "@mui/material/FormHelperText";
+import TextField from "@mui/material/TextField";
+import InputBase from "@mui/material/InputBase";
+import { FiPercent } from "react-icons/fi";
 
 const stage = [{ status: "setAmount" }, { status: "stableHedging" }];
 
@@ -77,19 +86,22 @@ const TextBox2 = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-const FirstText = styled(BoldText)``;
+const FirstText = styled(BoldText)`
+  /* font-size: 18px; */
+  margin-bottom: 4px;
+`;
 const SecondText = styled(LightText)`
-  font-size: 20px;
-  /* margin-bottom: 1vh; */
+  /* font-size: 13px; */
+  margin-bottom: 1vh;
 `;
 const ThirdText = styled(LightText)`
   height: 2vh;
   margin-top: 2vh;
   margin-bottom: 1vh;
-  font-size: 20px;
+  /* font-size: 20px; */
 `;
 const FourthText = styled(LightText)`
-  font-size: 10px;
+  font-size: 0.1vw;
   margin-left: 1.5vw;
   ${(props) =>
     props.top &&
@@ -102,6 +114,7 @@ const FourthText = styled(LightText)`
       margin-top: 0.5vh;
     `}
 `;
+const FifthText = styled(LightText)``;
 const Checker = styled.div`
   display: flex;
   flex-direction: column;
@@ -126,6 +139,7 @@ const FormBox = styled.div`
 const FirstBox = styled.div`
   width: 90%;
   margin: auto;
+  margin-bottom: 5vh;
 `;
 const SecondBox = styled.div`
   display: flex;
@@ -133,20 +147,27 @@ const SecondBox = styled.div`
   background-color: black;
   width: 95%;
   margin: auto;
+  margin-top: 1vh;
   margin-bottom: 5px;
   height: 5vh;
   border-radius: 10px;
 `;
 const ThirdBox = styled(SecondBox)`
   height: 10vh;
+  margin-top: 0vh;
 `;
 const FourthBox = styled(SecondBox)`
   height: 10vh;
+  margin-top: 0vh;
   margin-bottom: 15px;
 `;
 const FifthBox = styled(FirstBox)`
   margin-bottom: 15px;
 `;
+const ThirdFourBoxWrapper = styled.div`
+  position: relative;
+`;
+
 const LeftSide = styled.div`
   display: flex;
   align-items: center;
@@ -186,24 +207,28 @@ const RightsideMiniWrapper = styled.div`
 
 const VolumeControl = styled.div`
   position: relative;
-  width: 60%;
+  width: 100%;
   height: 5vh;
   /* border-radius: 20px;
   display: flex;
   justify-content: space-between;
   border: hidden; */
-  /* margin-top: 1vh; */
+  /* margin-top: 3vh; */
   /* margin-bottom: 5vh; */
 `;
 const VolumeControlOver1 = styled.div`
   position: absolute;
-  width: 25vw;
+  width: 100%;
   height: 100%;
   /* border-radius: 20px;
   display: flex;
   justify-content: space-between;
   border: hidden; */
-  margin-bottom: 1vh;
+  top: 50%;
+  /* left: 50%; */
+  /* transform: translate(-50%, -50%); */
+
+  /* margin-bottom: 1vh; */
 `;
 const VolumeControlOver2 = styled.div`
   position: absolute;
@@ -213,7 +238,10 @@ const VolumeControlOver2 = styled.div`
   display: flex;
   justify-content: space-between;
   border: hidden; */
-  margin-bottom: 1vh;
+  top: 50%;
+
+  /* transform: translate(0%, 0%); */
+  /* margin-bottom: 1vh; */
 `;
 // const SliderLine = styled.hr`
 //   width: 100%;
@@ -230,6 +258,17 @@ const ConfirmButton = styled(Button)`
   width: 100%;
   border-radius: 10px;
   margin-top: 20px;
+`;
+const RiskHedgeArrowWrapper = styled.img`
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+const RatioWrapper = styled.div`
+  display: flex;
+
+  align-items: center;
 `;
 
 const decimals = 8;
@@ -271,7 +310,7 @@ const RiskHedge = ({
 
   const marks = [
     {
-      value: (stake * 3) / 5,
+      value: (stake * 66) / 100,
       label: "Maximum Risk Hedging Ratio",
     },
   ];
@@ -365,41 +404,47 @@ const RiskHedge = ({
             <VolumeControl>
               <VolumeControlOver1>
                 <Slider
-                  size="small"
+                  size="big"
                   aria-label="Small steps"
-                  value={stake}
+                  value={100}
                   min={0}
                   max={(stake * 3) / 5}
-                  valueLabelDisplay="auto"
+                  valueLabelDisplay="off"
                   disabled={true}
                   sx={{
                     "& .MuiSlider-thumb": {
+                      display: "none",
                       height: 0,
                       width: 0,
+                    },
+                    "& .MuiSlider-track": {
+                      height: "0.6vh",
+                      color: "#FAF1E4",
                     },
                   }}
                 />
               </VolumeControlOver1>
               <VolumeControlOver2>
                 <Slider
-                  size="small"
+                  size="1000p"
                   aria-label="Small steps"
                   value={sliderValue}
                   step={0.00000001}
                   min={0}
-                  max={(stake * 3) / 5}
-                  marks={marks}
+                  max={(stake * 66) / 100}
+                  // marks={marks}
                   onChange={handleSliderChange}
                   valueLabelDisplay="off"
                   disabled={isToggle ? false : true}
                   sx={{
-                    color: "primary.main",
-                    "& .MuiSlider-colorPrimary": {
-                      color: "white",
-                    },
+                    // color: "#4759FF",
+                    // "& .MuiSlider-colorPrimary": {
+                    //   color: "#FAF1E4",
+                    // },
                     "& .MuiSlider-mark": {
-                      color: "primary",
-                      height: "1vh",
+                      color: "#1F53FF",
+                      height: "0.6vh",
+                      width: "0.1px",
                     },
                     "& .MuiSlider-markLabel": {
                       color: "white",
@@ -410,35 +455,72 @@ const RiskHedge = ({
                       height: 0,
                       width: 0,
                     },
+                    "& .MuiSlider-rail": {
+                      height: "0.7vh",
+                      color: "#FAF1E4",
+                    },
+                    "& .MuiSlider-track": {
+                      height: "0.7vh",
+                      color: "#4759FF",
+                    },
                   }}
                 />
               </VolumeControlOver2>
             </VolumeControl>
           </FirstBox>
           <SecondBox>
-            <LeftSide>Stable hedging Ratio you've set</LeftSide>
-            <RightSide>{volume}%</RightSide>
+            <LeftSide>
+              <FifthText>Stable hedging Ratio you've set</FifthText>
+            </LeftSide>
+            <RightSide>
+              <FifthText>
+                <RatioWrapper>
+                  <InputBase
+                    value={volume}
+                    sx={{
+                      ml: 1,
+                      flex: 1,
+                      fontSize: "1.2rem",
+                      marginRight: 2,
+                    }}
+                    placeholder="Stable Hedging Ratio"
+                    inputProps={{
+                      "aria-label": "Stable Hedging Ratio",
+                      style: { textAlign: "right" },
+                    }}
+                  />
+                  <FiPercent />
+                </RatioWrapper>
+              </FifthText>
+            </RightSide>
           </SecondBox>
-          <ThirdBox>
-            <LeftSideFromTo>From</LeftSideFromTo>
-            <RightSide>
-              {from}
-              <RightSideTokenName>{tokenNameRedux}</RightSideTokenName>
-            </RightSide>
-          </ThirdBox>
-          <FourthBox>
-            <LeftSideFromTo>To</LeftSideFromTo>
-            <RightSide>
-              {to}
-              <RightsideMiniWrapper>
-                <FourthText top>
-                  1{tokenNameRedux} = {tokenPrice} USDT
-                </FourthText>
-                <RightSideTokenName>USDT</RightSideTokenName>
-                <FourthText under>On Ethereum network</FourthText>
-              </RightsideMiniWrapper>
-            </RightSide>
-          </FourthBox>
+          <ThirdFourBoxWrapper>
+            <ThirdBox>
+              <LeftSideFromTo>
+                <FifthText>From</FifthText>
+              </LeftSideFromTo>
+              <RightSide>
+                <FifthText>{from}</FifthText>
+                <RightSideTokenName>{tokenNameRedux}</RightSideTokenName>
+              </RightSide>
+            </ThirdBox>
+            <RiskHedgeArrowWrapper src={riskHedgeArrow} />
+            <FourthBox>
+              <LeftSideFromTo>
+                <FifthText>To</FifthText>
+              </LeftSideFromTo>
+              <RightSide>
+                <FifthText>{to}</FifthText>
+                <RightsideMiniWrapper>
+                  <FourthText top>
+                    1{tokenNameRedux} = {tokenPrice} USDT
+                  </FourthText>
+                  <RightSideTokenName>USDT</RightSideTokenName>
+                  <FourthText under>On Ethereum network</FourthText>
+                </RightsideMiniWrapper>
+              </RightSide>
+            </FourthBox>
+          </ThirdFourBoxWrapper>
           {/* <FifthBox>
             <TextBox2>
               <ThirdText>You will Receive</ThirdText>
