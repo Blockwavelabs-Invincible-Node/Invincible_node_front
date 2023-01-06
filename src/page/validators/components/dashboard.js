@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
-import { PacmanLoader } from "react-spinners";
+import { RingLoader } from "react-spinners";
 
 import blockHeights from "../../../assets/images/blockHeightsIcon.svg";
 import nodes from "../../../assets/images/nodesIcon.svg";
@@ -233,7 +233,7 @@ const Dashboard = () => {
   return loading ? (
     <>
       <SpinnerBox>
-        <PacmanLoader size={40} color="#f6f7fc" />
+        <RingLoader size={80} color="#f6f7fc" />
       </SpinnerBox>
     </>
   ) : (

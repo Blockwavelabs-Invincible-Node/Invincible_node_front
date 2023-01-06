@@ -30,7 +30,7 @@ const StyledDropdownButton = styled(Dropdown.Toggle)`
   color: white;
   border: hidden;
   background-color: transparent;
-  font-size: 20px;
+  font-size: 0.8vw;
   border-radius: 5px;
   font-family: Pretendard;
   font-weight: 700;
@@ -41,6 +41,7 @@ const StyledDropdownButton = styled(Dropdown.Toggle)`
 `;
 const StyledDropdownItem = styled(Dropdown.Item)`
   color: white;
+  font-size: 0.8vw;
   text-align: left;
   text-decoration: none;
   z-index: 1;
@@ -49,10 +50,11 @@ const StyledDropdownMenu = styled(Dropdown.Menu)`
   /* display: flex;
   flex-direction: column; */
   margin-left: 2vw;
-  margin-top: 0.5vh;
+  /* margin-top: 0.5vh; */
   height: 50px;
   z-index: 2;
 `;
+
 // const ApplyButton = styled.button`
 //   font-size: 15px;
 //   height: 55px;

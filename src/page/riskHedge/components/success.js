@@ -4,7 +4,9 @@ import { BoldText } from "../../../styles/styledComponents/boldText";
 import { Button } from "../../../styles/styledComponents/button";
 import StakeInput from "../utils/stakeInput";
 
-const SuccessWrapper = styled.div``;
+const SuccessWrapper = styled.div`
+  width: 20vw;
+`;
 const FirstText = styled(BoldText)`
   font-size: 30px;
   font-weight: 900;
@@ -16,7 +18,10 @@ const SecondText = styled(BoldText)`
   font-weight: 700;
   text-align: left;
 `;
-const CurrentStatus = styled.div``;
+const CurrentStatus = styled.div`
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+`;
 const ConfirmButton = styled(Button)`
   width: 100%;
   font-size: 15px;
@@ -33,14 +38,14 @@ const Success = ({ token, stakeAmount, getAmount }) => {
   return (
     <SuccessWrapper>
       <FirstText>Successful Transfer</FirstText>
-      <SecondText>Current status</SecondText>
-      <CurrentStatus></CurrentStatus>
-      <StakeInput
-        status={"success"}
-        token={token}
-        stakeAmount={stakeAmount}
-        getAmount={getAmount}
-      />
+      <CurrentStatus>
+        <StakeInput
+          status={"success"}
+          token={token}
+          stakeAmount={stakeAmount}
+          getAmount={getAmount}
+        />
+      </CurrentStatus>
       <ConfirmButton
         onClick={() => {
           routeStake();

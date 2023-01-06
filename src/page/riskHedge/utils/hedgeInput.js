@@ -36,10 +36,11 @@ const InEvmosAmount = styled(LightText)`
 `;
 
 const ResultContainer = styled.div`
-  //   width: 100%;
-  max-width: 468px;
-  margin: 0px auto;
-  padding: min(34px, 5vw);
+  /* width: 100%; */
+  /* max-width: 468px; */
+  /* margin: 0px auto; */
+  /* padding: min(34px, 5vw); */
+  padding: 0 1vw 0 1vw;
   //   padding: 34px;
 `;
 
@@ -63,8 +64,6 @@ const GetWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5%;
-  max-width: 400px;
   align-items: center;
 `;
 const YouWillGet = styled(LightText)`
@@ -82,7 +81,7 @@ const HedgeInput = ({ status, token, hedgeAmount }) => {
             {status == "success" ? "You can get" : "You will get"}
           </YouWillGet>
           <EvmosInputWrapper>
-            <EvmosInput value={hedgeAmountRedux / 10**18} />
+            <EvmosInput value={hedgeAmountRedux / 10 ** 18} />
             <InEvmosAmount>USDT</InEvmosAmount>
           </EvmosInputWrapper>
         </GetWrapper>
