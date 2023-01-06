@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-PROJECT_NAME="deploy-fe"
-echo "> FE 배포"
-cd /home/ubuntu/deploy-fe
-sudo rm -rf node_modules/
-sudo npm install
-sudo npm run build
+DEPLOY_ROOT="/home/ubuntu/deploy-fe"
+echo "[log] FE 배포 시작"
+
+echo "[log] kill existed port"
 sudo kill $(sudo lsof -t -i:3000)
-sudo nohup npx serve -s build &
+sleep 5
+echo "[log] start server in background"
+sudo nohup npx serve -s $DEPLOY_ROOT/build 1>stdout.txt 2>stderr.txt &
 sleep 3
-echo "> 배포 종료
-
-
+echo "[log] 배포 종료
