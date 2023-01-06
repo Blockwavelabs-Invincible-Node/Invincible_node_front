@@ -45,7 +45,7 @@ jobs:
 
       - name: zip create
         # zip 파일을 만듭니다(파일명은 자유, 대신 아래 workflow에 적을 파일명과 동일하게 맞춰주세요).
-        run: zip -qq -r ./build-fe.zip ./build
+        run: zip -qq -r ./build-fe.zip .
         shell: bash
 
       - name: Configure AWS credentials
