@@ -8,16 +8,13 @@ import "./styles/font.css";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import persistStore from "redux-persist/es/persistStore";
-import { ProSidebarProvider } from "react-pro-sidebar";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   //<React.StrictMode>
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <ProSidebarProvider>
-        <App />
-      </ProSidebarProvider>
+      <App />
     </PersistGate>
   </Provider>
   //</React.StrictMode>

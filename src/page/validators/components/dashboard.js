@@ -26,7 +26,7 @@ const ListTable = styled.table`
   padding-top: 3vh;
   padding-bottom: 3vh;
   text-overflow: hidden;
-  font-size: 1vh;
+  /* font-size: 1.2vw; */
   border-collapse: collapse;
 
   /* table-layout: fixed; */
@@ -39,15 +39,18 @@ const ListTableBox = styled.div`
   padding-bottom: 5vh;
   border-radius: 10px;
 `;
-const ListTableHeader = styled.tr`
-  height: 7vh;
-  border-bottom: 1px solid #4e4e4e; ;
-`;
 const ListTableRow = styled.tr`
   height: 7vh;
   border-bottom: 1px solid #4e4e4e; ;
 `;
+const ListTableHeaderRow = styled.tr`
+  height: 3vh;
+`;
+const ListTableHeader = styled.th`
+  font-size: 0.8vw;
+`;
 const ListTableElement = styled.td`
+  font-size: 0.8vw;
   text-overflow: hidden;
 `;
 const Owner = styled(ListTableElement)`
@@ -209,9 +212,10 @@ const Dashboard = () => {
               {getShortenedAddress(valiAddresses[i], "evmos")}
             </Validator>
             <ListTableElement>{commissions[i]}%</ListTableElement>
-            <ListTableElement>{lends[i] / 10 ** 18} USDT</ListTableElement>
+            <ListTableElement>{lends[i] / 10 ** 18} USDC</ListTableElement>
             <ListTableElement>{score.toFixed(3)}</ListTableElement>
             <ListTableElement>{share.toFixed(3)}%</ListTableElement>
+            {console.log("valid: " + valiAddresses[i])}
           </ListTableRow>
         </>
       );
@@ -277,15 +281,15 @@ const Dashboard = () => {
         <FirstText>List</FirstText>
         <ListTableBox>
           <ListTable>
-            <ListTableHeader>
-              <ListTableElement>No.</ListTableElement>
+            <ListTableHeaderRow>
+              <ListTableHeader>No.</ListTableHeader>
               {/* <ListTableElement>Owner</ListTableElement> */}
-              <ListTableElement>Validator</ListTableElement>
-              <ListTableElement>Commission</ListTableElement>
-              <ListTableElement>USDT Lended</ListTableElement>
-              <ListTableElement>Score</ListTableElement>
-              <ListTableElement>Share(%)</ListTableElement>
-            </ListTableHeader>
+              <ListTableHeader>Validator</ListTableHeader>
+              <ListTableHeader>Commission</ListTableHeader>
+              <ListTableHeader>USDT Lended</ListTableHeader>
+              <ListTableHeader>Score</ListTableHeader>
+              <ListTableHeader>Share(%)</ListTableHeader>
+            </ListTableHeaderRow>
             {TableRows()}
           </ListTable>
         </ListTableBox>

@@ -196,7 +196,7 @@ const ApplyForm = ({ openModal }) => {
   //   }, 10000);
   // };
   const ValidatorApplication = async (validatorAddress, amount) => {
-    SwitchNetwork(5).then(async () => {
+    SwitchNetwork(9000).then(async () => {
       const getAccount = await web3.eth.getAccounts();
       console.log(validatorAddress, amount);
       console.log(await testUSDTContract.methods);
@@ -224,11 +224,14 @@ const ApplyForm = ({ openModal }) => {
     const getAccount = await web3.eth.getAccounts();
     const account = getAccount[0];
     const id = toast.loading("Verifying Validator Address..");
-    console.log(account);
+    console.log("account: ", account);
+    console.log("ValidatorAddress: ", validatorAddress);
     const addValidatorAddress = await liquidStakingContract.methods
       .addValidatorAddress(validatorAddress)
       .send({ from: account })
       .catch((err) => {
+        console.log("hi");
+
         console.log(err.message);
         return;
       })
