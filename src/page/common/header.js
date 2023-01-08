@@ -222,13 +222,12 @@ function Header({ launchedApp }) {
         />
       )}
       <Top>
-        <LeftTop>
-          <Logo
-            src={logo}
-            onClick={() => {
-              routeMain();
-            }}
-          ></Logo>
+        <LeftTop
+          onClick={() => {
+            routeMain();
+          }}
+        >
+          <Logo src={logo}></Logo>
           <InvincibleNodeText>Invincible Node</InvincibleNodeText>
         </LeftTop>
 
