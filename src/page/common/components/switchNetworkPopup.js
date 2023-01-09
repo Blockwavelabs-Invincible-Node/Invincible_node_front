@@ -118,11 +118,11 @@ const SwitchNetworkPopup = ({ routePage, closeModal }) => {
           window.location.reload();
         });
     } else if (selectedNetwork == 2) {
-      //mumbai
-      SwitchNetwork(80001)
+      //mumbai 80001 goerli 5
+      SwitchNetwork(5)
         .then(() => {
           console.log("Connected to Mumbai");
-          dispatch(setNetworkId(80001));
+          dispatch(setNetworkId(5));
           dispatch(setNetworkName("Polygon"));
           dispatch(setTokenName("Matic"));
           routePage();

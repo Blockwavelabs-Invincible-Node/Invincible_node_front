@@ -258,11 +258,11 @@ const RiskHedge = ({
   const [sliderValue, setSliderValue] = useState(0);
 
   const stakeAmountRedux = useSelector(selectStakeAmount);
-  const hedgeAmountRedux = useSelector(selectHedgeAmount);
-  const networkNameRedux = useSelector(selectNetworkName);
+  // const hedgeAmountRedux = useSelector(selectHedgeAmount);
+  // const networkNameRedux = useSelector(selectNetworkName);
   const tokenNameRedux = useSelector(selectTokenName);
 
-  const stakeDispatch = useDispatch();
+  // const stakeDispatch = useDispatch();
   const hedgeDispatch = useDispatch();
   const hedgeRatioDispatch = useDispatch();
 
@@ -452,11 +452,11 @@ const RiskHedge = ({
         <EmptyBox></EmptyBox>
         {isStakeMoved ? (
           <ConfirmButton
-            onClick={() => {
+            onClick={async () => {
               openModal();
 
-              const hedge = parseInt(
-                stakeAmountRedux * volume * swapRate * 10 ** 16
+              const hedge = await web3.utils.toBN(
+                parseInt(stakeAmountRedux * volume * swapRate * 10 ** 16)
               );
               console.log("hedge: ", hedge);
               hedgeDispatch(setHedgeAmount(hedge));

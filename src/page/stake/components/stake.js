@@ -24,6 +24,8 @@ import {
 import GetTokenPrice from "../../functions/fetchTokenPrice";
 import CheckNetwork from "../../functions/checkNetwork";
 
+import testV4Abi from "../../../artifacts/testV4.json";
+
 const StakeForm = styled(Form)``;
 const StakingWrapper = styled(Wrapper)`
   margin-top: 10vh;
@@ -306,11 +308,24 @@ const Stake = ({
   };
 
   const getEthBalance = async (account) => {
+    console.log("cur network: ", networkIdRedux);
     try {
-      console.log("Account for balance: ", account);
-      const getEthBalance = await web3.eth.getBalance(account);
-      setEthBalance(getEthBalance);
-      console.log("eth balance: ", getEthBalance);
+      if (networkIdRedux == 5) {
+        //test v4 token
+        const testV4Address = "0x499d11e0b6eac7c0593d8fb292dcbbf815fb29ae";
+        const testV4Contract = new web3.eth.Contract(testV4Abi, testV4Address);
+        console.log(testV4Contract);
+        const maticBalance = await testV4Contract.methods
+          .balanceOf(account)
+          .call();
+        setEthBalance(maticBalance);
+        console.log("matic balance: ", getEthBalance);
+      } else {
+        console.log("Account for balance: ", account);
+        const getEthBalance = await web3.eth.getBalance(account);
+        setEthBalance(getEthBalance);
+        console.log("eth balance: ", getEthBalance);
+      }
     } catch (error) {
       return error;
     }
@@ -334,16 +349,16 @@ const Stake = ({
     // if (tokenPrice == 0) {
     //   GetTokenPrice(tokenNameRedux.toUpperCase());
     // }
-    console.log("Token type: ", selectedOption);
+    // console.log("Token type: ", selectedOption);
   }, []);
 
-  const handleSelectedOption = (e) => {
-    console.log(e);
-    setUdenom(e.udenom);
-    setLabel(e.label);
-    setToken(e.label);
-    setSelectedOption(e.label);
-  };
+  // const handleSelectedOption = (e) => {
+  //   console.log(e);
+  //   setUdenom(e.udenom);
+  //   setLabel(e.label);
+  //   setToken(e.label);
+  //   setSelectedOption(e.label);
+  // };
 
   return (
     <>

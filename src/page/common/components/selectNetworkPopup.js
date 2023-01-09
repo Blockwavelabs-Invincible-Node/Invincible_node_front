@@ -74,13 +74,14 @@ const SelectNetworkPopup = ({ routePage }) => {
           }
         });
       } else if (selectedNetwork == 2) {
-        //mumbai
-        SwitchNetwork(80001).then((result) => {
+        //mumbai 80001 goerli 5
+        SwitchNetwork(5).then((result) => {
           console.log("res", result);
           if (result == 1) {
             console.log(result);
-            console.log("Connected to Mumbai");
-            dispatch(setNetworkId(80001));
+            //console.log("Connected to Mumbai");
+            console.log("Connected to Goerli");
+            dispatch(setNetworkId(5));
             dispatch(setNetworkName("Polygon"));
             dispatch(setTokenName("Matic"));
             routePage();
