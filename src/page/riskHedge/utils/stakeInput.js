@@ -15,7 +15,6 @@ const EvmosInputWrapper = styled.div`
 `;
 const EvmosInput = styled(BasicInput)`
   width: 100%;
-  margin-right: 13px;
   height: 30px;
   background-color: #292929;
   border-radius: 5px;
@@ -31,9 +30,11 @@ const EvmosInput = styled(BasicInput)`
   }
 `;
 const InEvmosAmount = styled(LightText)`
+  width: 5vw;
   font-size: 20px;
   font-weight: 400;
   white-space: nowrap;
+  text-align: right;
   //   width: 300px;
 `;
 
@@ -58,8 +59,13 @@ const YouWillStake = styled(LightText)`
   font-weight: 400;
 `;
 const EvmosAmount = styled(LightText)`
+  width: 5vw;
   font-size: 20px;
   font-weight: 400;
+  text-align: right;
+`;
+const EmptySpace = styled.div`
+  width: 1.5vw;
 `;
 const GetWrapper = styled.div`
   width: 100%;
@@ -90,6 +96,7 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
             <EvmosInput
               value={(stakeAmountRedux * (100 - hedgeRatioRedux)) / 100}
             />
+            <EmptySpace />
             <EvmosAmount>{tokenNameRedux}</EvmosAmount>
           </EvmosInputWrapper>
         </StakeWrapper>
@@ -101,6 +108,7 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
             <EvmosInput
               value={(stakeAmountRedux * (100 - hedgeRatioRedux)) / 100}
             />
+            <EmptySpace />
             <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
           </EvmosInputWrapper>
         </GetWrapper>

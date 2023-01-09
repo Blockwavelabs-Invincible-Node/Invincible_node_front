@@ -11,9 +11,11 @@ const EvmosInputWrapper = styled.div`
   width: 50%;
   align-items: center;
 `;
+const EmptySpace = styled.div`
+  width: 1.5vw;
+`;
 const EvmosInput = styled(BasicInput)`
   width: 100%;
-  margin-right: 13px;
   height: 30px;
   background-color: #292929;
   border-radius: 5px;
@@ -29,9 +31,11 @@ const EvmosInput = styled(BasicInput)`
   }
 `;
 const InEvmosAmount = styled(LightText)`
+  width: 5vw;
   font-size: 20px;
   font-weight: 400;
   white-space: nowrap;
+  text-align: right;
   //   width: 300px;
 `;
 
@@ -40,7 +44,6 @@ const ResultContainer = styled.div`
   /* max-width: 468px; */
   /* margin: 0px auto; */
   /* padding: min(34px, 5vw); */
-  padding: 0 1vw 0 1vw;
   //   padding: 34px;
 `;
 
@@ -82,7 +85,8 @@ const HedgeInput = ({ status, token, hedgeAmount }) => {
           </YouWillGet>
           <EvmosInputWrapper>
             <EvmosInput value={hedgeAmountRedux / 10 ** 18} />
-            <InEvmosAmount>USDT</InEvmosAmount>
+            <EmptySpace />
+            <InEvmosAmount>USDC</InEvmosAmount>
           </EvmosInputWrapper>
         </GetWrapper>
       </ResultContainer>

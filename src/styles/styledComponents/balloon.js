@@ -8,8 +8,6 @@ export const Balloon = styled.div`
   color: #1b1b1b;
   text-align: center;
   vertical-align: middle;
-  font-weight: 900;
-  font-size: 0.6vw;
   line-height: 2vh;
   &:after {
     border-top: 10px solid #faf1e4;

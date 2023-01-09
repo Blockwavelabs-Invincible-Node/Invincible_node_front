@@ -23,12 +23,14 @@ const ModalBackground = styled.div`
 
 const ModalWrapper = styled.div`
   background: #333333;
+  width: 35vw;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
   display: flex;
   justify-content: center;
-  padding: min(43px, 5vh) min(88px, 5vw) min(43px, 5vh) min(88px, 5vw);
-  max-width: 90%;
+  padding: min(43px, 5vh) min(1vw) min(43px, 5vh) min(88px, 1vw);
+  /* padding */
+  max-width: 100%;
 `;
 
 const ModalOverlay = styled.div`
