@@ -20,6 +20,8 @@ import { RotatingLines } from "react-loader-spinner";
 import { selectHedgeRatio } from "../../../redux/reducers/hedgeRatioReducer";
 import { selectNetworkId } from "../../../redux/reducers/networkReducer";
 import networkId from "../../../network/networkId.json";
+import GetAddressAndContract from "../../functions/getAddressAndContract";
+import testV4Abi from "../../../artifacts/testV4.json";
 
 const LeverageWrapper = styled.div`
   /* margin-top: 5vh; */
@@ -182,6 +184,20 @@ const PendingBox = styled.div`
 `;
 
 const web3 = new Web3(window.ethereum);
+const [
+  evmosLiquidStakingAddress,
+  evmosLiquidStakingContract,
+  evmosRewardTokenAddress,
+  evmosRewardTokenContract,
+  kavaLiquidStakingAddress,
+  kavaLiquidStakingContract,
+  kavaRewardTokenAddress,
+  kavaRewardTokenContract,
+  polygonLiquidStakingAddress,
+  polygonLiquidStakingContract,
+  polygonRewardTokenAddress,
+  polygonRewardTokenContract,
+] = GetAddressAndContract();
 
 const Confirm = ({ pressStake, token }) => {
   const [leveraged, setLeveraged] = useState(true);
@@ -193,6 +209,8 @@ const Confirm = ({ pressStake, token }) => {
   const stakeDispatch = useDispatch();
   const networkIdRedux = useSelector(selectNetworkId);
 
+  console.log("pol con: ", polygonLiquidStakingContract);
+
   const stake = () => {
     //stake redux 값 변경
     // stakeDispatch(
@@ -200,36 +218,58 @@ const Confirm = ({ pressStake, token }) => {
     // );
     const amount = (stakeAmountRedux * (100 - hedgeRatioRedux)) / 100;
     const doStake = async (amount) => {
-      let realAmount = amount * web3.utils.toBN(10 ** 18);
+      let realAmount = web3.utils.toBN(amount * 10 ** 18);
       const getAccount = await web3.eth.getAccounts();
       const account = getAccount[0];
       console.log("account: ", account);
       // data = hex encoded
       console.log("hedge amount: ", hedgeAmountRedux);
       let liquidStaking;
+      console.log("net id ", networkIdRedux);
       // get network Id and stake
-      if (networkIdRedux == networkId.evmos) {
-        liquidStaking = address.evmosLiquidStaking;
-      } else if (networkIdRedux == networkId.kava) {
-        liquidStaking = address.kavaLiquidStaking;
+      if (networkIdRedux == networkId.polygon) {
+        console.log("matic");
+        liquidStaking = polygonLiquidStakingAddress;
+        const testV4Address = "0x499d11e0b6eac7c0593d8fb292dcbbf815fb29ae";
+        const testV4Contract = new web3.eth.Contract(testV4Abi, testV4Address);
+        console.log("testv4: ", testV4Contract);
+        const approve = await testV4Contract.methods
+          .approve(polygonLiquidStakingAddress, realAmount)
+          .send({ from: account })
+          .then((result) => {
+            console.log(result);
+          });
+        const receiveToken = await polygonLiquidStakingContract.methods
+          .receiveToken(realAmount, hedgeAmountRedux)
+          .send({ from: account })
+          .then((result) => {
+            console.log(result);
+            pressStake();
+          });
+      } else {
+        if (networkIdRedux == networkId.evmos) {
+          liquidStaking = address.evmosLiquidStaking;
+        } else if (networkIdRedux == networkId.kava) {
+          liquidStaking = address.kavaLiquidStaking;
+        }
+        web3.eth
+          .sendTransaction({
+            from: account,
+            to: liquidStaking,
+            value: realAmount,
+            data:
+              hedgeAmountRedux != 0
+                ? web3.utils.numberToHex(web3.utils.toBN(hedgeAmountRedux))
+                : 0,
+          })
+          .then(function (receipt) {
+            console.log(receipt);
+            if (receipt && hedgeAmountRedux != 0) {
+              // sendStableCoin(hedgeAmountRedux);
+            }
+            pressStake();
+          });
       }
-      web3.eth
-        .sendTransaction({
-          from: account,
-          to: liquidStaking,
-          value: realAmount,
-          data:
-            hedgeAmountRedux != 0
-              ? web3.utils.numberToHex(hedgeAmountRedux)
-              : 0,
-        })
-        .then(function (receipt) {
-          console.log(receipt);
-          if (receipt && hedgeAmountRedux != 0) {
-            // sendStableCoin(hedgeAmountRedux);
-          }
-          pressStake();
-        });
     };
     doStake(amount);
   };
@@ -255,13 +295,6 @@ const Confirm = ({ pressStake, token }) => {
   //     });
   // };
 
-  const switchOnClick = () => {
-    setLeveraged(!leveraged);
-  };
-
-  const leverageOnChange = (e) => {
-    setLeveraged(e.target.valueAsNumber);
-  };
   return (
     <LeverageWrapper>
       <FirstText>Bill</FirstText>
@@ -280,7 +313,6 @@ const Confirm = ({ pressStake, token }) => {
             onClick={() => {
               stake();
               setInProgress(true);
-              // sendStableCoin(100);
             }}
           >
             Stake

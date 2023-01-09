@@ -550,11 +550,11 @@
       ]
     },
     "contracts/LiquidStaking.sol": {
-      "keccak256": "0xdffa6df0fe1b1b73e351af61fb35083bb7fa79d520a5130030ad410b56322077",
+      "keccak256": "0xd97eef385e98ac88edec6e0dbf9f4c63c267c0d807dd82ef88b2d70c57a0ba51",
       "license": "MIT",
       "urls": [
-        "bzz-raw://fa62c6bcff29075d7f9eac8754b75446515838574f3b5391c6ecc32c29ca5b62",
-        "dweb:/ipfs/QmczUqiSdoXBUzMcTnCnsq1JE6aeHb7okRsB4VvzCrxopW"
+        "bzz-raw://095fc5f0dfc4b927e8a65639f0c771364ae6066f88b0f93f9cd0b19a2b469ac4",
+        "dweb:/ipfs/QmTeaJbgVoUSJAorQPtF7rC5vjbMZUPFzsagHYxSCdXo9f"
       ]
     }
   },

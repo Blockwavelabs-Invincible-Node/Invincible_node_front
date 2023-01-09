@@ -31,6 +31,10 @@ import "../../../../node_modules/react-toastify/dist/ReactToastify.css";
 import { RotatingLines } from "react-loader-spinner";
 import GetAddressAndContract from "../../functions/getAddressAndContract";
 import networkId from "../../../network/networkId.json";
+import {
+  setStableCoinAmount,
+  setValidatorAddress,
+} from "../../../redux/reducers/validatorApplicationReducer";
 
 const Title = styled(BoldText)`
   text-align: left;
@@ -152,8 +156,8 @@ let liquidStakingAddress;
 let rewardTokenAddress;
 
 const ApplyForm = ({ openModal }) => {
-  const [stableCoinAmount, setStableCoinAmount] = useState(0);
-  const [validatorAddress, setValidatorAddress] = useState(null);
+  const [stableCoinAmount, setStableCoinAmountUseState] = useState(0);
+  const [validatorAddress, setValidatorAddressUseState] = useState(null);
 
   const [secondMessage, setSecondMessage] = useState(false);
   const [thirdMessage, setThirdMessage] = useState(false);
@@ -167,10 +171,10 @@ const ApplyForm = ({ openModal }) => {
   dispatch(resetPageNumber());
 
   const handleStableCoinAmountChange = (event) => {
-    setStableCoinAmount(event.target.value);
+    setStableCoinAmountUseState(event.target.value);
   };
   const handleValidatorAddressChange = (event) => {
-    setValidatorAddress(event.target.value);
+    setValidatorAddressUseState(event.target.value);
   };
   // const retryCheck = async () => {
   //   setTimeout(async () => {
