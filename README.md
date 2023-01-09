@@ -11,14 +11,14 @@ https://www.invinciblenode.app/
 
 # Contract Addresses
 
-evmosRewardToke": 0x912998a3b40286d60DB0663eE8806F1864133958
-evmosLiquidStaking: 0x34afA6beCB13462caFc6b58855A6aE1fCD58E5c2
-stableCoinPool: 0x418894766B4e9a2Ee1b0Da7543a949d54716C4e8
-kavaLiquidStaking": 0x5DD4af979214c5Eb994e708bE2A66cBA3882B567
-polygonLiquidStaking": 0x5299e87CF929Ea0849740840736CD5d9476E68BA
-kavaRewardToken":0xAd6c553BCe3079b4Dc52689fbfD4a2e72F1F3158
-kavaLiquidStaking: 0x5DD4af979214c5Eb994e708bE2A66cBA3882B567
-polygonRewardToken: 0x2F3EefaA999ECe148564e187CcA9e8B1eA7c2e89
+evmosRewardToken: 0x912998a3b40286d60DB0663eE8806F1864133958                                          
+evmosLiquidStaking: 0x34afA6beCB13462caFc6b58855A6aE1fCD58E5c2                                           
+stableCoinPool: 0x418894766B4e9a2Ee1b0Da7543a949d54716C4e8                                                  
+kavaLiquidStaking": 0x5DD4af979214c5Eb994e708bE2A66cBA3882B567                                                    
+polygonLiquidStaking": 0x5299e87CF929Ea0849740840736CD5d9476E68BA                                                     
+kavaRewardToken":0xAd6c553BCe3079b4Dc52689fbfD4a2e72F1F3158                                                         
+kavaLiquidStaking: 0x5DD4af979214c5Eb994e708bE2A66cBA3882B567                                                         
+polygonRewardToken: 0x2F3EefaA999ECe148564e187CcA9e8B1eA7c2e89                                                                      
 
 # Frontend
 npm i                                                                                                 
