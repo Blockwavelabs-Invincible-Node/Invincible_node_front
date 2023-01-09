@@ -84,7 +84,11 @@ const HedgeInput = ({ status, token, hedgeAmount }) => {
             {status == "success" ? "You can get" : "You will get"}
           </YouWillGet>
           <EvmosInputWrapper>
-            <EvmosInput value={hedgeAmountRedux / 10 ** 18} />
+            <EvmosInput
+              value={Number((hedgeAmountRedux / 10 ** 18) * 10 ** 11).toFixed(
+                5
+              )}
+            />
             <EmptySpace />
             <InEvmosAmount>USDC</InEvmosAmount>
           </EvmosInputWrapper>
