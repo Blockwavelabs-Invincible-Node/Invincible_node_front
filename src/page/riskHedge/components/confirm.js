@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { BoldText } from "../../../styles/styledComponents/boldText";
@@ -22,7 +22,12 @@ import { selectNetworkId } from "../../../redux/reducers/networkReducer";
 import networkId from "../../../network/networkId.json";
 import GetAddressAndContract from "../../functions/getAddressAndContract";
 import testV4Abi from "../../../artifacts/testV4.json";
-import { Slider } from "@mui/material";
+import { css, Slider } from "@mui/material";
+import { Balloon } from "../../../styles/styledComponents/balloon";
+import {
+  selectNetworkName,
+  selectTokenName,
+} from "../../../redux/reducers/networkReducer";
 
 const LeverageWrapper = styled.div`
   /* margin-top: 5vh; */
@@ -193,18 +198,99 @@ const CurrentStatusProgressWrapper = styled.div`
   position: relative;
   height: 15vh;
   margin-top: 2vh;
+  padding-left: 2vw;
+  padding-right: 2vw;
   background-color: #292929;
   border-radius: 5px;
 `;
+
 const BackgroundProgress = styled.div`
   position: absolute;
-  width: 100%;
+  width: ${(props) => 80 - (props.volume / 100) * 80 + 1}%;
   top: 50%;
-  left: 10%;
   right: 10%;
-  /* left: 50%; */
-  margin-right: 1vw;
   transform: translate(0, -50%);
+`;
+const ForegroundProgress = styled.div`
+  position: absolute;
+  /* ${(props) =>
+    props.volume == 0
+      ? css`
+          width: 0%;
+        `
+      : css`
+          width: ${(props.volume / 100) * 80}%;
+        `}; */
+  width: ${(props) =>
+    props.volume == 0 ? "5%" : "((props.volume} / 100) * 80)%"};
+  top: 50%;
+  left: 9.5%;
+  transform: translate(0, -50%);
+`;
+
+// balloons
+const StableBalloon = styled(Balloon)`
+  position: absolute;
+  width: 15%;
+  top: 28%;
+  color: white;
+  font-weight: 600;
+  font-size: 0.5vw;
+  background-color: #4759ff;
+  left: ${(props) => props.volume / 2}%;
+  &:after {
+    border-top: 0px solid #4759ff;
+    border-left: 0px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 10px solid #4759ff;
+    content: "";
+    position: absolute;
+    top: -30%;
+    right: 50%;
+    transform: translate(50%, 0%);
+  }
+`;
+const StakeBalloon = styled(Balloon)`
+  position: absolute;
+  width: 15%;
+  top: 28%;
+  color: #1b1b1b;
+  font-weight: 600;
+  font-size: 0.5vw;
+  right: ${(props) => (80 - (props.volume / 100) * 80) / 2 + 4}%;
+  &:after {
+    border-top: 0px solid #4759ff;
+    border-left: 0px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 0px solid #4759ff;
+    content: "";
+    position: absolute;
+    top: -30%;
+    right: 50%;
+    transform: translate(50%, 0%);
+  }
+`;
+const SuggestBalloon = styled(Balloon)`
+  width: 2vw;
+  top: 57%;
+  color: white;
+  font-weight: 600;
+  font-size: 0.5vw;
+  background-color: #4759ff;
+  left: ${(props) => (props.volume * 80) / 100 + 6.5}%;
+  /* left: 7%; */
+  &:after {
+    border-top: 0px solid #4759ff;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid #4759ff;
+    content: "";
+    position: absolute;
+    top: -30%;
+    right: 50%;
+    transform: translate(50%, 0%);
+    z-index: 5;
+  }
 `;
 
 const web3 = new Web3(window.ethereum);
@@ -227,12 +313,18 @@ const Confirm = ({ pressStake, token }) => {
   const [leveraged, setLeveraged] = useState(true);
   const [leverage, setLeverage] = useState(2);
   const [inProgress, setInProgress] = useState(false);
-  const [volume, setVolume] = useState(0);
+  const [volume, setVolume] = useState(30);
   const hedgeAmountRedux = useSelector(selectHedgeAmount);
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const hedgeRatioRedux = useSelector(selectHedgeRatio);
   const stakeDispatch = useDispatch();
   const networkIdRedux = useSelector(selectNetworkId);
+  const tokenNameRedux = useSelector(selectTokenName);
+
+  useEffect(() => {
+    setVolume(hedgeRatioRedux);
+    console.log(hedgeRatioRedux);
+  }, []);
 
   console.log("pol con: ", polygonLiquidStakingContract);
 
@@ -328,14 +420,17 @@ const Confirm = ({ pressStake, token }) => {
       </SecondText>
       <CurrentStatusWrapper>
         <ThirdText>Current Status</ThirdText>
-        {/* <CurrentStatusProgressWrapper>
-          <BackgroundProgress>
+        <CurrentStatusProgressWrapper>
+          <StableBalloon volume={volume}>
+            {Number((hedgeAmountRedux / 10 ** 18) * 10 ** 11).toFixed(5)} USDC
+          </StableBalloon>
+          <BackgroundProgress volume={volume}>
             <Slider
               size="big"
               aria-label="Small steps"
-              value={5}
+              value={100}
               min={0}
-              max={stake}
+              max={100}
               valueLabelDisplay="off"
               disabled={true}
               sx={{
@@ -351,27 +446,56 @@ const Confirm = ({ pressStake, token }) => {
               }}
             />
           </BackgroundProgress>
-          <Slider
-            size="big"
-            aria-label="Small steps"
-            value={100}
-            min={0}
-            max={stake}
-            valueLabelDisplay="off"
-            disabled={true}
-            sx={{
-              "& .MuiSlider-thumb": {
-                display: "none",
-                height: 0,
-                width: 0,
-              },
-              "& .MuiSlider-track": {
-                height: "0.6vh",
-                color: "#FAF1E4",
-              },
-            }}
-          />
-        </CurrentStatusProgressWrapper> */}
+          <StakeBalloon volume={volume}>
+            {Number((stakeAmountRedux * (100 - hedgeRatioRedux)) / 100).toFixed(
+              5
+            )}
+            {tokenNameRedux}
+          </StakeBalloon>
+          <ForegroundProgress volume={volume}>
+            <Slider
+              size="1000p"
+              aria-label="Small steps"
+              value={100}
+              // step={0.00000001}
+              min={0}
+              max={100}
+              // marks={marks}
+              valueLabelDisplay="off"
+              sx={{
+                // color: "#4759FF",
+                // "& .MuiSlider-colorPrimary": {
+                //   color: "#FAF1E4",
+                // },
+
+                "& .MuiSlider-thumb": {
+                  display: "none",
+                  height: 0,
+                  width: 0,
+                },
+                "& .MuiSlider-rail": {
+                  height: "0.7vh",
+                  color: "#FAF1E4",
+                },
+                "& .MuiSlider-track": {
+                  height: "0.7vh",
+                  color: "#4759FF",
+                  // border: 0,
+                },
+                "& .MuiSlider-mark": {
+                  color: "#4759FF",
+                  height: "1.0vh",
+                  width: "0.1vw",
+                },
+                "& .MuiSlider-markLabel": {
+                  color: "white",
+                  fontSize: 0.1,
+                },
+              }}
+            />
+          </ForegroundProgress>
+          <SuggestBalloon volume={volume}>{volume} %</SuggestBalloon>
+        </CurrentStatusProgressWrapper>
       </CurrentStatusWrapper>
       <StakeInput token={token} />
       <HedgeInput token={token} />

@@ -94,7 +94,9 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
           </YouWillStake>
           <EvmosInputWrapper>
             <EvmosInput
-              value={(stakeAmountRedux * (100 - hedgeRatioRedux)) / 100}
+              value={Number(
+                (stakeAmountRedux * (100 - hedgeRatioRedux)) / 100
+              ).toFixed(5)}
             />
             <EmptySpace />
             <EvmosAmount>{tokenNameRedux}</EvmosAmount>
@@ -106,7 +108,9 @@ const StakeInput = ({ status, token, stakeAmount, getAmount }) => {
           </YouWillGet>
           <EvmosInputWrapper>
             <EvmosInput
-              value={(stakeAmountRedux * (100 - hedgeRatioRedux)) / 100}
+              value={Number(
+                (stakeAmountRedux * (100 - hedgeRatioRedux)) / 100
+              ).toFixed(5)}
             />
             <EmptySpace />
             <InEvmosAmount>in{tokenNameRedux}</InEvmosAmount>
