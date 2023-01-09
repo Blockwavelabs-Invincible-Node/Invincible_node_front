@@ -289,7 +289,8 @@ const StakeBalloon = styled(Balloon)`
   height: 2vh;
   top: 5%;
   right: -2%;
-
+  font-weight: 600;
+  font-size: 0.5vw;
   &:after {
     top: 90%;
     right: 10%;
@@ -299,6 +300,8 @@ const SuggestBalloon = styled(Balloon)`
   width: 2vw;
   top: 100%;
   color: white;
+  font-weight: 600;
+  font-size: 0.5vw;
   background-color: #4759ff;
   left: ${(props) => props.volume - 4}%;
   &:after {
@@ -468,7 +471,7 @@ const RiskHedge = ({
                 <Slider
                   size="big"
                   aria-label="Small steps"
-                  value={100}
+                  value={stake}
                   min={0}
                   max={stake}
                   valueLabelDisplay="off"
@@ -607,7 +610,6 @@ const RiskHedge = ({
 
               const hedge = parseInt(
                 stakeAmountRedux * volume * swapRate * 10 ** 5
-
               );
               console.log("hedge: ", hedge);
               hedgeDispatch(setHedgeAmount(hedge));

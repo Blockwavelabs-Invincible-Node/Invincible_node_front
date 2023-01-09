@@ -22,10 +22,12 @@ import { selectNetworkId } from "../../../redux/reducers/networkReducer";
 import networkId from "../../../network/networkId.json";
 import GetAddressAndContract from "../../functions/getAddressAndContract";
 import testV4Abi from "../../../artifacts/testV4.json";
+import { Slider } from "@mui/material";
 
 const LeverageWrapper = styled.div`
   /* margin-top: 5vh; */
   margin-bottom: 5vh;
+  width: 30vw;
   text-align: left;
   max-width: 100%;
 `;
@@ -42,12 +44,10 @@ const ThirdText = styled(BoldText)`
   font-size: 20px;
   font-weight: 700;
 `;
-const CurrentStatusWrapper = styled.div``;
 const FourthText = styled(BoldText)``;
 const MaximizeWrapper = styled.div``;
 const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-evenly;
+  width: 100%;
 `;
 const ComingButton = styled(Button)`
   max-width: 240px;
@@ -57,8 +57,9 @@ const ComingButton = styled(Button)`
   font-weight: 700;
 `;
 const StakeButton = styled(Button)`
-  max-width: 240px;
-  height: 50px;
+  width: 100%;
+  height: 4vh;
+  margin-top: 4vh;
   font-size: 15px;
   font-weight: 700;
   background-color: #f1f1f1;
@@ -183,6 +184,29 @@ const PendingBox = styled.div`
   justify-content: center;
 `;
 
+//styled component for progress bar
+const CurrentStatusWrapper = styled.div`
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+`;
+const CurrentStatusProgressWrapper = styled.div`
+  position: relative;
+  height: 15vh;
+  margin-top: 2vh;
+  background-color: #292929;
+  border-radius: 5px;
+`;
+const BackgroundProgress = styled.div`
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  /* left: 50%; */
+  margin-right: 1vw;
+  transform: translate(0, -50%);
+`;
+
 const web3 = new Web3(window.ethereum);
 const [
   evmosLiquidStakingAddress,
@@ -203,6 +227,7 @@ const Confirm = ({ pressStake, token }) => {
   const [leveraged, setLeveraged] = useState(true);
   const [leverage, setLeverage] = useState(2);
   const [inProgress, setInProgress] = useState(false);
+  const [volume, setVolume] = useState(0);
   const hedgeAmountRedux = useSelector(selectHedgeAmount);
   const stakeAmountRedux = useSelector(selectStakeAmount);
   const hedgeRatioRedux = useSelector(selectHedgeRatio);
@@ -302,11 +327,54 @@ const Confirm = ({ pressStake, token }) => {
         Check this bill again and confirm your final position.
       </SecondText>
       <CurrentStatusWrapper>
-        <StakeInput token={token} />
+        <ThirdText>Current Status</ThirdText>
+        {/* <CurrentStatusProgressWrapper>
+          <BackgroundProgress>
+            <Slider
+              size="big"
+              aria-label="Small steps"
+              value={5}
+              min={0}
+              max={stake}
+              valueLabelDisplay="off"
+              disabled={true}
+              sx={{
+                "& .MuiSlider-thumb": {
+                  display: "none",
+                  height: 0,
+                  width: 0,
+                },
+                "& .MuiSlider-track": {
+                  height: "0.6vh",
+                  color: "#FAF1E4",
+                },
+              }}
+            />
+          </BackgroundProgress>
+          <Slider
+            size="big"
+            aria-label="Small steps"
+            value={100}
+            min={0}
+            max={stake}
+            valueLabelDisplay="off"
+            disabled={true}
+            sx={{
+              "& .MuiSlider-thumb": {
+                display: "none",
+                height: 0,
+                width: 0,
+              },
+              "& .MuiSlider-track": {
+                height: "0.6vh",
+                color: "#FAF1E4",
+              },
+            }}
+          />
+        </CurrentStatusProgressWrapper> */}
       </CurrentStatusWrapper>
-      <CurrentStatusWrapper>
-        <HedgeInput token={token} />
-      </CurrentStatusWrapper>
+      <StakeInput token={token} />
+      <HedgeInput token={token} />
       <ButtonWrapper>
         {!inProgress ? (
           <StakeButton
