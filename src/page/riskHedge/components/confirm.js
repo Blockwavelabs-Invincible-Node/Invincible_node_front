@@ -221,8 +221,9 @@ const ForegroundProgress = styled.div`
       : css`
           width: ${(props.volume / 100) * 80}%;
         `}; */
-  width: ${(props) =>
-    props.volume == 0 ? "5%" : "((props.volume} / 100) * 80)%"};
+  /* width: ${(props) =>
+    props.volume == 0 ? "5%" : "((props.volume} / 100) * 80)%"}; */
+  width: ${(props) => (props.volume / 100) * 80}%;
   top: 50%;
   left: 9.5%;
   transform: translate(0, -50%);
@@ -237,6 +238,7 @@ const StableBalloon = styled(Balloon)`
   font-weight: 600;
   font-size: 0.5vw;
   background-color: #4759ff;
+  overflow: hidden;
   left: ${(props) => props.volume / 2}%;
   &:after {
     border-top: 0px solid #4759ff;
@@ -257,6 +259,7 @@ const StakeBalloon = styled(Balloon)`
   color: #1b1b1b;
   font-weight: 600;
   font-size: 0.5vw;
+  overflow: hidden;
   right: ${(props) => (80 - (props.volume / 100) * 80) / 2 + 4}%;
   &:after {
     border-top: 0px solid #4759ff;
