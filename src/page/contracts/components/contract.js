@@ -189,9 +189,9 @@ const TableRow = styled.tr`
 const TableHeader = styled.th`
   font-size: 0.8vw;
   &:nth-child(2n) {
-    text-align: right;
+    /* text-align: right; */
   }
-  vertical-align: middle;
+  /* vertical-align: middle; */
 `;
 const TableElement = styled.td`
   font-size: 0.8vw;
@@ -209,9 +209,9 @@ const TableElement = styled.td`
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
   }
-  &:nth-child(2n) {
+  /* &:nth-child(2n) {
     text-align: right;
-  }
+  } */
 `;
 
 const SpinnerBox = styled.div`
