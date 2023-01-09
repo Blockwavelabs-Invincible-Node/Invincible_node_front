@@ -1,4 +1,4 @@
-# Invincible Node Front
+# Invincible Node
 
 Our Goal is to absorb the EVM compatible multi-chain affiliated assets into Matic Network via Invincible node in order to contribute to becoming a 
 sustaining-scalable chain
@@ -24,12 +24,3 @@ polygonRewardToken: 0x2F3EefaA999ECe148564e187CcA9e8B1eA7c2e89
 npm i                                                                                                 
 npm start
 
-# Backend
-Run following commands for each chain ( Kava, Evmos, Polygon )
-
-1. node ClaimReward.js
-- Claim and update reward every hour
-2. node ListenStakeEvent.js
-- listen to stake event using event subscriber
-3. node ListenUnbondEvent.js
-- listen to unbond request using event subscriber
