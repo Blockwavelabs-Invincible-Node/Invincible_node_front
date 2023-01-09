@@ -8,6 +8,7 @@ import { selectStakeAmount } from "../../../redux/reducers/stakeAmountReducer";
 import { setHedgeAmount } from "../../../redux/reducers/hedgeAmountReducer";
 import { BoldText } from "../../../styles/styledComponents/boldText";
 import { LightText } from "../../../styles/styledComponents/lightText";
+import { Balloon } from "../../../styles/styledComponents/balloon";
 import { NumberImg } from "../../../styles/styledComponents/numberImg";
 import { BasicInput } from "../../../styles/styledComponents/basicInput";
 import { Wrapper } from "../../../styles/styledComponents/wrapper";
@@ -36,6 +37,11 @@ import FormHelperText from "@mui/material/FormHelperText";
 import TextField from "@mui/material/TextField";
 import InputBase from "@mui/material/InputBase";
 import { FiPercent } from "react-icons/fi";
+import stSuggest from "../../../assets/images/stableHedgingSug.svg";
+import stStake from "../../../assets/images/stableHedgingStake.svg";
+import stMaxTop from "../../../assets/images/stableHedgingMaxTop.svg";
+import stMaxBottom from "../../../assets/images/stableHedgingMaxBottom.svg";
+import { style } from "@mui/system";
 
 const stage = [{ status: "setAmount" }, { status: "stableHedging" }];
 
@@ -83,8 +89,7 @@ const TitleBox = styled.div`
 `;
 const TextBox = styled.div``;
 const TextBox2 = styled.div`
-  display: flex;
-  justify-content: space-between;
+  position: absolute;
 `;
 const FirstText = styled(BoldText)`
   /* font-size: 18px; */
@@ -94,12 +99,7 @@ const SecondText = styled(LightText)`
   /* font-size: 13px; */
   margin-bottom: 1vh;
 `;
-const ThirdText = styled(LightText)`
-  height: 2vh;
-  margin-top: 2vh;
-  margin-bottom: 1vh;
-  /* font-size: 20px; */
-`;
+const ThirdText = styled(LightText)``;
 const FourthText = styled(LightText)`
   font-size: 0.1vw;
   margin-left: 1.5vw;
@@ -123,8 +123,8 @@ const Checker = styled.div`
 `;
 
 const ToggleImg = styled.img`
-  width: 70%;
-  height: 70%;
+  width: 50%;
+  height: 50%;
 `;
 
 const EmptyBox = styled.div`
@@ -213,8 +213,9 @@ const VolumeControl = styled.div`
   display: flex;
   justify-content: space-between;
   border: hidden; */
-  /* margin-top: 3vh; */
+  margin-top: 5vh;
   /* margin-bottom: 5vh; */
+  /* padding-bottom: 5vh; */
 `;
 const VolumeControlOver1 = styled.div`
   position: absolute;
@@ -232,7 +233,7 @@ const VolumeControlOver1 = styled.div`
 `;
 const VolumeControlOver2 = styled.div`
   position: absolute;
-  width: 15vw;
+  width: 66%;
   height: 100%;
   /* border-radius: 20px;
   display: flex;
@@ -267,8 +268,67 @@ const RiskHedgeArrowWrapper = styled.img`
 `;
 const RatioWrapper = styled.div`
   display: flex;
-
   align-items: center;
+`;
+// const StableHedgingSuggestWrapper = styled.div`
+//   position: absolute;
+//   bottom: -30%;
+// `;
+// const StableHedgingStakeWrapper = styled.div`
+//   position: absolute;
+//   /* top: 20%; */
+//   right: 30%;
+// `;
+
+const StableHedgingRelativeWrapper = styled.div`
+  position: relative;
+`;
+
+const StakeBalloon = styled(Balloon)`
+  width: 5vw;
+  height: 2vh;
+  top: 5%;
+  right: -2%;
+
+  &:after {
+    top: 90%;
+    right: 10%;
+  }
+`;
+const SuggestBalloon = styled(Balloon)`
+  width: 2vw;
+  top: 100%;
+  color: white;
+  background-color: #4759ff;
+  left: ${(props) => props.volume - 4}%;
+  &:after {
+    border-top: 0px solid #4759ff;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid #4759ff;
+    content: "";
+    position: absolute;
+    top: -30%;
+    right: 50%;
+    transform: translate(50%, 0%);
+  }
+`;
+
+const MaxTopWrapper = styled.img`
+  position: absolute;
+  height: 2vh;
+  top: 5%;
+  left: 66%;
+  transform: translate(-50%, 0%);
+  /* z-index: 4; */
+`;
+const MaxBottomWrapper = styled.img`
+  position: absolute;
+  height: 3vh;
+  top: 27%;
+  left: 66%;
+  transform: translate(-50%, 0%);
+  /* z-index: 3; */
 `;
 
 const decimals = 8;
@@ -311,7 +371,7 @@ const RiskHedge = ({
   const marks = [
     {
       value: (stake * 66) / 100,
-      label: "Maximum Risk Hedging Ratio",
+      // label: "Max 66%",
     },
   ];
 
@@ -377,7 +437,7 @@ const RiskHedge = ({
           <TextBox>
             <FirstText>Stable-hedging</FirstText>
             <SecondText>
-              Set your stable hedging ratio. It’ll be swapped to USDT.
+              Set your stable hedging ratio. It’ll be swapped to USDC.
             </SecondText>
           </TextBox>
           {/* <EmptyBox></EmptyBox>
@@ -395,20 +455,22 @@ const RiskHedge = ({
         <EmptyBox></EmptyBox>
         <FormBox>
           <FirstBox>
-            <TextBox2>
-              <ThirdText>You will stake</ThirdText>
-              <ThirdText>
-                {stake} {tokenNameRedux}
-              </ThirdText>
-            </TextBox2>
             <VolumeControl>
+              <TextBox2>
+                <ThirdText>You will stake</ThirdText>
+              </TextBox2>
+              <SuggestBalloon volume={volume}>{volume} %</SuggestBalloon>
+              <StakeBalloon>
+                {Number(stake).toFixed(5)} {tokenNameRedux}
+              </StakeBalloon>
+
               <VolumeControlOver1>
                 <Slider
                   size="big"
                   aria-label="Small steps"
                   value={100}
                   min={0}
-                  max={(stake * 3) / 5}
+                  max={stake}
                   valueLabelDisplay="off"
                   disabled={true}
                   sx={{
@@ -441,15 +503,7 @@ const RiskHedge = ({
                     // "& .MuiSlider-colorPrimary": {
                     //   color: "#FAF1E4",
                     // },
-                    "& .MuiSlider-mark": {
-                      color: "#1F53FF",
-                      height: "0.6vh",
-                      width: "0.1px",
-                    },
-                    "& .MuiSlider-markLabel": {
-                      color: "white",
-                      fontSize: 0.1,
-                    },
+
                     "& .MuiSlider-thumb": {
                       display: "none",
                       height: 0,
@@ -462,10 +516,22 @@ const RiskHedge = ({
                     "& .MuiSlider-track": {
                       height: "0.7vh",
                       color: "#4759FF",
+                      // border: 0,
+                    },
+                    "& .MuiSlider-mark": {
+                      color: "#4759FF",
+                      height: "1.0vh",
+                      width: "0.1vw",
+                    },
+                    "& .MuiSlider-markLabel": {
+                      color: "white",
+                      fontSize: 0.1,
                     },
                   }}
                 />
               </VolumeControlOver2>
+              <MaxBottomWrapper src={stMaxBottom} />
+              <MaxTopWrapper src={stMaxTop} />
             </VolumeControl>
           </FirstBox>
           <SecondBox>
@@ -478,10 +544,12 @@ const RiskHedge = ({
                   <InputBase
                     value={volume}
                     sx={{
+                      width: "2vw",
+                      height: "2vh",
                       ml: 1,
                       flex: 1,
-                      fontSize: "1.2rem",
-                      marginRight: 2,
+                      fontSize: "0.8vw",
+                      marginRight: 1,
                     }}
                     placeholder="Stable Hedging Ratio"
                     inputProps={{
@@ -500,7 +568,7 @@ const RiskHedge = ({
                 <FifthText>From</FifthText>
               </LeftSideFromTo>
               <RightSide>
-                <FifthText>{from}</FifthText>
+                <FifthText>{Number(from).toFixed(5)}</FifthText>
                 <RightSideTokenName>{tokenNameRedux}</RightSideTokenName>
               </RightSide>
             </ThirdBox>
@@ -510,12 +578,12 @@ const RiskHedge = ({
                 <FifthText>To</FifthText>
               </LeftSideFromTo>
               <RightSide>
-                <FifthText>{to}</FifthText>
+                <FifthText>{Number(to).toFixed(5)}</FifthText>
                 <RightsideMiniWrapper>
                   <FourthText top>
-                    1{tokenNameRedux} = {tokenPrice} USDT
+                    1{tokenNameRedux} = {tokenPrice} USDC
                   </FourthText>
-                  <RightSideTokenName>USDT</RightSideTokenName>
+                  <RightSideTokenName>USDC</RightSideTokenName>
                   <FourthText under>On Ethereum network</FourthText>
                 </RightsideMiniWrapper>
               </RightSide>
