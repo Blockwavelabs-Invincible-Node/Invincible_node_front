@@ -538,7 +538,7 @@ const RiskHedge = ({
               openModal();
 
               const hedge = parseInt(
-                stakeAmountRedux * volume * swapRate * 10 ** 16
+                stakeAmountRedux * volume * swapRate * 10 ** 5
               );
               console.log("hedge: ", hedge);
               hedgeDispatch(setHedgeAmount(hedge));
